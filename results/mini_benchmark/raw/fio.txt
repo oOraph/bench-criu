@@ -1,0 +1,36 @@
+root@ip-10-90-0-235:/home/ubuntu/bench-criu# bash fio.sh 
+seqread-1M: (g=0): rw=read, bs=(R) 1024KiB-1024KiB, (W) 1024KiB-1024KiB, (T) 1024KiB-1024KiB, ioengine=sync, iodepth=1
+...
+fio-3.41
+Starting 32 processes
+seqread-1M: Laying out IO file (1 file / 32768MiB)
+Jobs: 18 (f=18): [E(1),R(1),E(1),R(1),E(2),R(1),E(3),R(1),_(2),R(3),E(1),R(2),E(1),R(6),E(2),R(1),E(1),R(2)][38.4%][r=2394MiB/s][r=2394 IOPS][eta 01m:30s]
+seqread-1M: (groupid=0, jobs=32): err= 0: pid=29349: Wed Jun  3 14:41:00 2026
+  read: IOPS=2401, BW=2401MiB/s (2518MB/s)(106GiB/45015msec)
+    clat (usec): min=4950, max=21662, avg=13324.34, stdev=8004.86
+     lat (usec): min=4950, max=21662, avg=13324.53, stdev=8004.85
+    clat percentiles (usec):
+     |  1.00th=[ 5211],  5.00th=[ 5276], 10.00th=[ 5276], 20.00th=[ 5342],
+     | 30.00th=[ 5342], 40.00th=[ 5342], 50.00th=[21103], 60.00th=[21365],
+     | 70.00th=[21365], 80.00th=[21365], 90.00th=[21365], 95.00th=[21365],
+     | 99.00th=[21365], 99.50th=[21365], 99.90th=[21365], 99.95th=[21365],
+     | 99.99th=[21365]
+   bw (  MiB/s): min= 2323, max= 2433, per=100.00%, avg=2404.90, stdev= 1.04, samples=2851
+   iops        : min= 2316, max= 2432, avg=2403.28, stdev= 1.05, samples=2851
+  lat (msec)   : 10=50.00%, 50=50.00%
+  cpu          : usr=0.03%, sys=0.87%, ctx=108099, majf=0, minf=1164
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=108089,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=2401MiB/s (2518MB/s), 2401MiB/s-2401MiB/s (2518MB/s-2518MB/s), io=106GiB (113GB), run=45015-45015msec
+
+Disk stats (read/write):
+    md0: ios=1090264/2, sectors=279107584/72, merge=0/0, ticks=11500641/0, in_queue=11500641, util=99.91%, aggrios=272596/0, aggsectors=69784576/18, aggrmerge=0/0, aggrticks=2880647/0, aggrin_queue=2880647, aggrutil=99.88%
+  nvme3n1: ios=272660/0, sectors=69800960/0, merge=0/0, ticks=4566198/0, in_queue=4566199, util=99.87%
+  nvme2n1: ios=272532/0, sectors=69768192/0, merge=0/0, ticks=137449/0, in_queue=137449, util=61.35%
+  nvme1n1: ios=272532/2, sectors=69768192/72, merge=0/0, ticks=1310666/1, in_queue=1310666, util=99.83%
+  nvme4n1: ios=272660/0, sectors=69800960/0, merge=0/0, ticks=5508276/0, in_queue=5508276, util=99.88%

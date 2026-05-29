@@ -1,0 +1,81 @@
+
+# home-made plugin
+
+## huggingface-inference-toolkit + stabilityai/stable-diffusion-xl-base-1.0
+
+dump 15s
+restore 5s
+
+Normal   Scaled down  22m                 custom.shim.dev/manager  spec.containers{cuda-app2}: Scaled down container cuda-app2 in 15.221265926s
+Normal   Running      13m                 custom.shim.dev/manager  spec.containers{cuda-app2}: Restored container cuda-app2 in 5.594141342s
+
+## vllm + meta-llama/Llama-3.1-8B-Instruct
+
+dump 30s
+restore 12 s
+
+Normal   Scaled down  3m40s                   custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 31.851352053s
+Normal   Running      3m7s                    custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 12.549164617s
+
+## vllm + Qwen/Qwen3-8B
+
+Normal   Scaled down  48s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 33.189697049s
+Normal   Running      20s                   custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 15.23411138s 
+Normal   Running      7s                      custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.513318695s
+  
+# upstream optimized (criu-dev + the 2 optims)
+
+## huggingface-inference-toolkit + stabilityai/stable-diffusion-xl-base-1.0
+
+Normal   Scaled down  119s                  custom.shim.dev/manager  spec.containers{cuda-app2}: Scaled down container cuda-app2 in 9.053057663s
+Normal   Running      64s                   custom.shim.dev/manager  spec.containers{cuda-app2}: Restored container cuda-app2 in 7.757543216s
+
+## vllm + meta-llama/Llama-3.1-8B-Instruct
+
+Normal   Scaled down  97s                    custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.692696702s
+Normal   Running      62s                    custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 21.567873781s
+
+dump 19s
+restore 21s
+
+## vllm + Qwen/Qwen3-8B
+
+Normal   Scaled down  2m29s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 19.871547936s
+Normal   Running      73s                     custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.973207311s
+Normal   Running      1s                      custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 15.07478296s
+
+# criu-dev before # 3022 # 3021 (commit 4d76d1acd)
+
+## huggingface-inference-toolkit + stabilityai/stable-diffusion-xl-base-1.0
+
+Normal   Scaled down  45s                custom.shim.dev/manager  spec.containers{cuda-app2}: Scaled down container cuda-app2 in 9.574568374s
+Normal   Running      7s                 custom.shim.dev/manager  spec.containers{cuda-app2}: Restored container cuda-app2 in 6.324797697s
+
+## vllm + meta-llama/Llama-3.1-8B-Instruct
+
+Normal   Scaled down  68s                   custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.659878141s
+Normal   Running      19s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 14.155123195s
+
+## vllm + Qwen/Qwen3-8B
+
+Normal   Scaled down  2m4s                    custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 20.857843672s
+Normal   Running      101s                    custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.487916808s
+Normal   Running      20s                     custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 15.314165547s
+
+# all: criu-dev + # 3022 + # 3021 + home made
+
+## huggingface-inference-toolkit + stabilityai/stable-diffusion-xl-base-1.0
+
+Normal   Scaled down  97s                  custom.shim.dev/manager  spec.containers{cuda-app2}: Scaled down container cuda-app2 in 12.797094335s
+Normal   Running      83s                  custom.shim.dev/manager  spec.containers{cuda-app2}: Restored container cuda-app2 in 6.952306727s
+
+## vllm + meta-llama/Llama-3.1-8B-Instruct
+
+Normal   Scaled down  42s                   custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 32.872872187s
+Normal   Running      12s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 14.258308114s
+
+## vllm + Qwen/Qwen3-8B
+
+Normal   Scaled down  34s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 33.566074315s
+Normal   Running      7s                    custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 13.52891688s
+Normal   Running      0s                    custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.638783274s

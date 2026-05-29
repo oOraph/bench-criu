@@ -1,0 +1,211 @@
+root@ip-10-90-0-235:/home/ubuntu/bench-criu# ./bench_compare.sh 
+[15:00:32] === Benchmark start: TENSOR_SIZE=60000 RUNS=2 ===
+[15:00:32] New image:       criu-optimized
+[15:00:32] Orig image:      criu-dev
+[15:00:32] Home-made image: criu-fast-cuda-1
+
+=== SCENARIO 1: test_app + orig image ===
+[15:00:32] [orig run=1] starting container image=criu-dev (TENSOR_SIZE=60000)
+453f1e0472b1db3f72b3a97b0e1ff51c9e8d8a071e57738f187247610417fdd7
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:00:41] [orig run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1285): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[15:00:51] [orig run=1] dump=9960ms  gpu-pages=none  pages-*.img=14G  inventory=yes
+[15:00:51] drop caches
+[15:01:02] [orig run=1] restore start
+(00.050265) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:01:17] [orig run=1] restore=11537ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA L4 (+0.033s)
+[POST] first sum: +0.183s from wake
+[POST] x=-60641.535156 y=-486.052704
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=orig run=1 dump_ms=9960 restore_ms=11537
+bench1
+
+[15:01:18] [orig run=2] starting container image=criu-dev (TENSOR_SIZE=60000)
+27c720f8579647c949e690926c3eaf85907ef3890afae79d01fa48ef41f73706
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:01:27] [orig run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1285): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[15:01:37] [orig run=2] dump=9912ms  gpu-pages=none  pages-*.img=14G  inventory=yes
+[15:01:37] drop caches
+[15:01:48] [orig run=2] restore start
+(00.051207) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:02:04] [orig run=2] restore=11460ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA L4 (+0.034s)
+[POST] first sum: +0.185s from wake
+[POST] x=-60641.535156 y=-486.052704
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=orig run=2 dump_ms=9912 restore_ms=11460
+bench1
+
+
+=== SCENARIO 2: test_app + new image ===
+[15:02:05] [new run=1] starting container image=criu-optimized (TENSOR_SIZE=60000)
+50a23bb071c55767df4a52561f491b2398d2ffefe487b2f273295e4ee3bf3fe1
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:02:14] [new run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1285): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[15:02:24] [new run=1] dump=9882ms  gpu-pages=none  pages-*.img=14G  inventory=yes
+[15:02:24] drop caches
+[15:02:35] [new run=1] restore start
+(00.049205) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:02:49] [new run=1] restore=9623ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA L4 (+0.033s)
+[POST] first sum: +0.180s from wake
+[POST] x=-60641.535156 y=-486.052704
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=new run=1 dump_ms=9882 restore_ms=9623
+bench1
+
+[15:02:50] [new run=2] starting container image=criu-optimized (TENSOR_SIZE=60000)
+5ee3f20f0e4dfc86078d158a229849d38c0ca0242a229fa5122fdf18d21f3351
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=58
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:02:59] [new run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1285): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 60 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+[15:03:09] [new run=2] dump=9916ms  gpu-pages=none  pages-*.img=14G  inventory=yes
+[15:03:09] drop caches
+[15:03:20] [new run=2] restore start
+(00.049829) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:03:34] [new run=2] restore=9614ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=58
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=58
+[POST] device: NVIDIA L4 (+0.033s)
+[POST] first sum: +0.178s from wake
+[POST] x=-60641.535156 y=-486.052704
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=new run=2 dump_ms=9916 restore_ms=9614
+bench1
+
+
+=== SCENARIO 3: test_app + home made image ===
+[15:03:35] [home-made run=1] starting container image=criu-fast-cuda-1 (TENSOR_SIZE=60000)
+906b58270d3487b2be08c05c64d3c2773fb25b12c3d8f64fe9a7a65959362856
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:03:43] [home-made run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1285): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[15:04:02] [home-made run=1] dump=18085ms  gpu-pages=14G  pages-*.img=313M  inventory=yes
+[15:04:02] drop caches
+[15:04:02] [home-made run=1] restore start
+(00.050858) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(05.789135) [timing] O_DIRECT pread restore: 4720 ms (3.1 GB/s) [mlock=0 ms pread=4720 ms]
+(05.791570) cuda_plugin: [timing] O_DIRECT pread restore: 4723 ms
+(07.937795) cuda_plugin: [timing] cuda-checkpoint restore+unlock: 2146 ms
+[15:04:14] [home-made run=1] restore=8253ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA L4 (+0.032s)
+[POST] first sum: +0.180s from wake
+[POST] x=-60641.535156 y=-486.052704
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=home-made run=1 dump_ms=18085 restore_ms=8253
+bench1
+
+[15:04:15] [home-made run=2] starting container image=criu-fast-cuda-1 (TENSOR_SIZE=60000)
+977610ac6b64a4146b66203510048e08d838721126c96fff373f9c98d06ce49e
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=61
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:04:24] [home-made run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1285): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 63 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 65 with interrupted system call
+[15:04:42] [home-made run=2] dump=17665ms  gpu-pages=14G  pages-*.img=313M  inventory=yes
+[15:04:42] drop caches
+[15:04:42] [home-made run=2] restore start
+(00.051290) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(05.324044) [timing] O_DIRECT pread restore: 4300 ms (3.4 GB/s) [mlock=0 ms pread=4300 ms]
+(05.324480) cuda_plugin: [timing] O_DIRECT pread restore: 4301 ms
+(07.503658) cuda_plugin: [timing] cuda-checkpoint restore+unlock: 2179 ms
+[15:04:54] [home-made run=2] restore=7713ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:362: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA L4 (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-60641.535156 y=-486.052704 pid=61
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=61
+[POST] device: NVIDIA L4 (+0.033s)
+[POST] first sum: +0.179s from wake
+[POST] x=-60641.535156 y=-486.052704
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=home-made run=2 dump_ms=17665 restore_ms=7713
+bench1
+
+[15:04:55] === All benchmarks complete ===
+
