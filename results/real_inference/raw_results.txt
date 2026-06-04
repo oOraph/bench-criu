@@ -19,10 +19,20 @@ Normal   Running      3m7s                    custom.shim.dev/manager  spec.cont
 
 ## vllm + Qwen/Qwen3-8B
 
+run 1
+
 Normal   Scaled down  48s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 33.189697049s
 Normal   Running      20s                   custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 15.23411138s 
 Normal   Running      7s                      custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.513318695s
-  
+
+run 2
+
+Normal   Scaled down  8m34s                 zeropod.ctrox.dev/manager  spec.containers{vllm}: Scaled down container vllm in 33.585792238s
+Normal   Running      8m2s                  zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 13.989994441s
+Normal   Running      3m18s                 zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 15.053056481s
+Normal   Running      91s                   zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 15.07567599s
+Normal   Running      8s                    zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 14.210894627s
+
 # upstream optimized (criu-dev + the 2 optims)
 
 ## huggingface-inference-toolkit + stabilityai/stable-diffusion-xl-base-1.0
@@ -32,8 +42,25 @@ Normal   Running      64s                   custom.shim.dev/manager  spec.contai
 
 ## vllm + meta-llama/Llama-3.1-8B-Instruct
 
+run 1
+
 Normal   Scaled down  97s                    custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.692696702s
 Normal   Running      62s                    custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 21.567873781s
+
+run 2
+
+Normal   Scaled down  2m13s                   zeropod.ctrox.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.57331225s
+Normal   Running      94s                     zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 20.830861226s
+Normal   Running      5s                      zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 14.836984827s
+
+run 3
+
+Normal   Scaled down  4m9s                    zeropod.ctrox.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.793648829s
+Normal   Running      3m37s                   zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 21.080994277s
+Normal   Running      107s                    zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 15.026366899s
+Normal   Running      11s                     zeropod.ctrox.dev/manager  spec.containers{vllm}: Restored container vllm in 14.815047509s
+
+The first restore is always significantly slower, then the second one becomes faster and closer to the baseline (cache effect ?). 
 
 dump 19s
 restore 21s
