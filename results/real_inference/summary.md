@@ -26,31 +26,38 @@ Checkpoint/restore timings measured on real inference workloads via `runc checkp
 
 ### vllm + meta-llama/Llama-3.1-8B-Instruct
 
-| variant | dump (s) | restore (s) |
-|---------|----------|-------------|
-| baseline | 19.66 | 14.16 |
-| upstream-optimized | 19.69 | 21.57 |
-| home-made | 31.85 | 12.55 |
-| all | 32.87 | 14.26 |
+| variant | dump (s) | restore 1st (s) | restore 2nd (s) | restore 3rd (s) |
+|---------|----------|-----------------|-----------------|-----------------|
+| baseline | 19.66 | 14.16 | — | — |
+| upstream-optimized run 1 | 19.69 | 21.57 | — | — |
+| upstream-optimized run 2 | 19.57 | 20.83 | 14.84 | — |
+| upstream-optimized run 3 | 19.79 | 21.08 | 15.03 | 14.82 |
+| home-made | 31.85 | 12.55 | — | — |
+| all | 32.87 | 14.26 | — | — |
+
+The first restore for upstream-optimized is consistently ~21s across all runs. Subsequent restores within the same run drop to ~14.8–15s, very close to the baseline (possible page cache warm-up effect).
 
 ### vllm + Qwen/Qwen3-8B
 
-| variant | dump (s) | restore (s) | restore 2nd run (s) |
-|---------|----------|-------------|---------------------|
-| baseline | 20.86 | 14.49 | 15.31 |
-| upstream-optimized | 19.87 | 14.97 | 15.07 |
-| home-made | 33.19 | 15.23 | 14.51 |
-| all | 33.57 | 13.53 | 14.64 |
+| variant | dump (s) | restore 1st (s) | restore 2nd (s) | restore 3rd (s) | restore 4th (s) |
+|---------|----------|-----------------|-----------------|-----------------|-----------------|
+| baseline | 20.86 | 14.49 | 15.31 | — | — |
+| upstream-optimized | 19.87 | 14.97 | 15.07 | — | — |
+| home-made run 1 | 33.19 | 15.23 | 14.51 | — | — |
+| home-made run 2 | 33.59 | 13.99 | 15.05 | 15.08 | 14.21 |
+| all | 33.57 | 13.53 | 14.64 | — | — |
 
 ## Analysis
 
 ### PR #3021 + #3022 (upstream-optimized): unexpected restore times on large models
 
-The upstream-optimized variant shows notably higher restore times for Llama-3.1-8B (+52%: 14.16s → 21.57s) and SDXL (+23%: 6.32s → 7.76s) compared to baseline. Qwen3-8B is unaffected.
+The upstream-optimized variant shows notably higher **first** restore times for Llama-3.1-8B (~21s vs baseline 14.16s) and SDXL (+23%: 6.32s → 7.76s). Qwen3-8B is unaffected.
 
-Since #3021 and #3022 were only tested together, the source of this difference cannot be attributed to either PR individually. Whether this reflects a genuine regression introduced by the PRs, a benchmark condition issue, or something else is still unclear and warrants further investigation.
+For Llama-3.1-8B, additional runs revealed that the elevated time only affects the **first restore** in a session — subsequent restores drop to ~14.8–15s, very close to baseline. This pattern is consistent across 3 independent runs, suggesting a cold-start effect (e.g. page cache warming) rather than a constant overhead. Whether this is specific to the AIO/O_DIRECT path introduced by PR #3022 or something else is unclear.
 
-Notably, the `all` variant (PRs + custom plugin) shows Llama restore back at baseline level (14.26s ≈ 14.16s), which is an interesting data point but does not by itself explain what is happening in the upstream-optimized case.
+Since #3021 and #3022 were only tested together, the source of this difference cannot be attributed to either PR individually.
+
+The `all` variant (PRs + custom plugin) shows Llama first-restore back at baseline level (14.26s ≈ 14.16s), which is an interesting data point but does not by itself explain what is happening in the upstream-optimized case.
 
 ### Home-made plugin: faster restore, significantly slower dump
 
@@ -61,7 +68,7 @@ The custom plugin consistently speeds up restore for SDXL and Llama (~10–12%) 
 | variant | workload | dump Δ | restore Δ |
 |---------|----------|--------|-----------|
 | upstream-optimized | SDXL | −5% | +23% ❓ |
-| upstream-optimized | Llama-3.1-8B | +0% | +52% ❓ |
+| upstream-optimized | Llama-3.1-8B | +0% | +52% ❓ (1st restore only; subsequent ~+5%) |
 | upstream-optimized | Qwen3-8B | −5% | +1% |
 | home-made | SDXL | +59% | −12% |
 | home-made | Llama-3.1-8B | +62% | −11% |
