@@ -8,7 +8,7 @@
 |-----------|--------|
 | CPU | AMD EPYC 7R13, 24 cores / 48 threads, 1 NUMA node |
 | RAM | 181 GiB |
-| GPU | 4× NVIDIA L4 (23 GiB each), driver 595.71.05 |
+| GPU | 4× NVIDIA L4 (23 GiB each), driver 595.71.05 (the test is using only one though) |
 | Storage | 4× 875 GiB NVMe (Amazon EC2 Instance Storage) in RAID-0 → 3.4 TiB, XFS |
 | OS | Ubuntu 26.04 LTS, kernel 7.0.0-1004-aws |
 
