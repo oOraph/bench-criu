@@ -51,5 +51,5 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 
 ## Results
 
-- [results/mini_benchmark/summary.md](results/mini_benchmark/summary.md) — synthetic benchmark on AWS `g6.12xlarge` (4× NVIDIA L4, `TENSOR_SIZE=60000`)
+- [results/mini_benchmark/summary.md](results/mini_benchmark/summary.md) — synthetic benchmark on AWS `g6.12xlarge` (NVIDIA L4, `TENSOR_SIZE=60000`)
 - [results/real_inference/summary.md](results/real_inference/summary.md) — real inference workloads (SDXL, Llama-3.1-8B, Qwen3-8B) via runc checkpoint / restore + cuda plugin + cuda-checkpoint
