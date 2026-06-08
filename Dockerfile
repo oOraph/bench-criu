@@ -38,17 +38,17 @@ FROM base AS criu-optimized
 
 RUN git clone https://github.com/ooraph/criu.git /criu && \
     cd /criu && \
-    git checkout origin/criu-optimized && \
+    git checkout optim1 && \
     make -j$(nproc) && make install-criu && \
     mkdir -p /usr/lib/criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
 
-# criu-fast-cuda-1 — baseline + custom CUDA plugin (https://github.com/oOraph/criu/tree/fast_cuda_plugin_final): GPU pages offloaded via O_DIRECT to gpu-pages-*.img
+# criu-fast-cuda-1 (or equivalently cuda-plugin-optim) — baseline + custom CUDA plugin (https://github.com/oOraph/criu/tree/fast_cuda_plugin_final): GPU pages offloaded via O_DIRECT to gpu-pages-*.img
 FROM base AS criu-fast-cuda-1
 
 RUN git clone https://github.com/ooraph/criu.git /criu && \
     cd /criu && \
-    git checkout origin/fast-cuda-1 && \
+    git checkout fast-cuda-1 && \
     make -j$(nproc) && make install-criu && \
     mkdir -p /usr/lib/criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
