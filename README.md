@@ -53,3 +53,4 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 
 - [results/mini_benchmark/summary.md](results/mini_benchmark/summary.md) — synthetic benchmark on AWS `g6.12xlarge` (NVIDIA L4, `TENSOR_SIZE=60000`)
 - [results/real_inference/summary.md](results/real_inference/summary.md) — real inference workloads (SDXL, Llama-3.1-8B, Qwen3-8B) via runc checkpoint / restore + cuda plugin + cuda-checkpoint
+- [results/vllm_sleep_awake/summary.md](results/vllm_sleep_awake/summary.md) — vLLM cooperative sleep/wake-up benchmark (Llama-3.1-8B, Qwen3-8B)
