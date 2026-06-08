@@ -1,4 +1,4 @@
-# base
+# criu-base
 FROM ubuntu:24.04 AS base
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
@@ -15,16 +15,19 @@ RUN wget -q https://github.com/NVIDIA/cuda-checkpoint/raw/main/bin/x86_64_Linux/
       -O /usr/local/bin/cuda-checkpoint && \
       chmod +x /usr/local/bin/cuda-checkpoint
 
+ENTRYPOINT ["tini", "--", "sleep", "infinity"]
+
+# bench-base
+FROM base AS bench-base
+
 RUN python3 -m venv /venv && . /venv/bin/activate && pip install --no-cache-dir torch
 
 COPY test_app.py /test_app.py
 
 ENV PATH="/venv/bin:$PATH"
 
-ENTRYPOINT ["tini", "--", "sleep", "infinity"]
-
 # criu-dev — upstream baseline (commit just before PR #3021 and #3022 were merged)
-FROM base AS criu-dev
+FROM bench-base AS criu-dev
 
 RUN git clone https://github.com/ooraph/criu.git /criu && \
     cd /criu && \
@@ -34,7 +37,7 @@ RUN git clone https://github.com/ooraph/criu.git /criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
 
 # criu-optimized — baseline + PR #3021 (parallel memfd restore) + PR #3022 (native AIO page reads)
-FROM base AS criu-optimized
+FROM bench-base AS criu-optimized
 
 RUN git clone https://github.com/ooraph/criu.git /criu && \
     cd /criu && \
@@ -44,7 +47,7 @@ RUN git clone https://github.com/ooraph/criu.git /criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
 
 # criu-fast-cuda-1 (or equivalently cuda-plugin-optim) — baseline + custom CUDA plugin (https://github.com/oOraph/criu/tree/fast_cuda_plugin_final): GPU pages offloaded via O_DIRECT to gpu-pages-*.img
-FROM base AS criu-fast-cuda-1
+FROM bench-base AS criu-fast-cuda-1
 
 RUN git clone https://github.com/ooraph/criu.git /criu && \
     cd /criu && \
@@ -52,3 +55,20 @@ RUN git clone https://github.com/ooraph/criu.git /criu && \
     make -j$(nproc) && make install-criu && \
     mkdir -p /usr/lib/criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
+
+# criu-base (crit helper)
+FROM base AS criu-base
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends python3-pip && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/ooraph/criu.git /criu && \
+    cd /criu && \
+    git checkout optim1 && \
+    make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && \
+    cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && \
+    pip3 install --break-system-packages /criu/lib /criu/crit
+
+ENTRYPOINT ["bash"]
+
