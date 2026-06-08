@@ -1,0 +1,309 @@
+# vllm + sleep level 1 + wake up
+
+## meta-llama/Llama-3.1-8B-Instruct
+
+
+### v4.2 + home made plugin optim
+
+procedure: we have not implemented the sleep / wake up app coop yet, proceeding manually for now, nvm this does not disturb measure
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m20,760s
+user	0m0,003s
+sys	0m0,012s
+
+Normal   Scaled down  24m                 custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 32.133815268s
+Normal   Running      16m                 custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 12.64962728s -> without the wake up procedure -> restore faster !
+Normal   Scaled down  13m                 custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 14.787125773s
+Normal   Running      11m                 custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.883091189s
+Normal   Scaled down  7m28s               custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 6.204219451s -> frozen snapshot kill case (after 1 wake up in this case), should even be faster, I guess our kill is too soft
+Normal   Running      4m47s               custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.893463819s
+Normal   Scaled down  3m58s               custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 5.404251204s
+Normal   Running      3m3s                custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.863048454s
+Normal   Scaled down  2m11s               custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 5.570835356s 
+
+So full restore + wake_up -> 20.5 ~ 18.8 + 1.7 
+scaled up -> wake up takes ~1.7/2s + restore 18.8
+POST /sleep?level=1 -> takes ~ 11s (cold start)
+ 
+(reminder without the wake up procedure: wake up ~ 12.6s/13s, as we actually see, the first wake up being that)
+ 
+### Criu dev (4d76d1acd, before optims) + home made plugin optim
+
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m13,472s
+user	0m0,006s
+sys	0m0,008s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m10,762s
+user	0m0,006s
+sys	0m0,007s
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m20,691s
+user	0m0,005s
+sys	0m0,008s
+
+Normal   Scaled down  6m51s                   custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 30.928225357s
+Normal   Running      5m16s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 13.138802216s
+Normal   Scaled down  4m15s                   custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 14.617584494s
+Normal   Running      3m37s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.775458025s
+Normal   Scaled down  2m48s                   custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 5.404220177s
+Normal   Running      2m16s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.946813381s
+Normal   Scaled down  98s                     custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 5.253085718s
+
+### Criu dev (4d76d1acd, before optims)
+ 
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m14,855s
+user	0m0,003s
+sys	0m0,005s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m10,756s
+user	0m0,008s
+sys	0m0,007s
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m20,711s
+user	0m0,003s
+sys	0m0,012s
+
+Normal   Scaled down  9m39s               custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.187015198s
+Normal   Running      8m11s               custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 14.313422442s -> restore time with no sleep call in vllm
+Normal   Scaled down  7m4s                custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 14.31119462s
+Normal   Running      3m38s               custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.809493533s -> restore time after a sleep call before the snasphot
+Normal   Scaled down  3m                  custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 5.425086001s
+Normal   Running      61s                 custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 18.831278855s
+Normal   Scaled down  23s                 custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 5.347340526s
+
+So full restore + wake_up -> 20.711 ~ 18.8 + 2 vs standalone restore: 14.3
+
+standalone restore (no sleep): 14.5
+ 
+### Optimized upstream criu
+
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m14,939s
+user	0m0,005s
+sys	0m0,010s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m10,731s
+user	0m0,005s
+sys	0m0,007s
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m15,303s
+user	0m0,003s
+sys	0m0,011s
+
+Normal   Scaled down  9m54s               custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 19.234525935s
+Normal   Running      4m48s               custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 14.521395252s
+Normal   Scaled down  3m47s               custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 14.145277653s
+Normal   Running      2m26s               custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 13.385384781s
+Normal   Scaled down  109s                custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 4.525431722s
+Normal   Running      61s                 custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 13.375037253s
+Normal   Scaled down  24s                 custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 4.529040795s
+
+So full restore + wake_up -> 15.3 ~ 13.3 + 2
+
+standalone restore (no sleep): 14.5
+
+### All in 1 (optimized upstream + home made plugin optim)
+
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m14,089s
+user	0m0,004s
+sys	0m0,010s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m10,756s
+user	0m0,006s
+sys	0m0,008s
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m15,130s
+user	0m0,009s
+sys	0m0,006s
+
+Normal   Scaled down  7m22s                  custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 32.43744561s
+Normal   Running      6m38s                  custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 13.748163807s
+Normal   Scaled down  5m32s                  custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 14.600069206s
+Normal   Running      4m1s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 13.218419162s
+Normal   Scaled down  3m24s                  custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 4.486546739s
+Normal   Running      105s                   custom.shim.dev/manager  spec.containers{vllm}: Restored container vllm in 12.944642302s
+Normal   Scaled down  56s                    custom.shim.dev/manager  spec.containers{vllm}: Scaled down container vllm in 4.538315685s
+ 
+## Qwen/Qwen3-8B 
+
+### v4.2 + home made plugin optim
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m24,527s
+user	0m0,004s
+sys	0m0,012s
+
+Normal   Scaled down  43m                 custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 32.627150639s
+Normal   Running      7m34s               custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 13.651384742s
+Normal   Scaled down  6m20s               custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 16.036750465s
+Normal   Running      5m47s               custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 22.696215065s
+Normal   Scaled down  4m15s               custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 6.74061256s
+Normal   Running      90s                 custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 22.566556937s
+Normal   Scaled down  51s                 custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 6.538618543s
+
+POST /sleep?level=1 -> takes ~ 13s (cold start)
+
+scaled up -> wake up takes ~ 2s
+
+restore time 22.5 + 2 -> 24.5 vs 13s with no sleep at all
+
+
+### Criu dev (4d76d1acd, before optims) + home made plugin optim
+
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m13,348s
+user	0m0,007s
+sys	0m0,005s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m12,836s
+user	0m0,005s
+sys	0m0,006s
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m24,415s
+user	0m0,005s
+sys	0m0,008s
+
+Normal   Scaled down  9m8s                  custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 35.400205433s
+Normal   Running      4m19s                 custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 13.014892602s
+Normal   Scaled down  3m9s                  custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 16.684268073s
+Normal   Running      2m27s                 custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 22.456415482s
+Normal   Scaled down  108s                  custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 6.485592113s
+Normal   Running      65s                   custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 22.550339542s
+Normal   Scaled down  1s                    custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 6.464245793s
+
+### Criu dev (4d76d1acd, before optims)
+ 
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m14,840s
+user	0m0,003s
+sys	0m0,009s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m12,845s
+user	0m0,004s
+sys	0m0,012s
+ 
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m24,522s
+user	0m0,007s
+sys	0m0,009s
+
+Normal   Scaled down  6m20s                  custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 19.291160764s
+Normal   Running      5m18s                  custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.442412382s
+Normal   Scaled down  4m15s                  custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 16.117884274s
+Normal   Running      3m37s                  custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 22.570066546s
+Normal   Scaled down  2m57s                  custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 6.455307532s
+Normal   Running      46s                    custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 22.678499052s
+Normal   Scaled down  7s                     custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 6.574993938s 
+
+restore time 22.5 + 2 -> 24.5 vs 14.4s with no sleep at all
+ 
+### Optimized upstream criu
+
+First sleep before snapshot
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m12,838s
+user	0m0,007s
+sys	0m0,011s
+
+Then
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m17,787s
+user	0m0,004s
+sys	0m0,009s
+
+
+Normal   Scaled down  6m38s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 19.392738209s
+Normal   Running      5m34s                   custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 14.508877393s -> restore with no sleep / wake up
+Normal   Scaled down  4m27s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 16.015057836s
+Normal   Running      2m50s                   custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 16.027924468s -> restore with vllm asleep (woken up by the curl call above)
+Normal   Scaled down  2m2s                    custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 5.528199062s -> frozen snapshot ~ kill, no checkpoint
+Normal   Running      74s                     custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 15.825610897s
+Normal   Scaled down  36s                     custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 5.485279786s
+
+So:
+
+Restore with no sleep before ~14.5s
+Restore with sleep:
+restore: 15.8 seconds
+wake_up: ~ 1.7s
+ 
+### All in 1 (optimized upstream + home made plugin optim)
+
+$ time curl http://0:8000/is_sleeping
+{"is_sleeping":false}
+real	0m13,566s
+user	0m0,006s
+sys	0m0,007s
+
+$ time curl -X POST http://0:8000/sleep?level=1
+
+real	0m12,861s
+user	0m0,003s
+sys	0m0,011s
+
+$ time curl -X POST http://0:8000/wake_up
+
+real	0m20,625s
+user	0m0,007s
+sys	0m0,007s
+
+($ time curl -X POST http://0:8000/wake_up
+
+real	0m18,099s
+user	0m0,005s
+sys	0m0,008s
+
+the second time, lower -> the wake up is still the same time but as we see below the restore is faster...)
+
+Normal   Scaled down  5m47s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 32.995971824s
+Normal   Running      4m42s                   custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 13.242788263s
+Normal   Scaled down  3m34s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 16.190343629s
+Normal   Running      3m4s                    custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 18.672581039s
+Normal   Scaled down  2m26s                   custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 5.585583479s
+Normal   Running      108s                    custom.shim.dev/manager  spec.containers{vllm2}: Restored container vllm2 in 16.150638443s
+Normal   Scaled down  47s                     custom.shim.dev/manager  spec.containers{vllm2}: Scaled down container vllm2 in 5.496610926s
+
+## Conclusion
+
+No interest in performing the app side sleep so far vs direct criu checkpoint since the full restore + wake up time is always > standalone restore time 
+And the upstream optim are indeed interesting but only in the sleep case (and it's still worse than the upstream direct restore case)
+
