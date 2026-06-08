@@ -1,0 +1,1565 @@
+{
+    "magic": "MEMFD_INODE",
+    "entries": [
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2854912,
+            "shmid": 3624,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 1,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2147483648,
+            "shmid": 19718,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 2,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19717,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 3,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19716,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 4,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19715,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 5,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19714,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 6,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19713,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 7,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19712,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 8,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19711,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 9,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19710,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 10,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19709,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 11,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19708,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 12,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19707,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 13,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19706,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 14,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19705,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 15,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19704,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 16,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19703,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 17,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19702,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 18,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19701,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 19,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19700,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 20,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19699,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 21,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19698,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 22,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19697,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 23,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19696,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 24,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19695,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 25,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19694,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 26,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19693,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 27,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19692,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 28,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19691,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 29,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19690,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 30,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19689,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 31,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19688,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 32,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19687,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 33,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19686,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 34,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19685,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 35,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19684,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 36,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19683,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 37,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19682,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 38,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19681,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 39,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19680,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 40,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19679,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 41,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19678,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 42,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19677,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 43,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19676,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 44,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19675,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 45,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19674,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 46,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19673,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 47,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19672,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 48,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19671,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 49,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19670,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 50,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19669,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 51,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19668,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 52,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19667,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 53,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19666,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 54,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19665,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 55,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19664,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 56,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19663,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 57,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19662,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 58,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19661,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 59,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19660,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 60,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19659,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 61,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19658,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 62,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19657,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 63,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19656,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 64,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19655,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 65,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19654,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 66,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19653,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 67,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19652,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 68,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19651,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 69,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19650,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 70,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19649,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 71,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19648,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 72,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19647,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 73,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19646,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 74,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19645,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 75,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 19644,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 76,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 19643,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 77,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 19642,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 78,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 19641,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 79,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 308,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 80,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 307,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 81,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 306,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 82,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 305,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 83,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 304,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 84,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 303,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 85,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 302,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 86,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 301,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 87,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 300,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 88,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 299,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 89,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 298,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 90,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 297,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 91,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 296,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 92,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 295,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 93,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 294,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 94,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 293,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 95,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 292,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 96,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 291,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 97,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 290,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 98,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 289,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 99,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 288,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 100,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 287,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 101,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 286,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 102,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 285,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 103,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 284,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 104,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 283,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 105,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 282,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 106,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 281,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 107,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 280,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 108,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 279,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 109,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 278,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 110,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 277,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 111,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 276,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 112,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 275,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 113,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 274,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 114,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 273,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 115,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 272,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 116,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 271,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 117,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 270,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 118,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 269,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 119,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 268,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 120,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 267,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 121,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 266,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 122,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 265,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 123,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 264,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 124,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 263,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 125,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 262,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 126,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 261,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 127,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 260,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 128,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 259,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 129,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 258,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 130,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 257,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 131,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 256,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 132,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 255,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 133,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 254,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 134,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 253,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 135,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 252,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 136,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 251,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 137,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 250,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 138,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 249,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 139,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 248,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 140,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 247,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 141,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 246,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 142,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 134217728,
+            "shmid": 245,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 143,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 268435456,
+            "shmid": 244,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 144,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 241,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 145,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 67108864,
+            "shmid": 240,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 146,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2147483648,
+            "shmid": 37973,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 147,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 242,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 148,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 16777216,
+            "shmid": 243,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 149,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 13357,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 150,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 33554432,
+            "shmid": 43062,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 151,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 28748,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 152,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 48208,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 153,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 3625,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 154,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 3626,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 155,
+            "mode": 33279
+        },
+        {
+            "name": "/dev/zero",
+            "uid": 0,
+            "gid": 0,
+            "size": 2097152,
+            "shmid": 31856,
+            "seals": "F_SEAL_SEAL",
+            "inode_id": 156,
+            "mode": 33279
+        }
+    ]
+}
