@@ -80,6 +80,18 @@ RUN git clone https://github.com/checkpoint-restore/criu.git /criu && \
     mkdir -p /usr/lib/criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
 
+# criu-local — build from a local source tree (rsync your criu checkout to ./criu-src,
+# e.g. `rsync -a --exclude .git ~/workspace_idea/hf/criu/ criu-src/`) to validate a
+# branch without pushing it. ./criu-src is git-ignored.
+FROM bench-base AS criu-local
+
+COPY criu-src /criu
+RUN cd /criu && make clean >/dev/null 2>&1; cd /criu && \
+    make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && \
+    cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && \
+    { [ -f plugins/cuda/cuda-offload ] && cp plugins/cuda/cuda-offload /usr/local/bin/ || true; }
+
 # criu-base (crit helper)
 FROM base AS criu-base
 

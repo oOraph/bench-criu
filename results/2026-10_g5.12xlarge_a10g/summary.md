@@ -46,6 +46,32 @@
 
 Restore vs upstream defaults: upstream-direct −17%, v42-ours **−40%**. Restore vs best upstream (direct): v42-ours **−27%**.
 
+### Our plugin ported onto upstream head (branch `fast_cuda_plugin_on_head`, image `criu-local` target)
+
+| label | options | run | dump (ms) | restore (ms) |
+|-------|---------|-----|-----------|--------------|
+| head-ours | defaults (Driver API backend) | 1 | 19,862 | 7,418 |
+| head-ours | | 2 | 19,793 | 7,425 |
+| **head-ours avg** | | | **19,828** | **7,422** |
+| head-ours-direct | `--image-io-mode=direct` | 1 | 19,889 | 7,424 |
+| head-ours-direct | | 2 | 19,879 | 7,419 |
+| **head-ours-direct avg** | | | **19,884** | **7,422** |
+| head-ours-cli | `--plugin-option=cuda_plugin.backend=cuda-checkpoint` | 1 | 19,820 | 7,854 |
+| head-ours-cli | | 2 | 19,811 | 7,745 |
+| **head-ours-cli avg** | | | **19,816** | **7,800** |
+
+The port is behaviourally identical to v4.2-ours on the CLI backend (7.80 s vs 7.81 s) and gains ~0.4 s
+from the libcuda Driver API backend (restore+unlock 1.52 s vs 1.9 s). `--image-io-mode=direct` adds nothing
+on top of the plugin (only 319 MB left for CRIU core). Best restore on this box: **7.42 s** (−31% vs upstream-direct).
+
+### mlock pre-fault never ran
+
+Every run (here and in June/April) logs `mlock=0 ms`: the injected `mlock()` fails with -ENOMEM because
+`RLIMIT_MEMLOCK` is the default 8 MB (CRIU restores rlimits from the image; `docker update --ulimit` before
+restore has no effect). The pread() therefore faulted the pages itself (GUP) and still reached NVMe speed,
+most likely thanks to the `MADV_HUGEPAGE` hint (THP in `madvise` mode on the box). Fixed to warn in
+`5e5483fd6` on the port branch; `MEMLOCK_UNLIMITED=yes` in `bench_compare.sh` raises the limit at dump time.
+
 ## Image breakdown
 
 | label | pages-*.img | gpu-pages-*.img |

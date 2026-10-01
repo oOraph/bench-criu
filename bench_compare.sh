@@ -16,6 +16,7 @@ DEFAULT_SCENARIOS+=";upstream-cli-direct|criu-upstream-head|--image-io-mode=dire
 SCENARIOS=${SCENARIOS:-$DEFAULT_SCENARIOS}
 RUNS=${RUNS:-2}
 DROP_CACHE=${DROP_CACHE:-"yes"}
+MEMLOCK_UNLIMITED=${MEMLOCK_UNLIMITED:-"no"}
 
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 # Only drop caches on real block devices — tmpfs IS the page cache, dropping it destroys data
@@ -45,7 +46,12 @@ run_plugin() {
     local outfile=$dump_dir/app_out.txt
 
     log "[$label run=$run] starting container image=$image (TENSOR_SIZE=$TENSOR_SIZE)"
-    docker run -d --rm --name $CONTAINER --gpus '"device=0"' \
+    # MEMLOCK_UNLIMITED=yes raises RLIMIT_MEMLOCK at *dump* time: CRIU restores the rlimit from
+    # the image, so the plugin's injected mlock() pre-fault only works if the dumped process
+    # already had it. With the default 8 MB limit mlock() fails and pread() faults the pages.
+    local ulimit_opt=""
+    if [[ "${MEMLOCK_UNLIMITED,,}" =~ ^(yes|true|1)$ ]]; then ulimit_opt="--ulimit memlock=-1"; fi
+    docker run -d --rm --name $CONTAINER --gpus '"device=0"' $ulimit_opt \
         -v "$dump_dir:$dump_dir" \
         "$image"
 
@@ -118,7 +124,7 @@ run_plugin() {
     cleanup_container
 }
 
-log "=== Benchmark start: TENSOR_SIZE=$TENSOR_SIZE RUNS=$RUNS ==="
+log "=== Benchmark start: TENSOR_SIZE=$TENSOR_SIZE RUNS=$RUNS DROP_CACHE=$DROP_CACHE MEMLOCK_UNLIMITED=$MEMLOCK_UNLIMITED ==="
 IFS=';' read -ra SCENARIO_LIST <<< "$SCENARIOS"
 for sc in "${SCENARIO_LIST[@]}"; do log "scenario: $sc"; done
 

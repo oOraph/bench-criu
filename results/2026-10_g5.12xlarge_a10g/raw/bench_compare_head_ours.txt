@@ -1,0 +1,33 @@
+started
+[15:25:14] [head-ours run=1] dump=19862ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+(05.679093) [timing] O_DIRECT pread restore: 5078 ms (2.9 GB/s) [mlock=0 ms pread=5078 ms]
+(05.680108) cuda_plugin: [timing] GPU page restore: 5079 ms
+(07.204676) cuda_plugin: [timing] Driver API restore+unlock: 1525 ms
+RESULT label=head-ours run=1 dump_ms=19862 restore_ms=7418
+[15:25:54] [head-ours run=2] dump=19793ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+(05.694634) [timing] O_DIRECT pread restore: 5088 ms (2.9 GB/s) [mlock=0 ms pread=5088 ms]
+(05.694865) cuda_plugin: [timing] GPU page restore: 5089 ms
+(07.219602) cuda_plugin: [timing] Driver API restore+unlock: 1525 ms
+RESULT label=head-ours run=2 dump_ms=19793 restore_ms=7425
+[15:26:34] [head-ours-direct run=1] dump=19889ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+(05.670003) [timing] O_DIRECT pread restore: 5080 ms (2.9 GB/s) [mlock=0 ms pread=5080 ms]
+(05.670298) cuda_plugin: [timing] GPU page restore: 5081 ms
+(07.194781) cuda_plugin: [timing] Driver API restore+unlock: 1524 ms
+RESULT label=head-ours-direct run=1 dump_ms=19889 restore_ms=7424
+[15:27:14] [head-ours-direct run=2] dump=19879ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+(05.691184) [timing] O_DIRECT pread restore: 5093 ms (2.9 GB/s) [mlock=0 ms pread=5093 ms]
+(05.691443) cuda_plugin: [timing] GPU page restore: 5094 ms
+(07.216243) cuda_plugin: [timing] Driver API restore+unlock: 1525 ms
+RESULT label=head-ours-direct run=2 dump_ms=19879 restore_ms=7419
+[15:27:54] [head-ours-cli run=1] dump=19820ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+(05.690877) [timing] O_DIRECT pread restore: 5082 ms (2.9 GB/s) [mlock=0 ms pread=5082 ms]
+(05.691212) cuda_plugin: [timing] GPU page restore: 5083 ms
+(07.640897) cuda_plugin: [timing] cuda-checkpoint CLI restore+unlock: 1950 ms
+RESULT label=head-ours-cli run=1 dump_ms=19820 restore_ms=7854
+[15:28:34] [head-ours-cli run=2] dump=19811ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+(05.699823) [timing] O_DIRECT pread restore: 5088 ms (2.9 GB/s) [mlock=0 ms pread=5087 ms]
+(05.700093) cuda_plugin: [timing] GPU page restore: 5088 ms
+(07.530910) cuda_plugin: [timing] cuda-checkpoint CLI restore+unlock: 1831 ms
+RESULT label=head-ours-cli run=2 dump_ms=19811 restore_ms=7745
+
+[exited with code 0]
