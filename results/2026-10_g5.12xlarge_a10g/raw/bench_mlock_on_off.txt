@@ -1,0 +1,26 @@
+=== no memlock
+(00.601493) Warn  (cuda_gpu_pages.c:873): mlock(0x714ff264a000, 14723796992) failed in pid 60: -12 — no pre-fault, pages will fault during pread
+(05.681792) [timing] O_DIRECT pread restore: 5080 ms (2.9 GB/s) [mlock=0 ms pread=5080 ms]
+(05.682013) cuda_plugin: [timing] GPU page restore: 5081 ms
+(07.206733) cuda_plugin: [timing] Driver API restore+unlock: 1525 ms
+RESULT label=head-ours-nomlock run=1 dump_ms=19842 restore_ms=7415
+(00.606030) Warn  (cuda_gpu_pages.c:873): mlock(0x70dc6664a000, 14723796992) failed in pid 61: -12 — no pre-fault, pages will fault during pread
+(05.689599) [timing] O_DIRECT pread restore: 5084 ms (2.9 GB/s) [mlock=0 ms pread=5084 ms]
+(05.689876) cuda_plugin: [timing] GPU page restore: 5084 ms
+(07.214396) cuda_plugin: [timing] Driver API restore+unlock: 1525 ms
+RESULT label=head-ours-nomlock run=2 dump_ms=19722 restore_ms=7420
+=== memlock unlimited
+(06.028483) [timing] O_DIRECT pread restore: 5423 ms (2.7 GB/s) [mlock=865 ms pread=4554 ms]
+(06.030286) cuda_plugin: [timing] GPU page restore: 5425 ms
+(07.554694) cuda_plugin: [timing] Driver API restore+unlock: 1524 ms
+RESULT label=head-ours-mlock run=1 dump_ms=19692 restore_ms=7733
+(06.074113) [timing] O_DIRECT pread restore: 5465 ms (2.7 GB/s) [mlock=880 ms pread=4581 ms]
+(06.075091) cuda_plugin: [timing] GPU page restore: 5466 ms
+(07.599488) cuda_plugin: [timing] Driver API restore+unlock: 1524 ms
+RESULT label=head-ours-mlock run=2 dump_ms=19709 restore_ms=7847
+=== THP samples: time pid Rss(kB) AnonHuge(kB) Locked(kB) -- top by AnonHuge
+--- top by Locked
+--- count
+0
+
+[exited with code 0]

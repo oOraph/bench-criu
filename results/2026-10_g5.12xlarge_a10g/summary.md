@@ -72,6 +72,20 @@ restore has no effect). The pread() therefore faulted the pages itself (GUP) and
 most likely thanks to the `MADV_HUGEPAGE` hint (THP in `madvise` mode on the box). Fixed to warn in
 `5e5483fd6` on the port branch; `MEMLOCK_UNLIMITED=yes` in `bench_compare.sh` raises the limit at dump time.
 
+Measured with the fix (head-ours, Driver API backend, 14.7 GB staging region):
+
+| memlock limit | mlock | pread | GPU page restore | restore total |
+|---|---|---|---|---|
+| default 8 MB (mlock fails, -ENOMEM) | 0 ms | 5,080–5,084 ms (2.9 GB/s, faults inside pread) | 5.08 s | **7.42 s** |
+| unlimited (mlock pre-fault runs) | 865–880 ms | 4,554–4,581 ms (3.2 GB/s, pure DMA) | 5.42–5.47 s | 7.73–7.85 s |
+
+The pre-fault is a net loss here: it costs 0.87 s serially and saves only ~0.5 s of in-pread fault overhead.
+865 ms for 14.7 GB is a ~17 GB/s fault+zero rate, only possible with 2 MB THP pages — so the `MADV_HUGEPAGE`
+hint is what keeps faulting cheap, and `mlock` adds nothing. Recommendation: drop the injected mlock/munlock
+(which also removes the VM_LOCKED interaction with the CUDA driver's post-restore cleanup), keep MADV_HUGEPAGE.
+Re-check THP mode (`/sys/kernel/mm/transparent_hugepage/enabled` must allow `madvise`) on p4de-class nodes:
+a 4 KB-fault regime (~5 GB/s per core, as noted in the parallel-restore WIP) would explain the p4de ceiling.
+
 ## Image breakdown
 
 | label | pages-*.img | gpu-pages-*.img |
