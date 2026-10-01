@@ -1,0 +1,32 @@
+seqread-1M: (g=0): rw=read, bs=(R) 1024KiB-1024KiB, (W) 1024KiB-1024KiB, (T) 1024KiB-1024KiB, ioengine=sync, iodepth=1
+...
+fio-3.41
+Starting 32 processes
+seqread-1M: Laying out IO file (1 file / 32768MiB)
+
+seqread-1M: (groupid=0, jobs=32): err= 0: pid=33588: Thu Oct  1 14:49:26 2026
+  read: IOPS=2411, BW=2411MiB/s (2528MB/s)(106GiB/45005msec)
+    clat (usec): min=606, max=16106, avg=13269.34, stdev=60.38
+     lat (usec): min=606, max=16107, avg=13269.49, stdev=60.38
+    clat percentiles (usec):
+     |  1.00th=[13173],  5.00th=[13173], 10.00th=[13173], 20.00th=[13304],
+     | 30.00th=[13304], 40.00th=[13304], 50.00th=[13304], 60.00th=[13304],
+     | 70.00th=[13304], 80.00th=[13304], 90.00th=[13304], 95.00th=[13304],
+     | 99.00th=[13435], 99.50th=[13435], 99.90th=[13435], 99.95th=[13566],
+     | 99.99th=[13698]
+   bw (  MiB/s): min= 2368, max= 2432, per=100.00%, avg=2413.01, stdev= 0.91, samples=2848
+   iops        : min= 2368, max= 2432, avg=2412.88, stdev= 0.92, samples=2848
+  lat (usec)   : 750=0.01%
+  lat (msec)   : 20=100.00%
+  cpu          : usr=0.02%, sys=0.59%, ctx=108519, majf=0, minf=1196
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=108513,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=2411MiB/s (2528MB/s), 2411MiB/s-2411MiB/s (2528MB/s-2528MB/s), io=106GiB (114GB), run=45005-45005msec
+
+Disk stats (read/write):
+  nvme1n1: ios=1086224/3, sectors=278073344/42, merge=0/0, ticks=13831683/1, in_queue=13831684, util=99.84%

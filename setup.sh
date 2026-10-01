@@ -6,16 +6,34 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-sudo mdadm --create /dev/md0 --level=0 --raid-devices=4  /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 /dev/nvme4n1
-sudo mkfs.xfs /dev/md0
+# Instance-store NVMe = NVMe disks that are not the root/EBS volume and carry no
+# partition or filesystem. Stripe them all (RAID-0); with a single disk, use it directly.
+mapfile -t NVME_DEVS < <(lsblk -dnpo NAME,TYPE,MOUNTPOINTS,FSTYPE | awk '$2=="disk" && $1 ~ /nvme/ && $3=="" && $4==""' | awk '{print $1}' | while read -r d; do [ -z "$(lsblk -nro NAME "$d" | tail -n +2)" ] && echo "$d"; done)
+echo "instance-store NVMe devices: ${NVME_DEVS[*]:-none}"
+if [ "${#NVME_DEVS[@]}" -eq 0 ]; then echo "no free NVMe device found, aborting"; exit 1; fi
+if [ "${#NVME_DEVS[@]}" -eq 1 ]; then
+    DATA_DEV=${NVME_DEVS[0]}
+else
+    sudo apt-get update && sudo apt-get install -y mdadm
+    sudo mdadm --create /dev/md0 --level=0 --raid-devices="${#NVME_DEVS[@]}" "${NVME_DEVS[@]}"
+    DATA_DEV=/dev/md0
+fi
+sudo mkfs.xfs "$DATA_DEV"
 
-sudo mkdir /mnt/nvme
-sudo mount /dev/md0 /mnt/nvme
+sudo mkdir -p /mnt/nvme
+sudo mount "$DATA_DEV" /mnt/nvme
 
 echo "=== [1/2] NVIDIA driver ==="
 sudo apt-get update
 sudo apt-get install -y ubuntu-drivers-common
-sudo apt-get install -y nvidia-driver-590
+# Ubuntu 24.04 updates pocket ships 590.48.01 and 610.57.04 (checked 2026-10-01).
+# R610 adds legacy CUDA IPC support to cuda-checkpoint; override with NVIDIA_DRIVER=590.
+NVIDIA_DRIVER=${NVIDIA_DRIVER:-610}
+sudo apt-get install -y "nvidia-driver-${NVIDIA_DRIVER}"
+# The driver package blacklists nouveau but that only applies after a reboot;
+# on a fresh VM nouveau already holds the GPUs, so unload it and load nvidia now.
+if lsmod | grep -q '^nouveau'; then sudo rmmod nouveau; fi
+sudo modprobe nvidia && sudo modprobe nvidia_uvm
 # Enable persistence mode: keeps driver loaded between processes.
 # Critical for restore performance: ~10s without, ~2.5s with.
 sudo nvidia-smi -pm 1

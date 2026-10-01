@@ -6,7 +6,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libprotobuf-dev libprotobuf-c-dev protobuf-c-compiler protobuf-compiler \
     python3-protobuf pkg-config libnftables-dev libcap-dev libbsd-dev \
     libnet-dev libnl-3-dev libgnutls28-dev \
-    python3-yaml libaio-dev uuid-dev ca-certificates wget \
+    python3-yaml libaio-dev liblz4-dev uuid-dev ca-certificates wget \
     tini net-tools \
     python3 python3-venv && \
     rm -rf /var/lib/apt/lists/*
@@ -52,6 +52,30 @@ FROM bench-base AS criu-fast-cuda-1
 RUN git clone https://github.com/ooraph/criu.git /criu && \
     cd /criu && \
     git checkout fast-cuda-1 && \
+    make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && \
+    cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
+
+# criu-v42-ours — what production runs (2026-10): CRIU v4.2 + custom CUDA plugin,
+# tag v4.2-cuda-plugin-optim == branch fast_cuda_plugin_final
+FROM bench-base AS criu-v42-ours
+
+RUN git clone https://github.com/ooraph/criu.git /criu && \
+    cd /criu && \
+    git checkout v4.2-cuda-plugin-optim && \
+    make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && \
+    cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
+
+# criu-upstream-head — upstream criu-dev pinned at 2026-10-01 head: libcuda driver-api
+# backend + device-map, PR #3021/#3022 (asyncd memfd, AIO), --image-io-mode (#3066), LZ4.
+ARG UPSTREAM_HEAD=4485a86da237
+FROM bench-base AS criu-upstream-head
+ARG UPSTREAM_HEAD
+
+RUN git clone https://github.com/checkpoint-restore/criu.git /criu && \
+    cd /criu && \
+    git checkout ${UPSTREAM_HEAD} && \
     make -j$(nproc) && make install-criu && \
     mkdir -p /usr/lib/criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/

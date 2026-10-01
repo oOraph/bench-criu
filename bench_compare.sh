@@ -6,9 +6,14 @@ set -eu -o pipefail
 TENSOR_SIZE=${TENSOR_SIZE:-60000}
 NVME_BASE=${BENCH_DIR:-/mnt/nvme}
 CONTAINER=bench1
-IMAGE_HOME_MADE=${IMAGE_HOME_MADE:-criu-fast-cuda-1}
-IMAGE_NEW=${IMAGE_NEW:-criu-optimized}
-IMAGE_ORIG=${IMAGE_ORIG:-criu-dev}
+# Scenarios: "label|image|extra criu options (passed to both dump and restore)".
+# Override with SCENARIOS="a|img|opts;b|img2|opts2" (semicolon separated).
+# Note: since upstream PR #3066, O_DIRECT/AIO page reads are OFF unless --image-io-mode=direct.
+DEFAULT_SCENARIOS="v42-ours|criu-v42-ours|"
+DEFAULT_SCENARIOS+=";upstream|criu-upstream-head|"
+DEFAULT_SCENARIOS+=";upstream-direct|criu-upstream-head|--image-io-mode=direct"
+DEFAULT_SCENARIOS+=";upstream-cli-direct|criu-upstream-head|--image-io-mode=direct --plugin-option=cuda_plugin.backend=cuda-checkpoint"
+SCENARIOS=${SCENARIOS:-$DEFAULT_SCENARIOS}
 RUNS=${RUNS:-2}
 DROP_CACHE=${DROP_CACHE:-"yes"}
 
@@ -32,6 +37,7 @@ run_plugin() {
     local label=$1
     local image=$2
     local run=$3
+    local criu_opts=${4:-}
     local dump_dir=$NVME_BASE/dump_${label}_$run
 
     cleanup_container
@@ -57,7 +63,7 @@ run_plugin() {
     local t0; t0=$(( $(date +%s%N) / 1000000 ))
     local dump_log dump_rc
     dump_log=$(nsenter -n -m -u -p -i -t "$container_init_pid" -- \
-        criu dump --shell-job --skip-in-flight -D "$dump_dir" -t "$app_pid"  2>&1) && dump_rc=0 || dump_rc=$?
+        criu dump --shell-job --skip-in-flight $criu_opts -D "$dump_dir" -t "$app_pid"  2>&1) && dump_rc=0 || dump_rc=$?
     local dump_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 ))
     echo "$dump_log" | grep -E 'timing|Error|Warn|Err' || true
     if [ $dump_rc -ne 0 ]; then
@@ -87,7 +93,7 @@ run_plugin() {
     local pre_size; pre_size=$(wc -c < "$outfile" 2>/dev/null || echo 0)
     t0=$(( $(date +%s%N) / 1000000 ))
     nsenter -n -m -u -p -i -t "$container_init_pid" -- \
-        bash -c "touch /tmp/go && criu restore --shell-job -D $dump_dir --manage-cgroups --skip-in-flight -v3" \
+        bash -c "touch /tmp/go && criu restore --shell-job -D $dump_dir --manage-cgroups --skip-in-flight $criu_opts -v3" \
         > "$dump_dir/restore.log" 2>&1 &
     local restore_pid=$!
 
@@ -113,20 +119,14 @@ run_plugin() {
 }
 
 log "=== Benchmark start: TENSOR_SIZE=$TENSOR_SIZE RUNS=$RUNS ==="
-log "New image:       $IMAGE_NEW"
-log "Orig image:      $IMAGE_ORIG"
-log "Home-made image: $IMAGE_HOME_MADE"
+IFS=';' read -ra SCENARIO_LIST <<< "$SCENARIOS"
+for sc in "${SCENARIO_LIST[@]}"; do log "scenario: $sc"; done
 
-echo ""
-echo "=== SCENARIO 1: test_app + orig image ==="
-for r in $(seq 1 $RUNS); do run_plugin orig "$IMAGE_ORIG" $r; echo; done
-
-echo ""
-echo "=== SCENARIO 2: test_app + new image ==="
-for r in $(seq 1 $RUNS); do run_plugin new "$IMAGE_NEW" $r; echo; done
-
-echo ""
-echo "=== SCENARIO 3: test_app + home made image ==="
-for r in $(seq 1 $RUNS); do run_plugin home-made "$IMAGE_HOME_MADE" $r; echo; done
+for sc in "${SCENARIO_LIST[@]}"; do
+    IFS='|' read -r label image opts <<< "$sc"
+    echo ""
+    echo "=== SCENARIO $label: image=$image opts='$opts' ==="
+    for r in $(seq 1 $RUNS); do run_plugin "$label" "$image" $r "$opts" || true; echo; done
+done
 
 log "=== All benchmarks complete ==="

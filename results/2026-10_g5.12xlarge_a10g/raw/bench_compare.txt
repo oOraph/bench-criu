@@ -1,0 +1,273 @@
+sudo: preserving the entire environment is not supported, '-E' is ignored
+[14:56:18] === Benchmark start: TENSOR_SIZE=60000 RUNS=2 ===
+[14:56:18] scenario: v42-ours|criu-v42-ours|
+[14:56:18] scenario: upstream|criu-upstream-head|
+[14:56:18] scenario: upstream-direct|criu-upstream-head|--image-io-mode=direct
+[14:56:18] scenario: upstream-cli-direct|criu-upstream-head|--image-io-mode=direct --plugin-option=cuda_plugin.backend=cuda-checkpoint
+
+=== SCENARIO v42-ours: image=criu-v42-ours opts='' ===
+[14:56:18] [v42-ours run=1] starting container image=criu-v42-ours (TENSOR_SIZE=60000)
+7d935a2540f2bfe15fabf00ef24b5e5d450c899c154ac7af729f6e671a73c634
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[14:56:20] [v42-ours run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1290): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:418): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:418): Will restore 64 with interrupted system call
+[14:56:40] [v42-ours run=1] dump=19892ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+[14:56:40] drop caches
+[14:56:43] [v42-ours run=1] restore start
+(00.041583) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(05.943792) [timing] O_DIRECT pread restore: 5101 ms (2.9 GB/s) [mlock=0 ms pread=5101 ms]
+(05.944097) cuda_plugin: [timing] O_DIRECT pread restore: 5102 ms
+(07.572754) cuda_plugin: [timing] cuda-checkpoint restore+unlock: 1629 ms
+[14:56:55] [v42-ours run=1] restore=7745ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.026s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=v42-ours run=1 dump_ms=19892 restore_ms=7745
+bench1
+
+[14:56:55] [v42-ours run=2] starting container image=criu-v42-ours (TENSOR_SIZE=60000)
+ea91570ba48f3ffe6fecf3bdbc37aad1bdba85dd989d2f5d84a8f49ffabd77db
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[14:57:03] [v42-ours run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1290): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:418): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:418): Will restore 64 with interrupted system call
+[14:57:23] [v42-ours run=2] dump=19876ms  gpu-pages=14G  pages-*.img=319M  inventory=yes
+[14:57:23] drop caches
+[14:57:23] [v42-ours run=2] restore start
+(00.041656) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(05.962977) [timing] O_DIRECT pread restore: 5088 ms (2.9 GB/s) [mlock=0 ms pread=5088 ms]
+(05.963256) cuda_plugin: [timing] O_DIRECT pread restore: 5089 ms
+(07.586788) cuda_plugin: [timing] cuda-checkpoint restore+unlock: 1624 ms
+[14:57:35] [v42-ours run=2] restore=7867ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.026s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=v42-ours run=2 dump_ms=19876 restore_ms=7867
+bench1
+
+
+=== SCENARIO upstream: image=criu-upstream-head opts='' ===
+[14:57:36] [upstream run=1] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+508a32978c73de5443f235e77b61152483bc7593f7fbef11450cd43890608889
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[14:57:43] [upstream run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1286): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[14:57:56] [upstream run=1] dump=12370ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[14:57:56] drop caches
+[14:58:07] [upstream run=1] restore start
+(00.039789) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[14:58:23] [upstream run=1] restore=12914ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.026s)
+[POST] first sum: +0.132s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream run=1 dump_ms=12370 restore_ms=12914
+bench1
+
+[14:58:24] [upstream run=2] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+c7ab5fbdfd2d6ebab06ee57b3c4443013784f5b5c1cd28ea234abe343f33a3ff
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[14:58:32] [upstream run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1286): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[14:58:44] [upstream run=2] dump=12325ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[14:58:44] drop caches
+[14:58:56] [upstream run=2] restore start
+(00.039712) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[14:59:12] [upstream run=2] restore=12893ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.025s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream run=2 dump_ms=12325 restore_ms=12893
+bench1
+
+
+=== SCENARIO upstream-direct: image=criu-upstream-head opts='--image-io-mode=direct' ===
+[14:59:13] [upstream-direct run=1] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+3948ca07a20915d244a9f9d626a8cc0d7e0ae90ec16b9cd4f0002a8fc58409e1
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[14:59:21] [upstream-direct run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1286): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[14:59:41] [upstream-direct run=1] dump=20288ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[14:59:41] drop caches
+[14:59:42] [upstream-direct run=1] restore start
+(00.039690) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[14:59:56] [upstream-direct run=1] restore=10641ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.025s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream-direct run=1 dump_ms=20288 restore_ms=10641
+bench1
+
+[14:59:57] [upstream-direct run=2] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+978a4424e352d888aa21327df00a530c392f68a581ad7c248a3ca161b623d7a4
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=61
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:00:04] [upstream-direct run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1286): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 65 with interrupted system call
+[15:00:25] [upstream-direct run=2] dump=20330ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[15:00:25] drop caches
+[15:00:25] [upstream-direct run=2] restore start
+(00.040361) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:00:40] [upstream-direct run=2] restore=10755ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=61
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=61
+[POST] device: NVIDIA A10G (+0.025s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream-direct run=2 dump_ms=20330 restore_ms=10755
+bench1
+
+
+=== SCENARIO upstream-cli-direct: image=criu-upstream-head opts='--image-io-mode=direct --plugin-option=cuda_plugin.backend=cuda-checkpoint' ===
+[15:00:40] [upstream-cli-direct run=1] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+79d39c589b1c7f37c3d7f801101a8870c2c8cd3097d37dcf2f212fe51ed4c962
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:00:48] [upstream-cli-direct run=1] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1286): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[15:01:09] [upstream-cli-direct run=1] dump=20427ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[15:01:09] drop caches
+[15:01:09] [upstream-cli-direct run=1] restore start
+(00.040227) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:01:24] [upstream-cli-direct run=1] restore=10963ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.025s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream-cli-direct run=1 dump_ms=20427 restore_ms=10963
+bench1
+
+[15:01:24] [upstream-cli-direct run=2] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+bc1312e4aba8ffd921fe9aac8f3a29a64e7d713c781167b59117fe1561d3266e
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[15:01:32] [upstream-cli-direct run=2] dump start
+Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+Warn  (criu/kerndat.c:1286): Can't keep kdat cache on non-tempfs
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 62 with interrupted system call
+Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 64 with interrupted system call
+[15:01:52] [upstream-cli-direct run=2] dump=20402ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[15:01:52] drop caches
+[15:01:53] [upstream-cli-direct run=2] restore start
+(00.039995) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[15:02:07] [upstream-cli-direct run=2] restore=11071ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A10G (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-59318.554688 y=53.674988 pid=60
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=60
+[POST] device: NVIDIA A10G (+0.026s)
+[POST] first sum: +0.131s from wake
+[POST] x=-59318.554688 y=53.674988
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream-cli-direct run=2 dump_ms=20402 restore_ms=11071
+bench1
+
+[15:02:08] === All benchmarks complete ===

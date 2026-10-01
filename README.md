@@ -19,6 +19,17 @@ Three CRIU builds are compared head-to-head:
 | `new` | `criu-optimized` | Optimized CRIU build (contains https://github.com/checkpoint-restore/criu/pull/3021 + 3022 on top of criu-dev) |
 | `home-made` | `fast-cuda-1` | Experimental fast CUDA checkpoint plugin (optimization scoped to the cuda plugin only where we offload gpu memory pages to drive with O_DIRECT) |
 
+### 2026-10 variants
+
+| Label | Image target | Description |
+|---|---|---|
+| `v42-ours` | `criu-v42-ours` | CRIU v4.2 + custom CUDA plugin (tag `v4.2-cuda-plugin-optim`, what production runs) |
+| `upstream` | `criu-upstream-head` | upstream `criu-dev` pinned at `4485a86da` (2026-10-01): libcuda driver-api backend, PR #3021/#3022, LZ4 |
+| `upstream-direct` | `criu-upstream-head` | same + `--image-io-mode=direct` (O_DIRECT/AIO page reads are OFF by default since PR #3066) |
+| `upstream-cli-direct` | `criu-upstream-head` | same + `--plugin-option=cuda_plugin.backend=cuda-checkpoint` (CLI backend instead of libcuda) |
+
+Scenarios are defined in `bench_compare.sh` as `label|image|extra criu options` (options are passed to both dump and restore). Override with `SCENARIOS="a|img|opts;b|img2|opts2"`.
+
 ## Setup
 
 The benchmark targets a bare-metal machine with:
@@ -26,8 +37,8 @@ The benchmark targets a bare-metal machine with:
 - NVIDIA GPU with driver persistence mode enabled (`nvidia-smi -pm 1`)
 - Docker + nvidia-container-toolkit
 
-Run `setup.sh` to install everything (NVIDIA driver, Docker, nvidia-container-toolkit, RAID array). BEWARE, use in a disposable vm
-The script is mean to run on a vm with 4 nvme drives (like g6.12xlarge for example), pay attention the the nvme names before running.
+Run `setup.sh` to install everything (NVIDIA driver, Docker, nvidia-container-toolkit, RAID array). BEWARE, use in a disposable vm.
+The script auto-detects the free instance-store NVMe disks and stripes them (a single disk is used as is). Driver version defaults to `NVIDIA_DRIVER=610` (Ubuntu 26.04 ships 610.57.04 and 595.91.07 as of 2026-10).
 
 ## Build
 
@@ -35,6 +46,9 @@ The script is mean to run on a vm with 4 nvme drives (like g6.12xlarge for examp
 docker build --target criu-dev -t criu-dev .
 docker build --target criu-optimized -t criu-optimized .
 docker build --target criu-fast-cuda-1 -t criu-fast-cuda-1 .
+# 2026-10 variants
+docker build --target criu-v42-ours -t criu-v42-ours .
+docker build --target criu-upstream-head -t criu-upstream-head .
 ```
 
 ## Run
@@ -51,6 +65,7 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 
 ## Results
 
+- [results/2026-10_g5.12xlarge_a10g/summary.md](results/2026-10_g5.12xlarge_a10g/summary.md) — production plugin (v4.2) vs upstream `criu-dev` head `4485a86da` on AWS `g5.12xlarge` (A10G, driver 610), `TENSOR_SIZE=60000`
 - [results/mini_benchmark/summary.md](results/mini_benchmark/summary.md) — synthetic benchmark on AWS `g6.12xlarge` (NVIDIA L4, `TENSOR_SIZE=60000`)
 - [results/real_inference/summary.md](results/real_inference/summary.md) — real inference workloads (SDXL, Llama-3.1-8B, Qwen3-8B) via runc checkpoint / restore + cuda plugin + cuda-checkpoint
 - [results/vllm_sleep_awake/summary.md](results/vllm_sleep_awake/summary.md) — vLLM cooperative sleep/wake-up benchmark (Llama-3.1-8B, Qwen3-8B)
