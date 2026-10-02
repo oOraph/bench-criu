@@ -24,8 +24,15 @@ sudo mkdir -p /mnt/nvme
 sudo mount "$DATA_DEV" /mnt/nvme
 
 echo "=== [1/2] NVIDIA driver ==="
+# SKIP_DRIVER=1 keeps a preinstalled driver (e.g. Lambda Labs / HGX nodes whose driver must match the
+# vendor's Fabric Manager); only persistence mode is enabled.
+if [ "${SKIP_DRIVER:-0}" = 1 ]; then
+    echo "SKIP_DRIVER=1: keeping the installed driver $(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -1)"
+    sudo nvidia-smi -pm 1 || true
+    nvidia-smi -q | grep -A2 '^ *Fabric' | head -3 || true
+fi
 sudo apt-get update
-sudo apt-get install -y ubuntu-drivers-common
+[ "${SKIP_DRIVER:-0}" = 1 ] || sudo apt-get install -y ubuntu-drivers-common
 # Ubuntu 24.04 updates pocket ships 590.48.01 and 610.57.04 (checked 2026-10-01).
 # R610 adds legacy CUDA IPC support to cuda-checkpoint; override with NVIDIA_DRIVER=590.
 NVIDIA_DRIVER=${NVIDIA_DRIVER:-610}
@@ -35,7 +42,9 @@ NVIDIA_DRIVER=${NVIDIA_DRIVER:-610}
 # nvidia-fabricmanager-595 = 595.91.07 on 26.04; there is no FM for 610.57.04).
 # Neither NVreg_NvLinkDisable=1 nor unbinding the NVSwitch devices (pci-stub) avoids the requirement,
 # even after a reboot (tested 2026-10-02 on p4de): FM is mandatory on HGX boards.
-if lspci -d 10de: | grep -qi bridge; then
+if [ "${SKIP_DRIVER:-0}" = 1 ]; then
+    NVSWITCH=0
+elif lspci -d 10de: | grep -qi bridge; then
     echo "NVSwitch detected: installing nvidia-driver-${NVIDIA_DRIVER}-server + nvidia-fabricmanager-${NVIDIA_DRIVER}"
     sudo apt-get install -y "nvidia-driver-${NVIDIA_DRIVER}-server" "nvidia-fabricmanager-${NVIDIA_DRIVER}"
     NVSWITCH=1
@@ -45,8 +54,10 @@ else
 fi
 # The driver package blacklists nouveau but that only applies after a reboot;
 # on a fresh VM nouveau already holds the GPUs, so unload it and load nvidia now.
+if [ "${SKIP_DRIVER:-0}" != 1 ]; then
 if lsmod | grep -q '^nouveau'; then sudo rmmod nouveau; fi
 sudo modprobe nvidia && sudo modprobe nvidia_uvm
+fi
 if [ "$NVSWITCH" = 1 ]; then
     sudo systemctl enable --now nvidia-fabricmanager
     for i in $(seq 1 90); do
