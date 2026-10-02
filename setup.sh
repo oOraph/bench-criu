@@ -29,11 +29,31 @@ sudo apt-get install -y ubuntu-drivers-common
 # Ubuntu 24.04 updates pocket ships 590.48.01 and 610.57.04 (checked 2026-10-01).
 # R610 adds legacy CUDA IPC support to cuda-checkpoint; override with NVIDIA_DRIVER=590.
 NVIDIA_DRIVER=${NVIDIA_DRIVER:-610}
-sudo apt-get install -y "nvidia-driver-${NVIDIA_DRIVER}"
+# NVSwitch systems (p4d/p4de/p5, HGX boards) need NVIDIA Fabric Manager or CUDA fails with
+# error 802 "system not yet initialized". FM must match the driver to the patch level and
+# Ubuntu only ships it for the -server flavour (e.g. nvidia-driver-595-server +
+# nvidia-fabricmanager-595 = 595.91.07 on 26.04; there is no FM for 610.57.04).
+# NVreg_NvLinkDisable=1 alone does NOT avoid the requirement (tested 2026-10-02).
+if lspci -d 10de: | grep -qi bridge; then
+    echo "NVSwitch detected: installing nvidia-driver-${NVIDIA_DRIVER}-server + nvidia-fabricmanager-${NVIDIA_DRIVER}"
+    sudo apt-get install -y "nvidia-driver-${NVIDIA_DRIVER}-server" "nvidia-fabricmanager-${NVIDIA_DRIVER}"
+    NVSWITCH=1
+else
+    sudo apt-get install -y "nvidia-driver-${NVIDIA_DRIVER}"
+    NVSWITCH=0
+fi
 # The driver package blacklists nouveau but that only applies after a reboot;
 # on a fresh VM nouveau already holds the GPUs, so unload it and load nvidia now.
 if lsmod | grep -q '^nouveau'; then sudo rmmod nouveau; fi
 sudo modprobe nvidia && sudo modprobe nvidia_uvm
+if [ "$NVSWITCH" = 1 ]; then
+    sudo systemctl enable --now nvidia-fabricmanager
+    for i in $(seq 1 90); do
+        nvidia-smi -q 2>/dev/null | grep -A1 '^ *Fabric' | grep -q 'State *: Completed' && break
+        sleep 2
+    done
+    nvidia-smi -q | grep -A2 '^ *Fabric' | head -3
+fi
 # Enable persistence mode: keeps driver loaded between processes.
 # Critical for restore performance: ~10s without, ~2.5s with.
 sudo nvidia-smi -pm 1
