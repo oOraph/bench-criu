@@ -1,0 +1,166 @@
+[13:58:23] === vLLM benchmark: MODEL=Qwen/Qwen3-8B SLEEP_MODE=1 RUNS=2 DROP_CACHE=yes CUDA_RESTORE_THREADS=16 CRIU_BASE_OPTS='--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap'
+
+=== SCENARIO upstream: image=vllm-criu-upstream opts='' ===
+[13:58:23] [upstream run=1] starting container image=vllm-criu-upstream model=Qwen/Qwen3-8B
+[13:58:26] [upstream run=1] waiting for /health (timeout 900s)
+[14:00:52] [upstream run=1] server READY after 146s
+[14:00:52] [upstream run=1] app_pid=63 (container ns) init_pid=253505; tree:
+    PID    PPID   RSS COMMAND
+     65      63 1426412  \_ python3
+    674      65 12536      \_ python3
+    675      65 2544392      \_ VLLM::EngineCor
+[14:00:52] [upstream run=1] POST /sleep?level=1
+[14:01:03] [upstream run=1] sleep=10774ms http=200 is_sleeping={"is_sleeping":true}
+[14:01:03] [upstream run=1] dump start
+[14:01:18] [upstream run=1] dump=15174ms rc=0 gpu-pages=0
+none pages-*.img=27G
+[14:01:18] drop caches
+[14:01:21] [upstream run=1] restore start
+[14:01:31] [upstream run=1] restore=9693ms
+[14:01:31] [upstream run=1] POST /wake_up
+[14:01:35] [upstream run=1] wake_up=3611ms http=200 is_sleeping={"is_sleeping":false}
+[14:01:36] [upstream run=1] inference=OK infer_ms=988 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=upstream run=1 coldstart_s=146 sleep_ms=10774 dump_ms=15174 restore_ms=9693 wake_ms=3611 inference=OK infer_ms=988
+benchvllm
+
+[14:01:40] [upstream run=2] starting container image=vllm-criu-upstream model=Qwen/Qwen3-8B
+[14:01:44] [upstream run=2] waiting for /health (timeout 900s)
+[14:04:08] [upstream run=2] server READY after 144s
+[14:04:08] [upstream run=2] app_pid=64 (container ns) init_pid=263844; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1419024  \_ python3
+    665      66 12552      \_ python3
+    666      66 2542572      \_ VLLM::EngineCor
+[14:04:08] [upstream run=2] POST /sleep?level=1
+[14:04:19] [upstream run=2] sleep=10765ms http=200 is_sleeping={"is_sleeping":true}
+[14:04:19] [upstream run=2] dump start
+[14:04:34] [upstream run=2] dump=15153ms rc=0 gpu-pages=0
+none pages-*.img=27G
+[14:04:34] drop caches
+[14:04:38] [upstream run=2] restore start
+[14:04:48] [upstream run=2] restore=9829ms
+[14:04:48] [upstream run=2] POST /wake_up
+[14:04:51] [upstream run=2] wake_up=3606ms http=200 is_sleeping={"is_sleeping":false}
+[14:04:52] [upstream run=2] inference=OK infer_ms=1002 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=upstream run=2 coldstart_s=144 sleep_ms=10765 dump_ms=15153 restore_ms=9829 wake_ms=3606 inference=OK infer_ms=1002
+benchvllm
+
+
+=== SCENARIO upstream-direct: image=vllm-criu-upstream opts='--image-io-mode=direct' ===
+[14:04:57] [upstream-direct run=1] starting container image=vllm-criu-upstream model=Qwen/Qwen3-8B
+[14:05:01] [upstream-direct run=1] waiting for /health (timeout 900s)
+[14:07:26] [upstream-direct run=1] server READY after 145s
+[14:07:26] [upstream-direct run=1] app_pid=64 (container ns) init_pid=273515; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1452900  \_ python3
+    668      66 12624      \_ python3
+    669      66 2544036      \_ VLLM::EngineCor
+[14:07:26] [upstream-direct run=1] POST /sleep?level=1
+[14:07:37] [upstream-direct run=1] sleep=10795ms http=200 is_sleeping={"is_sleeping":true}
+[14:07:37] [upstream-direct run=1] dump start
+[14:07:49] [upstream-direct run=1] dump=11596ms rc=0 gpu-pages=0
+none pages-*.img=27G
+[14:07:49] drop caches
+[14:07:50] [upstream-direct run=1] restore start
+[14:07:58] [upstream-direct run=1] restore=8301ms
+[14:07:58] [upstream-direct run=1] POST /wake_up
+[14:08:02] [upstream-direct run=1] wake_up=3609ms http=200 is_sleeping={"is_sleeping":false}
+[14:08:03] [upstream-direct run=1] inference=OK infer_ms=999 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=upstream-direct run=1 coldstart_s=145 sleep_ms=10795 dump_ms=11596 restore_ms=8301 wake_ms=3609 inference=OK infer_ms=999
+benchvllm
+
+[14:08:07] [upstream-direct run=2] starting container image=vllm-criu-upstream model=Qwen/Qwen3-8B
+[14:08:11] [upstream-direct run=2] waiting for /health (timeout 900s)
+[14:10:37] [upstream-direct run=2] server READY after 146s
+[14:10:37] [upstream-direct run=2] app_pid=64 (container ns) init_pid=283223; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1448540  \_ python3
+    683      66 12544      \_ python3
+    684      66 2542852      \_ VLLM::EngineCor
+[14:10:37] [upstream-direct run=2] POST /sleep?level=1
+[14:10:48] [upstream-direct run=2] sleep=10745ms http=200 is_sleeping={"is_sleeping":true}
+[14:10:48] [upstream-direct run=2] dump start
+[14:11:00] [upstream-direct run=2] dump=11806ms rc=0 gpu-pages=0
+none pages-*.img=27G
+[14:11:00] drop caches
+[14:11:00] [upstream-direct run=2] restore start
+[14:11:08] [upstream-direct run=2] restore=7678ms
+[14:11:08] [upstream-direct run=2] POST /wake_up
+[14:11:12] [upstream-direct run=2] wake_up=3608ms http=200 is_sleeping={"is_sleeping":false}
+[14:11:13] [upstream-direct run=2] inference=OK infer_ms=1004 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=upstream-direct run=2 coldstart_s=146 sleep_ms=10745 dump_ms=11806 restore_ms=7678 wake_ms=3608 inference=OK infer_ms=1004
+benchvllm
+
+
+=== SCENARIO parallel-direct: image=vllm-criu-parallel opts='--image-io-mode=direct' ===
+[14:11:18] [parallel-direct run=1] starting container image=vllm-criu-parallel model=Qwen/Qwen3-8B
+[14:11:21] [parallel-direct run=1] waiting for /health (timeout 900s)
+[14:13:45] [parallel-direct run=1] server READY after 144s
+[14:13:45] [parallel-direct run=1] app_pid=63 (container ns) init_pid=293179; tree:
+    PID    PPID   RSS COMMAND
+     65      63 1448940  \_ python3
+    681      65 12572      \_ python3
+    682      65 2541308      \_ VLLM::EngineCor
+[14:13:45] [parallel-direct run=1] POST /sleep?level=1
+[14:13:56] [parallel-direct run=1] sleep=10751ms http=200 is_sleeping={"is_sleeping":true}
+[14:13:56] [parallel-direct run=1] dump start
+(00.136928) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.145052) cuda_plugin: [timing] post-scan+diff: 4 ms, 0 new VMAs
+(02.133239) cuda_plugin: [timing] Driver API checkpoint: 1982 ms
+(02.145157) cuda_plugin: [timing] post-scan+diff: 6 ms, 1 new VMAs
+(02.870685) [timing] dump: process_vm_readv=528 ms O_DIRECT_write=197 ms total=725 ms
+(02.873205) cuda_plugin: [timing] process_vm_readv dump: 728 ms (3.2 GB/s)
+(02.960399) cuda_plugin: [timing] injected madvise(DONTNEED): 87 ms
+[14:14:08] [parallel-direct run=1] dump=11912ms rc=0 gpu-pages=2.2G pages-*.img=24G
+[14:14:08] drop caches
+[14:14:08] [parallel-direct run=1] restore start
+(03.261865) cuda_plugin: [timing] GPU page restore: 0 ms
+(03.270919) cuda_plugin: [timing] GPU page restore: 0 ms
+(03.433623) cuda_plugin: [timing] Driver API restore+unlock: 163 ms
+(03.623919) [timing] parallel restore: 184 ms (12.7 GB/s) [16 threads, 35 chunks, O_DIRECT]
+(03.623985) cuda_plugin: [timing] GPU page restore: 185 ms
+(06.626997) cuda_plugin: [timing] Driver API restore+unlock: 3003 ms
+(06.627392) cuda_plugin: [timing] GPU page restore: 0 ms
+[14:14:15] [parallel-direct run=1] restore=6927ms
+[14:14:15] [parallel-direct run=1] POST /wake_up
+[14:14:19] [parallel-direct run=1] wake_up=3626ms http=200 is_sleeping={"is_sleeping":false}
+[14:14:20] [parallel-direct run=1] inference=OK infer_ms=1022 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=parallel-direct run=1 coldstart_s=144 sleep_ms=10751 dump_ms=11912 restore_ms=6927 wake_ms=3626 inference=OK infer_ms=1022
+benchvllm
+
+[14:14:25] [parallel-direct run=2] starting container image=vllm-criu-parallel model=Qwen/Qwen3-8B
+[14:14:29] [parallel-direct run=2] waiting for /health (timeout 900s)
+[14:16:53] [parallel-direct run=2] server READY after 144s
+[14:16:53] [parallel-direct run=2] app_pid=64 (container ns) init_pid=302947; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1426576  \_ python3
+    681      66 12580      \_ python3
+    682      66 2552564      \_ VLLM::EngineCor
+[14:16:53] [parallel-direct run=2] POST /sleep?level=1
+[14:17:04] [parallel-direct run=2] sleep=10697ms http=200 is_sleeping={"is_sleeping":true}
+[14:17:04] [parallel-direct run=2] dump start
+(00.127846) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.136668) cuda_plugin: [timing] post-scan+diff: 4 ms, 0 new VMAs
+(02.084008) cuda_plugin: [timing] Driver API checkpoint: 1941 ms
+(02.096057) cuda_plugin: [timing] post-scan+diff: 6 ms, 1 new VMAs
+(02.821289) [timing] dump: process_vm_readv=527 ms O_DIRECT_write=198 ms total=725 ms
+(02.823722) cuda_plugin: [timing] process_vm_readv dump: 728 ms (3.2 GB/s)
+(02.918712) cuda_plugin: [timing] injected madvise(DONTNEED): 95 ms
+[14:17:16] [parallel-direct run=2] dump=11616ms rc=0 gpu-pages=2.2G pages-*.img=24G
+[14:17:16] drop caches
+[14:17:16] [parallel-direct run=2] restore start
+(03.310966) cuda_plugin: [timing] GPU page restore: 0 ms
+(03.321551) cuda_plugin: [timing] GPU page restore: 0 ms
+(03.483852) cuda_plugin: [timing] Driver API restore+unlock: 162 ms
+(03.667644) [timing] parallel restore: 178 ms (13.2 GB/s) [16 threads, 35 chunks, O_DIRECT]
+(03.667712) cuda_plugin: [timing] GPU page restore: 178 ms
+(06.670255) cuda_plugin: [timing] Driver API restore+unlock: 3003 ms
+(06.670457) cuda_plugin: [timing] GPU page restore: 0 ms
+[14:17:23] [parallel-direct run=2] restore=6973ms
+[14:17:23] [parallel-direct run=2] POST /wake_up
+[14:17:27] [parallel-direct run=2] wake_up=3618ms http=200 is_sleeping={"is_sleeping":false}
+[14:17:28] [parallel-direct run=2] inference=OK infer_ms=1003 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=parallel-direct run=2 coldstart_s=144 sleep_ms=10697 dump_ms=11616 restore_ms=6973 wake_ms=3618 inference=OK infer_ms=1003
+benchvllm
+
+[14:17:33] === All vLLM benchmarks complete ===

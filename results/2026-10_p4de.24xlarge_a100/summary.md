@@ -92,3 +92,42 @@ Checkpoint: 7.4 GB GPU pages + 3.1–3.5 GB CPU pages. Cold start ~22 s from the
   driver restore+unlock ~2 s, CRIU core on 3+ GB of CPU pages and the gunicorn tree ~3 s.
 - Dump: ~8.5 s ours vs 7.8 s upstream; driver checkpoint copy 4.1 s, our readv+write 2.4 s.
 - June k8s reference (L4): baseline 6.3 s restore, ours 5.6 s, upstream PRs 7.8 s; dump 9.6 / 15.2 / 9.1 s.
+
+## vLLM sleep level 1 → checkpoint → restore → wake_up (`bench_vllm.sh SLEEP_MODE=1`, Qwen3-8B, `RUNS=2`)
+
+`--enable-sleep-mode` + `VLLM_SERVER_DEV_MODE=1`; `POST /sleep?level=1` before the dump (weights → host RAM,
+KV cache freed), `POST /wake_up` after the restore. Checkpoint: **24 GB of CPU pages + 2.2 GB of GPU pages**
+(vs 71 + 3 GB without sleep). Our plugin has almost nothing to offload here; the CPU pages go through CRIU core.
+
+| variant | run | sleep (ms) | dump (ms) | restore (ms) | wake_up (ms) | **dump side** (sleep+dump) | **restore side** (restore+wake) |
+|---|---|---|---|---|---|---|---|
+| upstream, buffered | 1 | 10,774 | 15,174 | 9,693 | 3,611 | 26.0 s | 13.3 s |
+| upstream, buffered | 2 | 10,765 | 15,153 | 9,829 | 3,606 | 25.9 s | 13.4 s |
+| upstream, `--image-io-mode=direct` | 1 | 10,795 | 11,596 | 8,301 | 3,609 | 22.4 s | 11.9 s |
+| upstream, `--image-io-mode=direct` | 2 | 10,745 | 11,806 | 7,678 | 3,608 | 22.6 s | 11.3 s |
+| parallel plugin + direct | 1 | 10,751 | 11,912 | 6,927 (GPU fill 184 ms) | 3,626 | 22.7 s | 10.6 s |
+| parallel plugin + direct | 2 | 10,697 | 11,616 | 6,973 (GPU fill 178 ms) | 3,618 | 22.3 s | 10.6 s |
+
+Compared with the full (no-sleep) checkpoint on this box:
+
+| | dump side | restore side |
+|---|---|---|
+| upstream-direct, no sleep | 58 s | 40.6 s |
+| parallel plugin, no sleep | 65 s | 16.1 s |
+| upstream-direct + sleep 1 | 22.5 s | 11.6 s |
+| parallel + direct + sleep 1 | 22.5 s | 10.6 s |
+
+- Sleep level 1 cuts the dump side ~3× for everyone (no 37 s driver VRAM→host copy: the model offload is
+  done by vLLM itself in ~10.8 s, and the KV cache is dropped) and makes the restore side 10.6–11.6 s.
+- On the restore side with sleep, CRIU core moves the 24 GB of CPU pages at ~4–5 GB/s with `--image-io-mode=direct`
+  (buffered: ~3 GB/s); our plugin's share is 0.18 s. The 3.6 s wake_up (vLLM copies 16 GB host→VRAM and
+  re-allocates the KV cache) is the floor on the restore side.
+- Net for the shim: sleep 1 + direct restore ≈ 10.6 s vs 16.1 s with our full-checkpoint parallel path, at
+  the price of app cooperation and ~11 s of sleep latency on the dump side.
+
+### SDXL upstream run-1 dump failure (for the record)
+
+`criu/util.c: sh exited, status=127` → `Iptables configuration failed` → `Failed to lock TCP connection`:
+the toolkit image lacks `iptables`, which CRIU needs to lock established TCP connections (`--tcp-established`).
+The first start still held an HTTPS session from the model download; later starts had no connection.
+Fixed by adding `iptables` to `Dockerfile.vllm`.

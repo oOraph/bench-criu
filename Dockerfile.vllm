@@ -14,7 +14,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     python3-protobuf pkg-config libnftables-dev libcap-dev libbsd-dev \
     libnet-dev libnl-3-dev libgnutls28-dev \
     python3-yaml libaio-dev liblz4-dev uuid-dev ca-certificates wget curl \
-    tini net-tools procps && \
+    tini net-tools procps iptables && \
     rm -rf /var/lib/apt/lists/*
 
 RUN wget -q https://github.com/NVIDIA/cuda-checkpoint/raw/main/bin/x86_64_Linux/cuda-checkpoint \
