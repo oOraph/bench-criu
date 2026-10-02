@@ -92,6 +92,18 @@ RUN cd /criu && make clean >/dev/null 2>&1; cd /criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && \
     { [ -f plugins/cuda/cuda-offload ] && cp plugins/cuda/cuda-offload /usr/local/bin/ || true; }
 
+# criu-ref — build from any pushed ref of a CRIU repo, e.g.
+#   docker build --target criu-ref -t criu-head-parallel \
+#       --build-arg CRIU_REPO=https://github.com/oOraph/criu.git --build-arg CRIU_REF=fast_cuda_plugin_on_head_parallel .
+FROM bench-base AS criu-ref
+ARG CRIU_REPO=https://github.com/oOraph/criu.git
+ARG CRIU_REF=fast_cuda_plugin_on_head
+
+RUN git clone ${CRIU_REPO} /criu && cd /criu && git checkout ${CRIU_REF} && \
+    make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && \
+    { [ -f plugins/cuda/cuda-offload ] && cp plugins/cuda/cuda-offload /usr/local/bin/ || true; }
+
 # criu-base (crit helper)
 FROM base AS criu-base
 
