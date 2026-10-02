@@ -145,3 +145,11 @@ blog reports 31.1 s restore for this model with upstream CRIU on a B200 (NFS).
 
 Restore **−63%** (17.2 s vs 46.9 s). Same shape as Qwen3-8B: dump dominated by the driver's 37.3 s VRAM→host
 copy; restore = 3.7 s fill + 10.6 s driver copy + ~3 s CRIU core.
+
+### gpt-oss-120b + sleep level 1: not feasible on the A100-80GB with vLLM 0.30
+
+`--enable-sleep-mode` forces the `cumem` allocator ("Enabling cumem allocator because sleep mode requires it"),
+and weight loading then OOMs on the 80 GB GPU (`CUDA Error: out of memory at cumem_allocator.cpp:163`, free 4 MB of
+85 GB) while the same model loads fine with the default allocator. Likely a transient second copy during the
+MXFP4→Marlin repack that the caching allocator reuses in place. Reproduced twice with a verified-free GPU
+(raw log: `raw/vllm_gptoss_sleep_oom.txt`). Would need a larger GPU (H200/B200).
