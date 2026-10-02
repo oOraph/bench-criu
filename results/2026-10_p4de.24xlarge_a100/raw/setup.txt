@@ -1,0 +1,1838 @@
+instance-store NVMe devices: /dev/nvme1n1 /dev/nvme4n1 /dev/nvme6n1 /dev/nvme2n1 /dev/nvme5n1 /dev/nvme8n1 /dev/nvme3n1 /dev/nvme7n1
+Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute InRelease
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
+Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports InRelease [137 kB]
+Get:4 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 Packages [16.3 MB]
+Get:5 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe Translation-en [6329 kB]
+Get:6 http://security.ubuntu.com/ubuntu resolute-security InRelease [137 kB]
+Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64 Components [4556 kB]
+Get:8 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64 c-n-f Metadata [313 kB]
+Get:9 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/multiverse amd64v3 Packages [291 kB]
+Get:10 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/multiverse Translation-en [127 kB]
+Get:11 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/multiverse amd64 Components [50.0 kB]
+Get:12 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/multiverse amd64 c-n-f Metadata [8276 B]
+Get:13 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 Packages [718 kB]
+Get:14 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [167 kB]
+Get:15 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64 Components [97.7 kB]
+Get:16 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64 c-n-f Metadata [5756 B]
+Get:17 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/universe amd64v3 Packages [316 kB]
+Get:18 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [101 kB]
+Get:19 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Components [201 kB]
+Get:20 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/universe amd64 c-n-f Metadata [4704 B]
+Get:21 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/restricted amd64v3 Packages [487 kB]
+Get:22 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/restricted Translation-en [97.7 kB]
+Get:23 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 Packages [11.9 kB]
+Get:24 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse Translation-en [3276 B]
+Get:25 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64 Components [216 B]
+Get:26 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64 c-n-f Metadata [256 B]
+Get:27 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/main amd64 Components [212 B]
+Get:28 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/main amd64 c-n-f Metadata [112 B]
+Get:29 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/universe amd64v3 Packages [3148 B]
+Get:30 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/universe Translation-en [7988 B]
+Get:31 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/universe amd64 Components [1056 B]
+Get:32 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/universe amd64 c-n-f Metadata [116 B]
+Get:33 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/restricted amd64 Components [216 B]
+Get:34 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/restricted amd64 c-n-f Metadata [120 B]
+Get:35 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/multiverse amd64 Components [216 B]
+Get:36 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports/multiverse amd64 c-n-f Metadata [120 B]
+Get:37 http://security.ubuntu.com/ubuntu resolute-security/main amd64v3 Packages [551 kB]
+Get:38 http://security.ubuntu.com/ubuntu resolute-security/main Translation-en [129 kB]
+Get:39 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Components [46.7 kB]
+Get:40 http://security.ubuntu.com/ubuntu resolute-security/main amd64 c-n-f Metadata [4616 B]
+Get:41 http://security.ubuntu.com/ubuntu resolute-security/universe amd64v3 Packages [192 kB]
+Get:42 http://security.ubuntu.com/ubuntu resolute-security/universe Translation-en [60.4 kB]
+Get:43 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Components [55.6 kB]
+Get:44 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 c-n-f Metadata [3552 B]
+Get:45 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64v3 Packages [447 kB]
+Get:46 http://security.ubuntu.com/ubuntu resolute-security/restricted Translation-en [89.7 kB]
+Get:47 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64v3 Packages [10.9 kB]
+Get:48 http://security.ubuntu.com/ubuntu resolute-security/multiverse Translation-en [2844 B]
+Get:49 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64 Components [212 B]
+Get:50 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64 c-n-f Metadata [120 B]
+Fetched 32.2 MB in 3s (11.3 MB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following packages will be upgraded:
+  mdadm
+1 upgraded, 0 newly installed, 0 to remove and 185 not upgraded.
+Need to get 478 kB of archives.
+After this operation, 1024 B of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 mdadm amd64 4.5-5ubuntu1.1 [478 kB]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Preconfiguring packages ...
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+Fetched 478 kB in 0s (14.9 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 85303 files and directories currently installed.)
+Preparing to unpack .../mdadm_4.5-5ubuntu1.1_amd64v3.deb ...
+Unpacking mdadm (4.5-5ubuntu1.1) over (4.5-5ubuntu1) ...
+Setting up mdadm (4.5-5ubuntu1.1) ...
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+update-initramfs: deferring update (trigger activated)
+Sourcing file `/etc/default/grub'
+Sourcing file `/etc/default/grub.d/40-force-partuuid.cfg'
+Sourcing file `/etc/default/grub.d/50-cloudimg-settings.cfg'
+Generating grub configuration file ...
+GRUB_FORCE_PARTUUID is set, will attempt initrdless boot
+Found linux image: /boot/vmlinuz-7.0.0-1006-aws
+Found initrd image: /boot/microcode.cpio /boot/initrd.img-7.0.0-1006-aws
+Warning: os-prober will not be executed to detect other bootable partitions.
+Systems on them will not be added to the GRUB boot configuration.
+Check GRUB_DISABLE_OS_PROBER documentation entry.
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+Processing triggers for dracut (110-11) ...
+update-initramfs: Generating /boot/initrd.img-7.0.0-1006-aws
+Processing triggers for man-db (2.13.1-1build1) ...
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+mdadm: Defaulting to version 1.2 metadata
+mdadm: array /dev/md0 started.
+meta-data=/dev/md0               isize=512    agcount=96, agsize=19121664 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=1
+         =                       reflink=1    bigtime=1 inobtcount=1 nrext64=1
+         =                       exchange=0   metadir=0
+data     =                       bsize=4096   blocks=1835672576, imaxpct=5
+         =                       sunit=128    swidth=1024 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1, parent=0
+log      =internal log           bsize=4096   blocks=521728, version=2
+         =                       sectsz=512   sunit=8 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+         =                       rgcount=0    rgsize=0 extents
+         =                       zoned=0      start=0 reserved=0
+Discarding blocks...Done.
+=== [1/2] NVIDIA driver ===
+Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute InRelease
+Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates InRelease
+Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports InRelease
+Hit:4 http://security.ubuntu.com/ubuntu resolute-security InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following additional packages will be installed:
+  python3-xkit
+Suggested packages:
+  python3-aptdaemon.pkcompat
+The following NEW packages will be installed:
+  python3-xkit ubuntu-drivers-common
+0 upgraded, 2 newly installed, 0 to remove and 185 not upgraded.
+Need to get 83.0 kB of archives.
+After this operation, 401 kB of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 python3-xkit all 0.5.0ubuntu8 [17.8 kB]
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 ubuntu-drivers-common amd64 1:0.10.9 [65.1 kB]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Preconfiguring packages ...
+Fetched 83.0 kB in 0s (1190 kB/s)
+Selecting previously unselected package python3-xkit.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 85304 files and directories currently installed.)
+Preparing to unpack .../python3-xkit_0.5.0ubuntu8_all.deb ...
+Unpacking python3-xkit (0.5.0ubuntu8) ...
+Selecting previously unselected package ubuntu-drivers-common.
+Preparing to unpack .../ubuntu-drivers-common_1%3a0.10.9_amd64.deb ...
+Unpacking ubuntu-drivers-common (1:0.10.9) ...
+Setting up python3-xkit (0.5.0ubuntu8) ...
+Setting up ubuntu-drivers-common (1:0.10.9) ...
+Created symlink '/etc/systemd/system/display-manager.service.wants/gpu-manager.service' → '/usr/lib/systemd/system/gpu-manager.service'.
+Unit /usr/lib/systemd/system/gpu-manager.service is added as a dependency to a non-existent unit display-manager.service.
+Created symlink '/etc/systemd/system/oem-config.service.wants/gpu-manager.service' → '/usr/lib/systemd/system/gpu-manager.service'.
+Unit /usr/lib/systemd/system/gpu-manager.service is added as a dependency to a non-existent unit oem-config.service.
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following additional packages will be installed:
+  bzip2 cpp cpp-15 cpp-15-x86-64-linux-gnu cpp-x86-64-linux-gnu dkms dpkg-dev
+  fakeroot gcc gcc-15 gcc-15-base gcc-15-x86-64-linux-gnu gcc-x86-64-linux-gnu
+  libalgorithm-diff-perl libalgorithm-diff-xs-perl libalgorithm-merge-perl
+  libasan8 libbz2-1.0 libcc1-0 libdisplay-info3 libdpkg-perl libdrm-intel1
+  libegl-mesa0 libegl1 libepoxy0 libfakeroot libfile-fcntllock-perl
+  libfontenc1 libgbm1 libgcc-15-dev libgl1 libgl1-mesa-dri libglvnd0
+  libglx-mesa0 libglx0 libgomp1 libhwasan0 libice6 libisl23 libitm1 liblsan0
+  libmpc3 libnvidia-cfg1-610 libnvidia-common-610 libnvidia-compute-610
+  libnvidia-decode-610 libnvidia-egl-wayland1 libnvidia-encode-610
+  libnvidia-extra-610 libnvidia-fbc1-610 libnvidia-gl-610 libpciaccess0
+  libpixman-1-0 libquadmath0 libsm6 libtsan2 libubsan1 libvulkan1
+  libwayland-client0 libwayland-server0 libx11-xcb1 libxaw7 libxcb-dri3-0
+  libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-shm0 libxcb-sync1
+  libxcb-xfixes0 libxcvt0 libxfont2 libxkbfile1 libxmu6 libxpm4 libxrandr2
+  libxrender1 libxshmfence1 libxt6t64 libxxf86vm1 lto-disabled-list make
+  mesa-libgallium mesa-vulkan-drivers nvidia-compute-utils-610 nvidia-dkms-610
+  nvidia-firmware-610-610.57.04 nvidia-kernel-common-610
+  nvidia-kernel-source-610 nvidia-prime nvidia-utils-610 ocl-icd-libopencl1
+  x11-common x11-xkb-utils xcvt xfonts-base xfonts-encodings xfonts-utils
+  xserver-common xserver-xorg-core xserver-xorg-video-nvidia-610
+Suggested packages:
+  bzip2-doc cpp-doc gcc-15-locales cpp-15-doc menu debian-keyring
+  debian-tag2upload-keyring gcc-multilib manpages-dev autoconf automake
+  libtool flex bison gdb gcc-doc gcc-15-multilib gcc-15-doc
+  gdb-x86-64-linux-gnu bzr make-doc xfs | xserver xfonts-100dpi | xfonts-75dpi
+  xfonts-scalable
+Recommended packages:
+  build-essential libc6-dev | libc-dev libc6-dev libc-dev nvidia-settings
+  libnvidia-compute-610:i386 libnvidia-decode-610:i386
+  libnvidia-encode-610:i386 libnvidia-fbc1-610:i386 libnvidia-gl-610:i386
+The following NEW packages will be installed:
+  bzip2 cpp cpp-15 cpp-15-x86-64-linux-gnu cpp-x86-64-linux-gnu dkms dpkg-dev
+  fakeroot gcc gcc-15 gcc-15-base gcc-15-x86-64-linux-gnu gcc-x86-64-linux-gnu
+  libalgorithm-diff-perl libalgorithm-diff-xs-perl libalgorithm-merge-perl
+  libasan8 libcc1-0 libdisplay-info3 libdpkg-perl libdrm-intel1 libegl-mesa0
+  libegl1 libepoxy0 libfakeroot libfile-fcntllock-perl libfontenc1 libgbm1
+  libgcc-15-dev libgl1 libgl1-mesa-dri libglvnd0 libglx-mesa0 libglx0 libgomp1
+  libhwasan0 libice6 libisl23 libitm1 liblsan0 libmpc3 libnvidia-cfg1-610
+  libnvidia-common-610 libnvidia-compute-610 libnvidia-decode-610
+  libnvidia-egl-wayland1 libnvidia-encode-610 libnvidia-extra-610
+  libnvidia-fbc1-610 libnvidia-gl-610 libpciaccess0 libpixman-1-0 libquadmath0
+  libsm6 libtsan2 libubsan1 libvulkan1 libwayland-client0 libwayland-server0
+  libx11-xcb1 libxaw7 libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-randr0
+  libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcvt0 libxfont2 libxkbfile1
+  libxmu6 libxpm4 libxrandr2 libxrender1 libxshmfence1 libxt6t64 libxxf86vm1
+  lto-disabled-list make mesa-libgallium mesa-vulkan-drivers
+  nvidia-compute-utils-610 nvidia-dkms-610 nvidia-driver-610
+  nvidia-firmware-610-610.57.04 nvidia-kernel-common-610
+  nvidia-kernel-source-610 nvidia-prime nvidia-utils-610 ocl-icd-libopencl1
+  x11-common x11-xkb-utils xcvt xfonts-base xfonts-encodings xfonts-utils
+  xserver-common xserver-xorg-core xserver-xorg-video-nvidia-610
+The following packages will be upgraded:
+  libbz2-1.0
+1 upgraded, 100 newly installed, 0 to remove and 184 not upgraded.
+Need to get 516 MB of archives.
+After this operation, 1522 MB of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libbz2-1.0 amd64 1.0.8-6ubuntu0.1 [36.9 kB]
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 bzip2 amd64 1.0.8-6ubuntu0.1 [34.4 kB]
+Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 gcc-15-base amd64 15.2.0-16ubuntu1 [39.1 kB]
+Get:4 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libisl23 amd64 0.27-1build1 [692 kB]
+Get:5 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libmpc3 amd64 1.3.1-3 [55.0 kB]
+Get:6 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 cpp-15-x86-64-linux-gnu amd64 15.2.0-16ubuntu1 [13.0 MB]
+Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 cpp-15 amd64 15.2.0-16ubuntu1 [1044 B]
+Get:8 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 cpp-x86-64-linux-gnu amd64 4:15.2.0-5ubuntu1 [5852 B]
+Get:9 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 cpp amd64 4:15.2.0-5ubuntu1 [22.4 kB]
+Get:10 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libcc1-0 amd64 16-20260322-1ubuntu1 [53.8 kB]
+Get:11 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libgomp1 amd64 16-20260322-1ubuntu1 [163 kB]
+Get:12 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libitm1 amd64 16-20260322-1ubuntu1 [29.9 kB]
+Get:13 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libasan8 amd64 16-20260322-1ubuntu1 [3181 kB]
+Get:14 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 liblsan0 amd64 16-20260322-1ubuntu1 [1397 kB]
+Get:15 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libtsan2 amd64 16-20260322-1ubuntu1 [2875 kB]
+Get:16 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libubsan1 amd64 16-20260322-1ubuntu1 [1242 kB]
+Get:17 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libhwasan0 amd64 16-20260322-1ubuntu1 [1733 kB]
+Get:18 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libquadmath0 amd64 16-20260322-1ubuntu1 [156 kB]
+Get:19 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libgcc-15-dev amd64 15.2.0-16ubuntu1 [2867 kB]
+Get:20 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 gcc-15-x86-64-linux-gnu amd64 15.2.0-16ubuntu1 [25.6 MB]
+Get:21 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 gcc-15 amd64 15.2.0-16ubuntu1 [539 kB]
+Get:22 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 gcc-x86-64-linux-gnu amd64 4:15.2.0-5ubuntu1 [1220 B]
+Get:23 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 gcc amd64 4:15.2.0-5ubuntu1 [5014 B]
+Get:24 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libdpkg-perl all 1.23.7ubuntu1 [289 kB]
+Get:25 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 make amd64 4.4.1-3 [197 kB]
+Get:26 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 lto-disabled-list all 79 [14.2 kB]
+Get:27 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 dpkg-dev all 1.23.7ubuntu1 [1062 kB]
+Get:28 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 dkms all 3.2.2-1ubuntu1 [63.0 kB]
+Get:29 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libfakeroot amd64 1.37.2-1 [34.0 kB]
+Get:30 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 fakeroot amd64 1.37.2-1 [68.8 kB]
+Get:31 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libalgorithm-diff-perl all 1.201-1 [41.8 kB]
+Get:32 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libalgorithm-diff-xs-perl amd64 0.04-9 [11.3 kB]
+Get:33 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libalgorithm-merge-perl all 0.08-5 [11.4 kB]
+Get:34 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libdisplay-info3 amd64 0.3.0-1 [87.6 kB]
+Get:35 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libpciaccess0 amd64 0.18.1-1ubuntu4.1 [19.3 kB]
+Get:36 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libdrm-intel1 amd64 2.4.131-1 [67.5 kB]
+Get:37 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libx11-xcb1 amd64 2:1.8.13-1 [7984 B]
+Get:38 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-dri3-0 amd64 1.17.0-2ubuntu1 [7676 B]
+Get:39 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-present0 amd64 1.17.0-2ubuntu1 [6136 B]
+Get:40 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-randr0 amd64 1.17.0-2ubuntu1 [18.0 kB]
+Get:41 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-sync1 amd64 1.17.0-2ubuntu1 [9378 B]
+Get:42 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-xfixes0 amd64 1.17.0-2ubuntu1 [10.3 kB]
+Get:43 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxshmfence1 amd64 1.3.3-1build1 [5304 B]
+Get:44 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 mesa-libgallium amd64 26.0.8-1ubuntu0.3 [11.4 MB]
+Get:45 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libgbm1 amd64 26.0.8-1ubuntu0.3 [49.3 kB]
+Get:46 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libwayland-client0 amd64 1.24.0-2 [28.6 kB]
+Get:47 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-shm0 amd64 1.17.0-2ubuntu1 [5826 B]
+Get:48 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libegl-mesa0 amd64 26.0.8-1ubuntu0.3 [134 kB]
+Get:49 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libepoxy0 amd64 1.5.10-2build1 [226 kB]
+Get:50 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libfile-fcntllock-perl amd64 0.22-4ubuntu6 [32.8 kB]
+Get:51 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libfontenc1 amd64 1:1.1.8-1build2 [14.1 kB]
+Get:52 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libvulkan1 amd64 1.4.341.0-1 [163 kB]
+Get:53 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libgl1-mesa-dri amd64 26.0.8-1ubuntu0.3 [38.3 kB]
+Get:54 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcb-glx0 amd64 1.17.0-2ubuntu1 [24.6 kB]
+Get:55 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxxf86vm1 amd64 1:1.1.4-2 [10.7 kB]
+Get:56 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libglx-mesa0 amd64 26.0.8-1ubuntu0.3 [126 kB]
+Get:57 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 x11-common all 1:7.7+26ubuntu1 [22.5 kB]
+Get:58 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libice6 amd64 2:1.1.1-1build1 [44.3 kB]
+Get:59 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-firmware-610-610.57.04 amd64 610.57.04-0ubuntu0.26.04.3 [85.8 MB]
+Get:60 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-kernel-common-610 amd64 610.57.04-0ubuntu0.26.04.3 [1073 kB]
+Get:61 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-cfg1-610 amd64 610.57.04-0ubuntu0.26.04.3 [158 kB]
+Get:62 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-common-610 amd64 610.57.04-0ubuntu0.26.04.3 [18.3 kB]
+Get:63 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 ocl-icd-libopencl1 amd64 2.3.4-1 [41.0 kB]
+Get:64 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-compute-610 amd64 610.57.04-0ubuntu0.26.04.3 [90.7 MB]
+Get:65 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-decode-610 amd64 610.57.04-0ubuntu0.26.04.3 [3304 kB]
+Get:66 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libwayland-server0 amd64 1.24.0-2 [36.0 kB]
+Get:67 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libnvidia-egl-wayland1 amd64 1:1.1.21-1 [34.6 kB]
+Get:68 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-encode-610 amd64 610.57.04-0ubuntu0.26.04.3 [118 kB]
+Get:69 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-extra-610 amd64 610.57.04-0ubuntu0.26.04.3 [66.1 kB]
+Get:70 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-fbc1-610 amd64 610.57.04-0ubuntu0.26.04.3 [76.1 kB]
+Get:71 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 libnvidia-gl-610 amd64 610.57.04-0ubuntu0.26.04.3 [143 MB]
+Get:72 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libpixman-1-0 amd64 0.46.4-1 [284 kB]
+Get:73 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libsm6 amd64 2:1.2.6-1build1 [16.9 kB]
+Get:74 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxt6t64 amd64 1:1.2.1-1.3build1 [173 kB]
+Get:75 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxmu6 amd64 2:1.1.3-4 [48.9 kB]
+Get:76 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libxpm4 amd64 1:3.5.17-1ubuntu0.26.04.2 [37.3 kB]
+Get:77 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxaw7 amd64 2:1.0.16-1build1 [191 kB]
+Get:78 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxcvt0 amd64 0.1.3-1build1 [5868 B]
+Get:79 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libxfont2 amd64 1:2.0.6-2ubuntu0.2 [96.6 kB]
+Get:80 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxkbfile1 amd64 1:1.1.0-1build5 [71.0 kB]
+Get:81 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxrender1 amd64 1:0.9.12-1build1 [19.6 kB]
+Get:82 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libxrandr2 amd64 2:1.5.4-1build1 [19.8 kB]
+Get:83 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 mesa-vulkan-drivers amd64 26.0.8-1ubuntu0.3 [19.3 MB]
+Get:84 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-compute-utils-610 amd64 610.57.04-0ubuntu0.26.04.3 [134 kB]
+Get:85 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-kernel-source-610 amd64 610.57.04-0ubuntu0.26.04.3 [92.2 MB]
+Get:86 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-dkms-610 amd64 610.57.04-0ubuntu0.26.04.3 [39.1 kB]
+Get:87 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-utils-610 amd64 610.57.04-0ubuntu0.26.04.3 [626 kB]
+Get:88 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 x11-xkb-utils amd64 7.7+9build1 [171 kB]
+Get:89 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 xserver-common all 2:21.1.22-1ubuntu1.2 [29.8 kB]
+Get:90 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libglvnd0 amd64 1.7.0-3 [64.1 kB]
+Get:91 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libegl1 amd64 1.7.0-3 [29.8 kB]
+Get:92 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libglx0 amd64 1.7.0-3 [39.0 kB]
+Get:93 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libgl1 amd64 1.7.0-3 [98.3 kB]
+Get:94 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 xserver-xorg-core amd64 2:21.1.22-1ubuntu1.2 [1533 kB]
+Get:95 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 xserver-xorg-video-nvidia-610 amd64 610.57.04-0ubuntu0.26.04.3 [1199 kB]
+Get:96 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64v3 nvidia-driver-610 amd64 610.57.04-0ubuntu0.26.04.3 [504 kB]
+Get:97 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 nvidia-prime all 0.8.17.2build1 [10.5 kB]
+Get:98 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 xcvt amd64 0.1.3-1build1 [7184 B]
+Get:99 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 xfonts-encodings all 1:1.0.5-0ubuntu3 [576 kB]
+Get:100 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 xfonts-utils amd64 1:7.7+7build1 [97.3 kB]
+Get:101 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 xfonts-base all 1:1.0.5+nmu1build1 [5940 kB]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Fetched 516 MB in 5s (96.6 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 85357 files and directories currently installed.)
+Preparing to unpack .../libbz2-1.0_1.0.8-6ubuntu0.1_amd64v3.deb ...
+Unpacking libbz2-1.0:amd64 (1.0.8-6ubuntu0.1) over (1.0.8-6build2) ...
+Setting up libbz2-1.0:amd64 (1.0.8-6ubuntu0.1) ...
+Selecting previously unselected package bzip2.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 85357 files and directories currently installed.)
+Preparing to unpack .../00-bzip2_1.0.8-6ubuntu0.1_amd64v3.deb ...
+Unpacking bzip2 (1.0.8-6ubuntu0.1) ...
+Selecting previously unselected package gcc-15-base:amd64.
+Preparing to unpack .../01-gcc-15-base_15.2.0-16ubuntu1_amd64v3.deb ...
+Unpacking gcc-15-base:amd64 (15.2.0-16ubuntu1) ...
+Selecting previously unselected package libisl23:amd64.
+Preparing to unpack .../02-libisl23_0.27-1build1_amd64v3.deb ...
+Unpacking libisl23:amd64 (0.27-1build1) ...
+Selecting previously unselected package libmpc3:amd64.
+Preparing to unpack .../03-libmpc3_1.3.1-3_amd64v3.deb ...
+Unpacking libmpc3:amd64 (1.3.1-3) ...
+Selecting previously unselected package cpp-15-x86-64-linux-gnu.
+Preparing to unpack .../04-cpp-15-x86-64-linux-gnu_15.2.0-16ubuntu1_amd64v3.deb ...
+Unpacking cpp-15-x86-64-linux-gnu (15.2.0-16ubuntu1) ...
+Selecting previously unselected package cpp-15.
+Preparing to unpack .../05-cpp-15_15.2.0-16ubuntu1_amd64v3.deb ...
+Unpacking cpp-15 (15.2.0-16ubuntu1) ...
+Selecting previously unselected package cpp-x86-64-linux-gnu.
+Preparing to unpack .../06-cpp-x86-64-linux-gnu_4%3a15.2.0-5ubuntu1_amd64v3.deb ...
+Unpacking cpp-x86-64-linux-gnu (4:15.2.0-5ubuntu1) ...
+Selecting previously unselected package cpp.
+Preparing to unpack .../07-cpp_4%3a15.2.0-5ubuntu1_amd64v3.deb ...
+Unpacking cpp (4:15.2.0-5ubuntu1) ...
+Selecting previously unselected package libcc1-0:amd64.
+Preparing to unpack .../08-libcc1-0_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libcc1-0:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libgomp1:amd64.
+Preparing to unpack .../09-libgomp1_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libgomp1:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libitm1:amd64.
+Preparing to unpack .../10-libitm1_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libitm1:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libasan8:amd64.
+Preparing to unpack .../11-libasan8_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libasan8:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package liblsan0:amd64.
+Preparing to unpack .../12-liblsan0_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking liblsan0:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libtsan2:amd64.
+Preparing to unpack .../13-libtsan2_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libtsan2:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libubsan1:amd64.
+Preparing to unpack .../14-libubsan1_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libubsan1:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libhwasan0:amd64.
+Preparing to unpack .../15-libhwasan0_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libhwasan0:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libquadmath0:amd64.
+Preparing to unpack .../16-libquadmath0_16-20260322-1ubuntu1_amd64v3.deb ...
+Unpacking libquadmath0:amd64 (16-20260322-1ubuntu1) ...
+Selecting previously unselected package libgcc-15-dev:amd64.
+Preparing to unpack .../17-libgcc-15-dev_15.2.0-16ubuntu1_amd64v3.deb ...
+Unpacking libgcc-15-dev:amd64 (15.2.0-16ubuntu1) ...
+Selecting previously unselected package gcc-15-x86-64-linux-gnu.
+Preparing to unpack .../18-gcc-15-x86-64-linux-gnu_15.2.0-16ubuntu1_amd64v3.deb ...
+Unpacking gcc-15-x86-64-linux-gnu (15.2.0-16ubuntu1) ...
+Selecting previously unselected package gcc-15.
+Preparing to unpack .../19-gcc-15_15.2.0-16ubuntu1_amd64v3.deb ...
+Unpacking gcc-15 (15.2.0-16ubuntu1) ...
+Selecting previously unselected package gcc-x86-64-linux-gnu.
+Preparing to unpack .../20-gcc-x86-64-linux-gnu_4%3a15.2.0-5ubuntu1_amd64v3.deb ...
+Unpacking gcc-x86-64-linux-gnu (4:15.2.0-5ubuntu1) ...
+Selecting previously unselected package gcc.
+Preparing to unpack .../21-gcc_4%3a15.2.0-5ubuntu1_amd64v3.deb ...
+Unpacking gcc (4:15.2.0-5ubuntu1) ...
+Selecting previously unselected package libdpkg-perl.
+Preparing to unpack .../22-libdpkg-perl_1.23.7ubuntu1_all.deb ...
+Unpacking libdpkg-perl (1.23.7ubuntu1) ...
+Selecting previously unselected package make.
+Preparing to unpack .../23-make_4.4.1-3_amd64v3.deb ...
+Unpacking make (4.4.1-3) ...
+Selecting previously unselected package lto-disabled-list.
+Preparing to unpack .../24-lto-disabled-list_79_all.deb ...
+Unpacking lto-disabled-list (79) ...
+Selecting previously unselected package dpkg-dev.
+Preparing to unpack .../25-dpkg-dev_1.23.7ubuntu1_all.deb ...
+Unpacking dpkg-dev (1.23.7ubuntu1) ...
+Selecting previously unselected package dkms.
+Preparing to unpack .../26-dkms_3.2.2-1ubuntu1_all.deb ...
+Unpacking dkms (3.2.2-1ubuntu1) ...
+Selecting previously unselected package libfakeroot:amd64.
+Preparing to unpack .../27-libfakeroot_1.37.2-1_amd64v3.deb ...
+Unpacking libfakeroot:amd64 (1.37.2-1) ...
+Selecting previously unselected package fakeroot.
+Preparing to unpack .../28-fakeroot_1.37.2-1_amd64v3.deb ...
+Unpacking fakeroot (1.37.2-1) ...
+Selecting previously unselected package libalgorithm-diff-perl.
+Preparing to unpack .../29-libalgorithm-diff-perl_1.201-1_all.deb ...
+Unpacking libalgorithm-diff-perl (1.201-1) ...
+Selecting previously unselected package libalgorithm-diff-xs-perl.
+Preparing to unpack .../30-libalgorithm-diff-xs-perl_0.04-9_amd64v3.deb ...
+Unpacking libalgorithm-diff-xs-perl (0.04-9) ...
+Selecting previously unselected package libalgorithm-merge-perl.
+Preparing to unpack .../31-libalgorithm-merge-perl_0.08-5_all.deb ...
+Unpacking libalgorithm-merge-perl (0.08-5) ...
+Selecting previously unselected package libdisplay-info3:amd64.
+Preparing to unpack .../32-libdisplay-info3_0.3.0-1_amd64v3.deb ...
+Unpacking libdisplay-info3:amd64 (0.3.0-1) ...
+Selecting previously unselected package libpciaccess0:amd64.
+Preparing to unpack .../33-libpciaccess0_0.18.1-1ubuntu4.1_amd64v3.deb ...
+Unpacking libpciaccess0:amd64 (0.18.1-1ubuntu4.1) ...
+Selecting previously unselected package libdrm-intel1:amd64.
+Preparing to unpack .../34-libdrm-intel1_2.4.131-1_amd64v3.deb ...
+Unpacking libdrm-intel1:amd64 (2.4.131-1) ...
+Selecting previously unselected package libx11-xcb1:amd64.
+Preparing to unpack .../35-libx11-xcb1_2%3a1.8.13-1_amd64v3.deb ...
+Unpacking libx11-xcb1:amd64 (2:1.8.13-1) ...
+Selecting previously unselected package libxcb-dri3-0:amd64.
+Preparing to unpack .../36-libxcb-dri3-0_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-dri3-0:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libxcb-present0:amd64.
+Preparing to unpack .../37-libxcb-present0_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-present0:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libxcb-randr0:amd64.
+Preparing to unpack .../38-libxcb-randr0_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-randr0:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libxcb-sync1:amd64.
+Preparing to unpack .../39-libxcb-sync1_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-sync1:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libxcb-xfixes0:amd64.
+Preparing to unpack .../40-libxcb-xfixes0_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-xfixes0:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libxshmfence1:amd64.
+Preparing to unpack .../41-libxshmfence1_1.3.3-1build1_amd64v3.deb ...
+Unpacking libxshmfence1:amd64 (1.3.3-1build1) ...
+Selecting previously unselected package mesa-libgallium:amd64.
+Preparing to unpack .../42-mesa-libgallium_26.0.8-1ubuntu0.3_amd64v3.deb ...
+Unpacking mesa-libgallium:amd64 (26.0.8-1ubuntu0.3) ...
+Selecting previously unselected package libgbm1:amd64.
+Preparing to unpack .../43-libgbm1_26.0.8-1ubuntu0.3_amd64v3.deb ...
+Unpacking libgbm1:amd64 (26.0.8-1ubuntu0.3) ...
+Selecting previously unselected package libwayland-client0:amd64.
+Preparing to unpack .../44-libwayland-client0_1.24.0-2_amd64v3.deb ...
+Unpacking libwayland-client0:amd64 (1.24.0-2) ...
+Selecting previously unselected package libxcb-shm0:amd64.
+Preparing to unpack .../45-libxcb-shm0_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-shm0:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libegl-mesa0:amd64.
+Preparing to unpack .../46-libegl-mesa0_26.0.8-1ubuntu0.3_amd64v3.deb ...
+Unpacking libegl-mesa0:amd64 (26.0.8-1ubuntu0.3) ...
+Selecting previously unselected package libepoxy0:amd64.
+Preparing to unpack .../47-libepoxy0_1.5.10-2build1_amd64v3.deb ...
+Unpacking libepoxy0:amd64 (1.5.10-2build1) ...
+Selecting previously unselected package libfile-fcntllock-perl.
+Preparing to unpack .../48-libfile-fcntllock-perl_0.22-4ubuntu6_amd64v3.deb ...
+Unpacking libfile-fcntllock-perl (0.22-4ubuntu6) ...
+Selecting previously unselected package libfontenc1:amd64.
+Preparing to unpack .../49-libfontenc1_1%3a1.1.8-1build2_amd64v3.deb ...
+Unpacking libfontenc1:amd64 (1:1.1.8-1build2) ...
+Selecting previously unselected package libvulkan1:amd64.
+Preparing to unpack .../50-libvulkan1_1.4.341.0-1_amd64v3.deb ...
+Unpacking libvulkan1:amd64 (1.4.341.0-1) ...
+Selecting previously unselected package libgl1-mesa-dri:amd64.
+Preparing to unpack .../51-libgl1-mesa-dri_26.0.8-1ubuntu0.3_amd64v3.deb ...
+Unpacking libgl1-mesa-dri:amd64 (26.0.8-1ubuntu0.3) ...
+Selecting previously unselected package libxcb-glx0:amd64.
+Preparing to unpack .../52-libxcb-glx0_1.17.0-2ubuntu1_amd64v3.deb ...
+Unpacking libxcb-glx0:amd64 (1.17.0-2ubuntu1) ...
+Selecting previously unselected package libxxf86vm1:amd64.
+Preparing to unpack .../53-libxxf86vm1_1%3a1.1.4-2_amd64v3.deb ...
+Unpacking libxxf86vm1:amd64 (1:1.1.4-2) ...
+Selecting previously unselected package libglx-mesa0:amd64.
+Preparing to unpack .../54-libglx-mesa0_26.0.8-1ubuntu0.3_amd64v3.deb ...
+Unpacking libglx-mesa0:amd64 (26.0.8-1ubuntu0.3) ...
+Selecting previously unselected package x11-common.
+Preparing to unpack .../55-x11-common_1%3a7.7+26ubuntu1_all.deb ...
+Unpacking x11-common (1:7.7+26ubuntu1) ...
+Selecting previously unselected package libice6:amd64.
+Preparing to unpack .../56-libice6_2%3a1.1.1-1build1_amd64v3.deb ...
+Unpacking libice6:amd64 (2:1.1.1-1build1) ...
+Selecting previously unselected package nvidia-firmware-610-610.57.04.
+Preparing to unpack .../57-nvidia-firmware-610-610.57.04_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-firmware-610-610.57.04 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package nvidia-kernel-common-610.
+Preparing to unpack .../58-nvidia-kernel-common-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-kernel-common-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libnvidia-cfg1-610:amd64.
+Preparing to unpack .../59-libnvidia-cfg1-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-cfg1-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libnvidia-common-610.
+Preparing to unpack .../60-libnvidia-common-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-common-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package ocl-icd-libopencl1:amd64.
+Preparing to unpack .../61-ocl-icd-libopencl1_2.3.4-1_amd64v3.deb ...
+Unpacking ocl-icd-libopencl1:amd64 (2.3.4-1) ...
+Selecting previously unselected package libnvidia-compute-610:amd64.
+Preparing to unpack .../62-libnvidia-compute-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-compute-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libnvidia-decode-610:amd64.
+Preparing to unpack .../63-libnvidia-decode-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-decode-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libwayland-server0:amd64.
+Preparing to unpack .../64-libwayland-server0_1.24.0-2_amd64v3.deb ...
+Unpacking libwayland-server0:amd64 (1.24.0-2) ...
+Selecting previously unselected package libnvidia-egl-wayland1:amd64.
+Preparing to unpack .../65-libnvidia-egl-wayland1_1%3a1.1.21-1_amd64v3.deb ...
+Unpacking libnvidia-egl-wayland1:amd64 (1:1.1.21-1) ...
+Selecting previously unselected package libnvidia-encode-610:amd64.
+Preparing to unpack .../66-libnvidia-encode-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-encode-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libnvidia-extra-610:amd64.
+Preparing to unpack .../67-libnvidia-extra-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-extra-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libnvidia-fbc1-610:amd64.
+Preparing to unpack .../68-libnvidia-fbc1-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking libnvidia-fbc1-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libnvidia-gl-610:amd64.
+Preparing to unpack .../69-libnvidia-gl-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+dpkg-query: no packages found matching libnvidia-gl-550
+Unpacking libnvidia-gl-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package libpixman-1-0:amd64.
+Preparing to unpack .../70-libpixman-1-0_0.46.4-1_amd64v3.deb ...
+Unpacking libpixman-1-0:amd64 (0.46.4-1) ...
+Selecting previously unselected package libsm6:amd64.
+Preparing to unpack .../71-libsm6_2%3a1.2.6-1build1_amd64v3.deb ...
+Unpacking libsm6:amd64 (2:1.2.6-1build1) ...
+Selecting previously unselected package libxt6t64:amd64.
+Preparing to unpack .../72-libxt6t64_1%3a1.2.1-1.3build1_amd64v3.deb ...
+Unpacking libxt6t64:amd64 (1:1.2.1-1.3build1) ...
+Selecting previously unselected package libxmu6:amd64.
+Preparing to unpack .../73-libxmu6_2%3a1.1.3-4_amd64v3.deb ...
+Unpacking libxmu6:amd64 (2:1.1.3-4) ...
+Selecting previously unselected package libxpm4:amd64.
+Preparing to unpack .../74-libxpm4_1%3a3.5.17-1ubuntu0.26.04.2_amd64v3.deb ...
+Unpacking libxpm4:amd64 (1:3.5.17-1ubuntu0.26.04.2) ...
+Selecting previously unselected package libxaw7:amd64.
+Preparing to unpack .../75-libxaw7_2%3a1.0.16-1build1_amd64v3.deb ...
+Unpacking libxaw7:amd64 (2:1.0.16-1build1) ...
+Selecting previously unselected package libxcvt0:amd64.
+Preparing to unpack .../76-libxcvt0_0.1.3-1build1_amd64v3.deb ...
+Unpacking libxcvt0:amd64 (0.1.3-1build1) ...
+Selecting previously unselected package libxfont2:amd64.
+Preparing to unpack .../77-libxfont2_1%3a2.0.6-2ubuntu0.2_amd64v3.deb ...
+Unpacking libxfont2:amd64 (1:2.0.6-2ubuntu0.2) ...
+Selecting previously unselected package libxkbfile1:amd64.
+Preparing to unpack .../78-libxkbfile1_1%3a1.1.0-1build5_amd64v3.deb ...
+Unpacking libxkbfile1:amd64 (1:1.1.0-1build5) ...
+Selecting previously unselected package libxrender1:amd64.
+Preparing to unpack .../79-libxrender1_1%3a0.9.12-1build1_amd64v3.deb ...
+Unpacking libxrender1:amd64 (1:0.9.12-1build1) ...
+Selecting previously unselected package libxrandr2:amd64.
+Preparing to unpack .../80-libxrandr2_2%3a1.5.4-1build1_amd64v3.deb ...
+Unpacking libxrandr2:amd64 (2:1.5.4-1build1) ...
+Selecting previously unselected package mesa-vulkan-drivers:amd64.
+Preparing to unpack .../81-mesa-vulkan-drivers_26.0.8-1ubuntu0.3_amd64v3.deb ...
+Unpacking mesa-vulkan-drivers:amd64 (26.0.8-1ubuntu0.3) ...
+Selecting previously unselected package nvidia-compute-utils-610.
+Preparing to unpack .../82-nvidia-compute-utils-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-compute-utils-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package nvidia-kernel-source-610.
+Preparing to unpack .../83-nvidia-kernel-source-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-kernel-source-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package nvidia-dkms-610.
+Preparing to unpack .../84-nvidia-dkms-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-dkms-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package nvidia-utils-610.
+Preparing to unpack .../85-nvidia-utils-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-utils-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package x11-xkb-utils.
+Preparing to unpack .../86-x11-xkb-utils_7.7+9build1_amd64v3.deb ...
+Unpacking x11-xkb-utils (7.7+9build1) ...
+Selecting previously unselected package xserver-common.
+Preparing to unpack .../87-xserver-common_2%3a21.1.22-1ubuntu1.2_all.deb ...
+Unpacking xserver-common (2:21.1.22-1ubuntu1.2) ...
+Selecting previously unselected package libglvnd0:amd64.
+Preparing to unpack .../88-libglvnd0_1.7.0-3_amd64v3.deb ...
+Unpacking libglvnd0:amd64 (1.7.0-3) ...
+Selecting previously unselected package libegl1:amd64.
+Preparing to unpack .../89-libegl1_1.7.0-3_amd64v3.deb ...
+Unpacking libegl1:amd64 (1.7.0-3) ...
+Selecting previously unselected package libglx0:amd64.
+Preparing to unpack .../90-libglx0_1.7.0-3_amd64v3.deb ...
+Unpacking libglx0:amd64 (1.7.0-3) ...
+Selecting previously unselected package libgl1:amd64.
+Preparing to unpack .../91-libgl1_1.7.0-3_amd64v3.deb ...
+Unpacking libgl1:amd64 (1.7.0-3) ...
+Selecting previously unselected package xserver-xorg-core.
+Preparing to unpack .../92-xserver-xorg-core_2%3a21.1.22-1ubuntu1.2_amd64v3.deb ...
+Unpacking xserver-xorg-core (2:21.1.22-1ubuntu1.2) ...
+Selecting previously unselected package xserver-xorg-video-nvidia-610.
+Preparing to unpack .../93-xserver-xorg-video-nvidia-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking xserver-xorg-video-nvidia-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package nvidia-driver-610.
+Preparing to unpack .../94-nvidia-driver-610_610.57.04-0ubuntu0.26.04.3_amd64v3.deb ...
+Unpacking nvidia-driver-610 (610.57.04-0ubuntu0.26.04.3) ...
+Selecting previously unselected package nvidia-prime.
+Preparing to unpack .../95-nvidia-prime_0.8.17.2build1_all.deb ...
+Unpacking nvidia-prime (0.8.17.2build1) ...
+Selecting previously unselected package xcvt.
+Preparing to unpack .../96-xcvt_0.1.3-1build1_amd64v3.deb ...
+Unpacking xcvt (0.1.3-1build1) ...
+Selecting previously unselected package xfonts-encodings.
+Preparing to unpack .../97-xfonts-encodings_1%3a1.0.5-0ubuntu3_all.deb ...
+Unpacking xfonts-encodings (1:1.0.5-0ubuntu3) ...
+Selecting previously unselected package xfonts-utils.
+Preparing to unpack .../98-xfonts-utils_1%3a7.7+7build1_amd64v3.deb ...
+Unpacking xfonts-utils (1:7.7+7build1) ...
+Selecting previously unselected package xfonts-base.
+Preparing to unpack .../99-xfonts-base_1%3a1.0.5+nmu1build1_all.deb ...
+Unpacking xfonts-base (1:1.0.5+nmu1build1) ...
+Setting up libxcb-dri3-0:amd64 (1.17.0-2ubuntu1) ...
+Setting up libpixman-1-0:amd64 (0.46.4-1) ...
+Setting up libwayland-server0:amd64 (1.24.0-2) ...
+Setting up libx11-xcb1:amd64 (2:1.8.13-1) ...
+Setting up libpciaccess0:amd64 (0.18.1-1ubuntu4.1) ...
+Setting up lto-disabled-list (79) ...
+Setting up libxcb-xfixes0:amd64 (1.17.0-2ubuntu1) ...
+Setting up libxpm4:amd64 (1:3.5.17-1ubuntu0.26.04.2) ...
+Setting up libxrender1:amd64 (1:0.9.12-1build1) ...
+Setting up libfile-fcntllock-perl (0.22-4ubuntu6) ...
+Setting up libalgorithm-diff-perl (1.201-1) ...
+Setting up nvidia-prime (0.8.17.2build1) ...
+Setting up libglvnd0:amd64 (1.7.0-3) ...
+Setting up libdisplay-info3:amd64 (0.3.0-1) ...
+Setting up libxcb-glx0:amd64 (1.17.0-2ubuntu1) ...
+Setting up libdrm-intel1:amd64 (2.4.131-1) ...
+Setting up x11-common (1:7.7+26ubuntu1) ...
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Setting up libxcb-shm0:amd64 (1.17.0-2ubuntu1) ...
+Setting up libgomp1:amd64 (16-20260322-1ubuntu1) ...
+Setting up bzip2 (1.0.8-6ubuntu0.1) ...
+Setting up libfakeroot:amd64 (1.37.2-1) ...
+Setting up nvidia-firmware-610-610.57.04 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libxxf86vm1:amd64 (1:1.1.4-2) ...
+Setting up fakeroot (1.37.2-1) ...
+update-alternatives: using /usr/bin/fakeroot-sysv to provide /usr/bin/fakeroot (fakeroot) in auto mode
+Setting up libxcb-present0:amd64 (1.17.0-2ubuntu1) ...
+Setting up libfontenc1:amd64 (1:1.1.8-1build2) ...
+Setting up nvidia-kernel-source-610 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up make (4.4.1-3) ...
+Setting up libepoxy0:amd64 (1.5.10-2build1) ...
+Setting up libxcb-sync1:amd64 (1.17.0-2ubuntu1) ...
+Setting up nvidia-kernel-common-610 (610.57.04-0ubuntu0.26.04.3) ...
+update-initramfs: deferring update (trigger activated)
+Created symlink '/etc/systemd/system/systemd-hibernate.service.wants/nvidia-hibernate.service' → '/usr/lib/systemd/system/nvidia-hibernate.service'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/nvidia-powerd.service' → '/usr/lib/systemd/system/nvidia-powerd.service'.
+Created symlink '/etc/systemd/system/systemd-suspend.service.wants/nvidia-resume.service' → '/usr/lib/systemd/system/nvidia-resume.service'.
+Created symlink '/etc/systemd/system/systemd-hibernate.service.wants/nvidia-resume.service' → '/usr/lib/systemd/system/nvidia-resume.service'.
+Created symlink '/etc/systemd/system/systemd-suspend-then-hibernate.service.wants/nvidia-resume.service' → '/usr/lib/systemd/system/nvidia-resume.service'.
+Created symlink '/etc/systemd/system/systemd-suspend.service.wants/nvidia-suspend.service' → '/usr/lib/systemd/system/nvidia-suspend.service'.
+Setting up xfonts-encodings (1:1.0.5-0ubuntu3) ...
+Setting up libquadmath0:amd64 (16-20260322-1ubuntu1) ...
+Setting up libmpc3:amd64 (1.3.1-3) ...
+Setting up libxrandr2:amd64 (2:1.5.4-1build1) ...
+Setting up libnvidia-extra-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libdpkg-perl (1.23.7ubuntu1) ...
+Setting up libnvidia-cfg1-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libvulkan1:amd64 (1.4.341.0-1) ...
+Setting up libubsan1:amd64 (16-20260322-1ubuntu1) ...
+Setting up ocl-icd-libopencl1:amd64 (2.3.4-1) ...
+Setting up libxshmfence1:amd64 (1.3.3-1build1) ...
+Setting up libhwasan0:amd64 (16-20260322-1ubuntu1) ...
+Setting up libxcb-randr0:amd64 (1.17.0-2ubuntu1) ...
+Setting up libasan8:amd64 (16-20260322-1ubuntu1) ...
+Setting up libxcvt0:amd64 (0.1.3-1build1) ...
+Setting up libxkbfile1:amd64 (1:1.1.0-1build5) ...
+Setting up libtsan2:amd64 (16-20260322-1ubuntu1) ...
+Setting up libisl23:amd64 (0.27-1build1) ...
+Setting up gcc-15-base:amd64 (15.2.0-16ubuntu1) ...
+Setting up libxfont2:amd64 (1:2.0.6-2ubuntu0.2) ...
+Setting up libalgorithm-diff-xs-perl (0.04-9) ...
+Setting up libnvidia-compute-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libcc1-0:amd64 (16-20260322-1ubuntu1) ...
+Setting up liblsan0:amd64 (16-20260322-1ubuntu1) ...
+Setting up libnvidia-decode-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libitm1:amd64 (16-20260322-1ubuntu1) ...
+Setting up libalgorithm-merge-perl (0.08-5) ...
+Setting up libwayland-client0:amd64 (1.24.0-2) ...
+Setting up mesa-vulkan-drivers:amd64 (26.0.8-1ubuntu0.3) ...
+Setting up libice6:amd64 (2:1.1.1-1build1) ...
+Setting up mesa-libgallium:amd64 (26.0.8-1ubuntu0.3) ...
+Setting up libnvidia-common-610 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libgcc-15-dev:amd64 (15.2.0-16ubuntu1) ...
+Setting up libgbm1:amd64 (26.0.8-1ubuntu0.3) ...
+Setting up nvidia-utils-610 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libnvidia-fbc1-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up nvidia-compute-utils-610 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libgl1-mesa-dri:amd64 (26.0.8-1ubuntu0.3) ...
+Setting up cpp-15-x86-64-linux-gnu (15.2.0-16ubuntu1) ...
+Setting up xfonts-utils (1:7.7+7build1) ...
+Setting up dpkg-dev (1.23.7ubuntu1) ...
+Setting up xcvt (0.1.3-1build1) ...
+Setting up gcc-15-x86-64-linux-gnu (15.2.0-16ubuntu1) ...
+Setting up libnvidia-egl-wayland1:amd64 (1:1.1.21-1) ...
+Setting up xfonts-base (1:1.0.5+nmu1build1) ...
+Setting up libegl-mesa0:amd64 (26.0.8-1ubuntu0.3) ...
+Setting up cpp-15 (15.2.0-16ubuntu1) ...
+Setting up libnvidia-gl-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libnvidia-encode-610:amd64 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up libegl1:amd64 (1.7.0-3) ...
+Setting up libsm6:amd64 (2:1.2.6-1build1) ...
+Setting up cpp-x86-64-linux-gnu (4:15.2.0-5ubuntu1) ...
+Setting up libglx-mesa0:amd64 (26.0.8-1ubuntu0.3) ...
+Setting up gcc-x86-64-linux-gnu (4:15.2.0-5ubuntu1) ...
+Setting up libglx0:amd64 (1.7.0-3) ...
+Setting up gcc-15 (15.2.0-16ubuntu1) ...
+Setting up libgl1:amd64 (1.7.0-3) ...
+Setting up libxt6t64:amd64 (1:1.2.1-1.3build1) ...
+Setting up cpp (4:15.2.0-5ubuntu1) ...
+Setting up libxmu6:amd64 (2:1.1.3-4) ...
+Setting up libxaw7:amd64 (2:1.0.16-1build1) ...
+Setting up gcc (4:15.2.0-5ubuntu1) ...
+Setting up dkms (3.2.2-1ubuntu1) ...
+Setting up nvidia-dkms-610 (610.57.04-0ubuntu0.26.04.3) ...
+update-initramfs: deferring update (trigger activated)
+INFO:Enable nvidia
+DEBUG:Parsing /usr/share/ubuntu-drivers-common/quirks/dell_latitude
+DEBUG:Parsing /usr/share/ubuntu-drivers-common/quirks/lenovo_thinkpad
+DEBUG:Parsing /usr/share/ubuntu-drivers-common/quirks/put_your_quirks_here
+Loading new nvidia/610.57.04 DKMS files...
+Building for 7.0.0-1006-aws
+Building for architecture x86_64
+
+Building initial module nvidia/610.57.04 for 7.0.0-1006-aws
+Sign command: /usr/bin/kmodsign
+Certificate or key are missing, generating them using update-secureboot-policy...
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+EFI variables are not supported on this system
+/sys/firmware/efi/efivars not found, aborting.
+Signing key: /var/lib/shim-signed/mok/MOK.priv
+Public certificate (MOK): /var/lib/shim-signed/mok/MOK.der
+
+Building module(s)............ done.
+Signing module /var/lib/dkms/nvidia/610.57.04/build/nvidia.ko
+Signing module /var/lib/dkms/nvidia/610.57.04/build/nvidia-modeset.ko
+Signing module /var/lib/dkms/nvidia/610.57.04/build/nvidia-drm.ko
+Signing module /var/lib/dkms/nvidia/610.57.04/build/nvidia-uvm.ko
+Signing module /var/lib/dkms/nvidia/610.57.04/build/nvidia-peermem.ko
+Installing /lib/modules/7.0.0-1006-aws/updates/dkms/nvidia.ko.zst
+Installing /lib/modules/7.0.0-1006-aws/updates/dkms/nvidia-modeset.ko.zst
+Installing /lib/modules/7.0.0-1006-aws/updates/dkms/nvidia-drm.ko.zst
+Installing /lib/modules/7.0.0-1006-aws/updates/dkms/nvidia-uvm.ko.zst
+Installing /lib/modules/7.0.0-1006-aws/updates/dkms/nvidia-peermem.ko.zst
+Running depmod..... done.
+Setting up x11-xkb-utils (7.7+9build1) ...
+Setting up xserver-common (2:21.1.22-1ubuntu1.2) ...
+Setting up xserver-xorg-core (2:21.1.22-1ubuntu1.2) ...
+Setting up xserver-xorg-video-nvidia-610 (610.57.04-0ubuntu0.26.04.3) ...
+Setting up nvidia-driver-610 (610.57.04-0ubuntu0.26.04.3) ...
+Processing triggers for man-db (2.13.1-1build1) ...
+Processing triggers for dbus (1.16.2-2ubuntu4) ...
+Processing triggers for dracut (110-11) ...
+update-initramfs: Generating /boot/initrd.img-7.0.0-1006-aws
+Processing triggers for libc-bin (2.43-2ubuntu2) ...
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+
+Running kernel seems to be up-to-date.
+
+Restarting services...
+ systemctl restart packagekit.service
+
+Service restarts being deferred:
+ systemctl restart networkd-dispatcher.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Enabled persistence mode via daemon for GPU 00000000:10:1C.0.
+Enabled persistence mode via daemon for GPU 00000000:10:1D.0.
+Enabled persistence mode via daemon for GPU 00000000:20:1C.0.
+Enabled persistence mode via daemon for GPU 00000000:20:1D.0.
+Enabled persistence mode via daemon for GPU 00000000:90:1C.0.
+Enabled persistence mode via daemon for GPU 00000000:90:1D.0.
+Enabled persistence mode via daemon for GPU 00000000:A0:1C.0.
+Enabled persistence mode via daemon for GPU 00000000:A0:1D.0.
+All done.
+Fri Oct  2 12:37:10 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:10:1C.0 Off |                    0 |
+| N/A   29C    P0             58W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100-SXM4-80GB          On  |   00000000:10:1D.0 Off |                    0 |
+| N/A   28C    P0             60W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA A100-SXM4-80GB          On  |   00000000:20:1C.0 Off |                    0 |
+| N/A   28C    P0             57W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA A100-SXM4-80GB          On  |   00000000:20:1D.0 Off |                    0 |
+| N/A   28C    P0             58W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA A100-SXM4-80GB          On  |   00000000:90:1C.0 Off |                    0 |
+| N/A   29C    P0             58W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA A100-SXM4-80GB          On  |   00000000:90:1D.0 Off |                    0 |
+| N/A   28C    P0             58W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA A100-SXM4-80GB          On  |   00000000:A0:1C.0 Off |                    0 |
+| N/A   28C    P0             60W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA A100-SXM4-80GB          On  |   00000000:A0:1D.0 Off |                    0 |
+| N/A   27C    P0             57W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== [2/2] Docker + nvidia-container-toolkit ===
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute InRelease
+Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates InRelease
+Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports InRelease
+Hit:4 http://security.ubuntu.com/ubuntu resolute-security InRelease
+Reading package lists...
+Building dependency tree...
+Reading state information...
+184 packages can be upgraded. Run 'apt list --upgradable' to see them.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+Upgrading:
+  ca-certificates  curl  libcurl3t64-gnutls  libcurl4t64
+
+Installing:
+  fio
+
+Installing dependencies:
+  libboost-iostreams1.90.0  libgfrpc0      libndctl6    librados2
+  libboost-thread1.90.0     libgfxdr0      libnfs14     librbd1
+  libdaxctl1                libglusterfs0  libpmem1     librdmacm1t64
+  libgfapi0                 libnbd0        libpmemobj1
+
+Suggested packages:
+  fio-examples  gnuplot
+
+Summary:
+  Upgrading: 4, Installing: 16, Removing: 0, Not Upgrading: 180
+  Download size: 10.7 MB
+  Space needed: 39.3 MB / 307 GB available
+
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 ca-certificates all 20260601~26.04.1 [139 kB]
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 curl amd64 8.18.0-1ubuntu2.7 [273 kB]
+Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libcurl4t64 amd64 8.18.0-1ubuntu2.7 [428 kB]
+Get:4 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 libgfxdr0 amd64 11.2-2 [20.1 kB]
+Get:5 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 libglusterfs0 amd64 11.2-2 [266 kB]
+Get:6 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 libgfrpc0 amd64 11.2-2 [41.3 kB]
+Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 libgfapi0 amd64 11.2-2 [80.6 kB]
+Get:8 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 libnbd0 amd64 1.24.2-1ubuntu1 [103 kB]
+Get:9 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libnfs14 amd64 5.0.2-1ubuntu1.1 [111 kB]
+Get:10 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libdaxctl1 amd64 81-1ubuntu1 [22.7 kB]
+Get:11 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libndctl6 amd64 81-1ubuntu1 [63.3 kB]
+Get:12 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libpmem1 amd64 1.13.1-1.1ubuntu4 [80.1 kB]
+Get:13 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libboost-iostreams1.90.0 amd64 1.90.0-6ubuntu1 [253 kB]
+Get:14 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libboost-thread1.90.0 amd64 1.90.0-6ubuntu1 [265 kB]
+Get:15 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 librdmacm1t64 amd64 61.0-2ubuntu3 [75.5 kB]
+Get:16 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 librados2 amd64 20.2.0-0ubuntu2 [4289 kB]
+Get:17 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 libpmemobj1 amd64 1.13.1-1.1ubuntu4 [117 kB]
+Get:18 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/main amd64v3 librbd1 amd64 20.2.0-0ubuntu2 [3042 kB]
+Get:19 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 fio amd64 3.41-2 [625 kB]
+Get:20 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 libcurl3t64-gnutls amd64 8.18.0-1ubuntu2.7 [419 kB]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Preconfiguring packages ...
+Fetched 10.7 MB in 0s (42.8 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 88196 files and directories currently installed.)
+Preparing to unpack .../00-ca-certificates_20260601~26.04.1_all.deb ...
+Unpacking ca-certificates (20260601~26.04.1) over (20260223) ...
+Preparing to unpack .../01-curl_8.18.0-1ubuntu2.7_amd64v3.deb ...
+Unpacking curl (8.18.0-1ubuntu2.7) over (8.18.0-1ubuntu2.1) ...
+Preparing to unpack .../02-libcurl4t64_8.18.0-1ubuntu2.7_amd64v3.deb ...
+Unpacking libcurl4t64:amd64 (8.18.0-1ubuntu2.7) over (8.18.0-1ubuntu2.1) ...
+Selecting previously unselected package libgfxdr0:amd64.
+Preparing to unpack .../03-libgfxdr0_11.2-2_amd64v3.deb ...
+Unpacking libgfxdr0:amd64 (11.2-2) ...
+Selecting previously unselected package libglusterfs0:amd64.
+Preparing to unpack .../04-libglusterfs0_11.2-2_amd64v3.deb ...
+Unpacking libglusterfs0:amd64 (11.2-2) ...
+Selecting previously unselected package libgfrpc0:amd64.
+Preparing to unpack .../05-libgfrpc0_11.2-2_amd64v3.deb ...
+Unpacking libgfrpc0:amd64 (11.2-2) ...
+Selecting previously unselected package libgfapi0:amd64.
+Preparing to unpack .../06-libgfapi0_11.2-2_amd64v3.deb ...
+Unpacking libgfapi0:amd64 (11.2-2) ...
+Selecting previously unselected package libnbd0:amd64.
+Preparing to unpack .../07-libnbd0_1.24.2-1ubuntu1_amd64v3.deb ...
+Unpacking libnbd0:amd64 (1.24.2-1ubuntu1) ...
+Selecting previously unselected package libnfs14:amd64.
+Preparing to unpack .../08-libnfs14_5.0.2-1ubuntu1.1_amd64v3.deb ...
+Unpacking libnfs14:amd64 (5.0.2-1ubuntu1.1) ...
+Selecting previously unselected package libdaxctl1:amd64.
+Preparing to unpack .../09-libdaxctl1_81-1ubuntu1_amd64v3.deb ...
+Unpacking libdaxctl1:amd64 (81-1ubuntu1) ...
+Selecting previously unselected package libndctl6:amd64.
+Preparing to unpack .../10-libndctl6_81-1ubuntu1_amd64v3.deb ...
+Unpacking libndctl6:amd64 (81-1ubuntu1) ...
+Selecting previously unselected package libpmem1:amd64.
+Preparing to unpack .../11-libpmem1_1.13.1-1.1ubuntu4_amd64v3.deb ...
+Unpacking libpmem1:amd64 (1.13.1-1.1ubuntu4) ...
+Selecting previously unselected package libboost-iostreams1.90.0:amd64.
+Preparing to unpack .../12-libboost-iostreams1.90.0_1.90.0-6ubuntu1_amd64v3.deb ...
+Unpacking libboost-iostreams1.90.0:amd64 (1.90.0-6ubuntu1) ...
+Selecting previously unselected package libboost-thread1.90.0:amd64.
+Preparing to unpack .../13-libboost-thread1.90.0_1.90.0-6ubuntu1_amd64v3.deb ...
+Unpacking libboost-thread1.90.0:amd64 (1.90.0-6ubuntu1) ...
+Selecting previously unselected package librdmacm1t64:amd64.
+Preparing to unpack .../14-librdmacm1t64_61.0-2ubuntu3_amd64v3.deb ...
+Unpacking librdmacm1t64:amd64 (61.0-2ubuntu3) ...
+Selecting previously unselected package librados2.
+Preparing to unpack .../15-librados2_20.2.0-0ubuntu2_amd64v3.deb ...
+Unpacking librados2 (20.2.0-0ubuntu2) ...
+Selecting previously unselected package libpmemobj1:amd64.
+Preparing to unpack .../16-libpmemobj1_1.13.1-1.1ubuntu4_amd64v3.deb ...
+Unpacking libpmemobj1:amd64 (1.13.1-1.1ubuntu4) ...
+Selecting previously unselected package librbd1.
+Preparing to unpack .../17-librbd1_20.2.0-0ubuntu2_amd64v3.deb ...
+Unpacking librbd1 (20.2.0-0ubuntu2) ...
+Selecting previously unselected package fio.
+Preparing to unpack .../18-fio_3.41-2_amd64v3.deb ...
+Unpacking fio (3.41-2) ...
+Preparing to unpack .../19-libcurl3t64-gnutls_8.18.0-1ubuntu2.7_amd64v3.deb ...
+Unpacking libcurl3t64-gnutls:amd64 (8.18.0-1ubuntu2.7) over (8.18.0-1ubuntu2.1) ...
+Setting up libcurl4t64:amd64 (8.18.0-1ubuntu2.7) ...
+Setting up libcurl3t64-gnutls:amd64 (8.18.0-1ubuntu2.7) ...
+Setting up libnbd0:amd64 (1.24.2-1ubuntu1) ...
+Setting up libboost-thread1.90.0:amd64 (1.90.0-6ubuntu1) ...
+Setting up libnfs14:amd64 (5.0.2-1ubuntu1.1) ...
+Setting up libglusterfs0:amd64 (11.2-2) ...
+Setting up ca-certificates (20260601~26.04.1) ...
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Updating certificates in /etc/ssl/certs...
+rehash: warning: skipping ca-certificates.crt, it does not contain exactly one certificate or CRL
+2 added, 25 removed; done.
+Setting up libdaxctl1:amd64 (81-1ubuntu1) ...
+Setting up libndctl6:amd64 (81-1ubuntu1) ...
+Setting up librdmacm1t64:amd64 (61.0-2ubuntu3) ...
+Setting up curl (8.18.0-1ubuntu2.7) ...
+Setting up libpmem1:amd64 (1.13.1-1.1ubuntu4) ...
+Setting up libboost-iostreams1.90.0:amd64 (1.90.0-6ubuntu1) ...
+Setting up libgfxdr0:amd64 (11.2-2) ...
+Setting up librados2 (20.2.0-0ubuntu2) ...
+Setting up libpmemobj1:amd64 (1.13.1-1.1ubuntu4) ...
+Setting up librbd1 (20.2.0-0ubuntu2) ...
+Setting up libgfrpc0:amd64 (11.2-2) ...
+Setting up libgfapi0:amd64 (11.2-2) ...
+Setting up fio (3.41-2) ...
+Processing triggers for man-db (2.13.1-1build1) ...
+Processing triggers for libc-bin (2.43-2ubuntu2) ...
+Processing triggers for ca-certificates (20260601~26.04.1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+
+Running kernel seems to be up-to-date.
+
+Restarting services...
+ systemctl restart packagekit.service
+
+Service restarts being deferred:
+ systemctl restart networkd-dispatcher.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: resolute
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute InRelease
+Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-updates InRelease
+Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute-backports InRelease
+Get:4 https://download.docker.com/linux/ubuntu resolute InRelease [32.5 kB]
+Hit:5 http://security.ubuntu.com/ubuntu resolute-security InRelease
+Get:6 https://download.docker.com/linux/ubuntu resolute/stable amd64 Packages [27.3 kB]
+Fetched 59.8 kB in 0s (883 kB/s)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+180 packages can be upgraded. Run 'apt list --upgradable' to see them.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+Installing:
+  containerd.io         docker-ce      docker-compose-plugin
+  docker-buildx-plugin  docker-ce-cli
+
+Installing dependencies:
+  docker-ce-rootless-extras  pigz
+
+Suggested packages:
+  cgroupfs-mount  | cgroup-lite  docker-model-plugin
+
+Summary:
+  Upgrading: 0, Installing: 7, Removing: 0, Not Upgrading: 180
+  Download size: 101 MB
+  Space needed: 383 MB / 306 GB available
+
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu resolute/universe amd64v3 pigz amd64 2.8-1build1 [68.5 kB]
+Get:2 https://download.docker.com/linux/ubuntu resolute/stable amd64 containerd.io amd64 2.3.6-1~ubuntu.26.04~resolute [23.2 MB]
+Get:3 https://download.docker.com/linux/ubuntu resolute/stable amd64 docker-ce-cli amd64 5:29.8.2-1~ubuntu.26.04~resolute [17.6 MB]
+Get:4 https://download.docker.com/linux/ubuntu resolute/stable amd64 docker-ce amd64 5:29.8.2-1~ubuntu.26.04~resolute [24.4 MB]
+Get:5 https://download.docker.com/linux/ubuntu resolute/stable amd64 docker-buildx-plugin amd64 0.37.1-1~ubuntu.26.04~resolute [17.3 MB]
+Get:6 https://download.docker.com/linux/ubuntu resolute/stable amd64 docker-ce-rootless-extras amd64 5:29.8.2-1~ubuntu.26.04~resolute [10.2 MB]
+Get:7 https://download.docker.com/linux/ubuntu resolute/stable amd64 docker-compose-plugin amd64 5.5.1-1~ubuntu.26.04~resolute [8013 kB]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Fetched 101 MB in 1s (128 MB/s)
+Selecting previously unselected package containerd.io.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 88306 files and directories currently installed.)
+Preparing to unpack .../0-containerd.io_2.3.6-1~ubuntu.26.04~resolute_amd64.deb ...
+Unpacking containerd.io (2.3.6-1~ubuntu.26.04~resolute) ...
+Selecting previously unselected package docker-ce-cli.
+Preparing to unpack .../1-docker-ce-cli_5%3a29.8.2-1~ubuntu.26.04~resolute_amd64.deb ...
+Unpacking docker-ce-cli (5:29.8.2-1~ubuntu.26.04~resolute) ...
+Selecting previously unselected package docker-ce.
+Preparing to unpack .../2-docker-ce_5%3a29.8.2-1~ubuntu.26.04~resolute_amd64.deb ...
+Unpacking docker-ce (5:29.8.2-1~ubuntu.26.04~resolute) ...
+Selecting previously unselected package pigz.
+Preparing to unpack .../3-pigz_2.8-1build1_amd64v3.deb ...
+Unpacking pigz (2.8-1build1) ...
+Selecting previously unselected package docker-buildx-plugin.
+Preparing to unpack .../4-docker-buildx-plugin_0.37.1-1~ubuntu.26.04~resolute_amd64.deb ...
+Unpacking docker-buildx-plugin (0.37.1-1~ubuntu.26.04~resolute) ...
+Selecting previously unselected package docker-ce-rootless-extras.
+Preparing to unpack .../5-docker-ce-rootless-extras_5%3a29.8.2-1~ubuntu.26.04~resolute_amd64.deb ...
+Unpacking docker-ce-rootless-extras (5:29.8.2-1~ubuntu.26.04~resolute) ...
+Selecting previously unselected package docker-compose-plugin.
+Preparing to unpack .../6-docker-compose-plugin_5.5.1-1~ubuntu.26.04~resolute_amd64.deb ...
+Unpacking docker-compose-plugin (5.5.1-1~ubuntu.26.04~resolute) ...
+Setting up docker-buildx-plugin (0.37.1-1~ubuntu.26.04~resolute) ...
+Setting up containerd.io (2.3.6-1~ubuntu.26.04~resolute) ...
+Created symlink '/etc/systemd/system/multi-user.target.wants/containerd.service' → '/usr/lib/systemd/system/containerd.service'.
+Setting up docker-compose-plugin (5.5.1-1~ubuntu.26.04~resolute) ...
+Setting up docker-ce-cli (5:29.8.2-1~ubuntu.26.04~resolute) ...
+Setting up pigz (2.8-1build1) ...
+Setting up docker-ce-rootless-extras (5:29.8.2-1~ubuntu.26.04~resolute) ...
+Setting up docker-ce (5:29.8.2-1~ubuntu.26.04~resolute) ...
+Created symlink '/etc/systemd/system/multi-user.target.wants/docker.service' → '/usr/lib/systemd/system/docker.service'.
+Created symlink '/etc/systemd/system/sockets.target.wants/docker.socket' → '/usr/lib/systemd/system/docker.socket'.
+Processing triggers for man-db (2.13.1-1build1) ...
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+
+Running kernel seems to be up-to-date.
+
+Restarting services...
+
+Service restarts being deferred:
+ systemctl restart networkd-dispatcher.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-10-02 12:37:31 UTC; 2s ago
+ Invocation: 5ba0a21e97ec43eb9ec3d51806be7c5b
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 34110 (dockerd)
+      Tasks: 31
+     Memory: 37.6M (peak: 39.4M)
+        CPU: 425ms
+     CGroup: /system.slice/docker.service
+             └─34110 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+Oct 02 12:37:30 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:30.893155261Z" level=info msg="Restoring containers: start."
+Oct 02 12:37:30 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:30.928991230Z" level=info msg="Deleting nftables IPv4 rules" error="running nft: /dev/stdin:1:17-30: Error: Could not process rule: No such file or directory\ndelete table ip docker-bridges\n                ^^^^^^^^^^^^^^\n exit status 1"
+Oct 02 12:37:30 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:30.944535031Z" level=info msg="Deleting nftables IPv6 rules" error="running nft: /dev/stdin:1:18-31: Error: Could not process rule: No such file or directory\ndelete table ip6 docker-bridges\n                 ^^^^^^^^^^^^^^\n exit status 1"
+Oct 02 12:37:31 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:31.223031504Z" level=info msg="Loading containers: done."
+Oct 02 12:37:31 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:31.228978755Z" level=info msg="Docker daemon" commit=8af9fe3 containerd-snapshotter=true storage-driver=overlayfs version=29.8.2
+Oct 02 12:37:31 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:31.229073334Z" level=info msg="Initializing buildkit"
+Oct 02 12:37:31 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:31.391820893Z" level=info msg="Completed buildkit initialization"
+Oct 02 12:37:31 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:31.395898017Z" level=info msg="Daemon has completed initialization"
+Oct 02 12:37:31 ip-10-102-90-69 dockerd[34110]: time="2026-10-02T12:37:31.395932792Z" level=info msg="API listen on /run/docker.sock"
+Oct 02 12:37:31 ip-10-102-90-69 systemd[1]: Started docker.service - Docker Application Container Engine.
+deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/deb/$(ARCH) /
+#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/experimental/deb/$(ARCH) /
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following additional packages will be installed:
+  libnvidia-container-tools libnvidia-container1 nvidia-container-toolkit-base
+The following NEW packages will be installed:
+  libnvidia-container-tools libnvidia-container1 nvidia-container-toolkit
+  nvidia-container-toolkit-base
+0 upgraded, 4 newly installed, 0 to remove and 180 not upgraded.
+Need to get 8752 kB of archives.
+After this operation, 37.7 MB of additional disk space will be used.
+Get:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  libnvidia-container1 1.20.1-1 [1236 kB]
+Get:2 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  libnvidia-container-tools 1.20.1-1 [20.8 kB]
+Get:3 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  nvidia-container-toolkit-base 1.20.1-1 [5993 kB]
+Get:4 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  nvidia-container-toolkit 1.20.1-1 [1501 kB]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Fetched 8752 kB in 0s (76.5 MB/s)
+Selecting previously unselected package libnvidia-container1:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 88543 files and directories currently installed.)
+Preparing to unpack .../libnvidia-container1_1.20.1-1_amd64.deb ...
+Unpacking libnvidia-container1:amd64 (1.20.1-1) ...
+Selecting previously unselected package libnvidia-container-tools.
+Preparing to unpack .../libnvidia-container-tools_1.20.1-1_amd64.deb ...
+Unpacking libnvidia-container-tools (1.20.1-1) ...
+Selecting previously unselected package nvidia-container-toolkit-base.
+Preparing to unpack .../nvidia-container-toolkit-base_1.20.1-1_amd64.deb ...
+Unpacking nvidia-container-toolkit-base (1.20.1-1) ...
+Selecting previously unselected package nvidia-container-toolkit.
+Preparing to unpack .../nvidia-container-toolkit_1.20.1-1_amd64.deb ...
+Unpacking nvidia-container-toolkit (1.20.1-1) ...
+Setting up nvidia-container-toolkit-base (1.20.1-1) ...
+Created symlink '/etc/systemd/system/multi-user.target.wants/nvidia-cdi-refresh.path' → '/usr/lib/systemd/system/nvidia-cdi-refresh.path'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/nvidia-cdi-refresh.service' → '/usr/lib/systemd/system/nvidia-cdi-refresh.service'.
+Setting up libnvidia-container1:amd64 (1.20.1-1) ...
+Setting up libnvidia-container-tools (1.20.1-1) ...
+Setting up nvidia-container-toolkit (1.20.1-1) ...
+Processing triggers for libc-bin (2.43-2ubuntu2) ...
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+locale: Cannot set LC_ALL to default locale: No such file or directory
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = (unset),
+	LC_NUMERIC = "fr_FR.UTF-8",
+	LC_COLLATE = (unset),
+	LC_TIME = "fr_FR.UTF-8",
+	LC_MESSAGES = (unset),
+	LC_MONETARY = "fr_FR.UTF-8",
+	LC_ADDRESS = "fr_FR.UTF-8",
+	LC_IDENTIFICATION = "fr_FR.UTF-8",
+	LC_MEASUREMENT = "fr_FR.UTF-8",
+	LC_PAPER = "fr_FR.UTF-8",
+	LC_TELEPHONE = "fr_FR.UTF-8",
+	LC_NAME = "fr_FR.UTF-8",
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("C.UTF-8").
+
+Running kernel seems to be up-to-date.
+
+Restarting services...
+
+Service restarts being deferred:
+ systemctl restart networkd-dispatcher.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+time="2026-10-02T12:37:38Z" level=info msg="Config file does not exist; using empty config"
+time="2026-10-02T12:37:38Z" level=info msg="Wrote updated config to /etc/docker/daemon.json"
+time="2026-10-02T12:37:38Z" level=info msg="It is recommended that docker daemon be restarted."
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-10-02 12:37:39 UTC; 12ms ago
+ Invocation: 71f888e4877c4ae7b2e93c74874dc8c6
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 34926 (dockerd)
+      Tasks: 32
+     Memory: 36.3M (peak: 46.4M)
+        CPU: 664ms
+     CGroup: /system.slice/docker.service
+             └─34926 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+Oct 02 12:37:38 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:38.959336669Z" level=info msg="Restoring containers: start."
+Oct 02 12:37:38 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:38.973932390Z" level=info msg="Deleting nftables IPv4 rules" error="running nft: /dev/stdin:1:17-30: Error: Could not process rule: No such file or directory\ndelete table ip docker-bridges\n                ^^^^^^^^^^^^^^\n exit status 1"
+Oct 02 12:37:38 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:38.986942787Z" level=info msg="Deleting nftables IPv6 rules" error="running nft: /dev/stdin:1:18-31: Error: Could not process rule: No such file or directory\ndelete table ip6 docker-bridges\n                 ^^^^^^^^^^^^^^\n exit status 1"
+Oct 02 12:37:39 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:39.551600116Z" level=info msg="Loading containers: done."
+Oct 02 12:37:39 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:39.558462934Z" level=info msg="Docker daemon" commit=8af9fe3 containerd-snapshotter=true storage-driver=overlayfs version=29.8.2
+Oct 02 12:37:39 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:39.558490241Z" level=info msg="Initializing buildkit"
+Oct 02 12:37:39 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:39.842217270Z" level=info msg="Completed buildkit initialization"
+Oct 02 12:37:39 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:39.846147053Z" level=info msg="Daemon has completed initialization"
+Oct 02 12:37:39 ip-10-102-90-69 dockerd[34926]: time="2026-10-02T12:37:39.846189720Z" level=info msg="API listen on /run/docker.sock"
+Oct 02 12:37:39 ip-10-102-90-69 systemd[1]: Started docker.service - Docker Application Container Engine.
+
+=== Setup complete ===

@@ -1,0 +1,101 @@
+[13:03:33] === Benchmark start: TENSOR_SIZE=5000 RUNS=1 DROP_CACHE=no MEMLOCK_UNLIMITED=no ===
+[13:03:33] scenario: smoke-upstream|criu-upstream-head|--image-io-mode=direct
+[13:03:33] scenario: smoke-ours|criu-head-ours|
+[13:03:33] scenario: smoke-parallel|criu-head-parallel|
+
+=== SCENARIO smoke-upstream: image=criu-upstream-head opts='--image-io-mode=direct' ===
+[13:03:33] [smoke-upstream run=1] starting container image=criu-upstream-head (TENSOR_SIZE=5000)
+59b6dfdf181fae03e816e218e1606c5388ff4494fd7fe6e55277b78d72df4ea1
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:03:35] [smoke-upstream run=1] dump start
+[13:03:36] [smoke-upstream run=1] dump=945ms  gpu-pages=none  pages-*.img=919M  inventory=yes
+[13:03:36] skip drop caches (deactivated)
+[13:03:36] [smoke-upstream run=1] restore start
+(00.003483) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[13:03:37] [smoke-upstream run=1] restore=755ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=65
+[POST] device: NVIDIA A100-SXM4-80GB (+0.000s)
+[POST] first sum: +0.001s from wake
+[POST] x=-3377.735840 y=-35.730186
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=smoke-upstream run=1 dump_ms=945 restore_ms=755
+bench1
+
+
+=== SCENARIO smoke-ours: image=criu-head-ours opts='' ===
+[13:03:38] [smoke-ours run=1] starting container image=criu-head-ours (TENSOR_SIZE=5000)
+3ca39607322f349b782d6f6c757f8282930b22cfd8a8317a22e0724e7764037e
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:03:40] [smoke-ours run=1] dump start
+[13:03:41] [smoke-ours run=1] dump=1019ms  gpu-pages=599M  pages-*.img=321M  inventory=yes
+[13:03:41] skip drop caches (deactivated)
+[13:03:41] [smoke-ours run=1] restore start
+(00.003176) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(00.359896) [timing] O_DIRECT pread restore: 146 ms (4.3 GB/s) [pread=146 ms]
+(00.361232) cuda_plugin: [timing] GPU page restore: 148 ms
+(00.634217) cuda_plugin: [timing] Driver API restore+unlock: 273 ms
+[13:03:42] [smoke-ours run=1] restore=651ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.000s)
+[POST] first sum: +0.001s from wake
+[POST] x=-3377.735840 y=-35.730186
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=smoke-ours run=1 dump_ms=1019 restore_ms=651
+bench1
+
+
+=== SCENARIO smoke-parallel: image=criu-head-parallel opts='' ===
+[13:03:42] [smoke-parallel run=1] starting container image=criu-head-parallel (TENSOR_SIZE=5000)
+8e52985689810201175c4e3e7f75b4cf429b64e4e27775d155a0cc1c2fbcbd91
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:03:45] [smoke-parallel run=1] dump start
+[13:03:46] [smoke-parallel run=1] dump=983ms  gpu-pages=599M  pages-*.img=321M  inventory=yes
+[13:03:46] skip drop caches (deactivated)
+[13:03:46] [smoke-parallel run=1] restore start
+(00.003831) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(00.298796) [timing] parallel restore: 84 ms (7.4 GB/s) [8 threads, 10 chunks, O_DIRECT]
+(00.298835) cuda_plugin: [timing] GPU page restore: 85 ms
+(00.571914) cuda_plugin: [timing] Driver API restore+unlock: 273 ms
+[13:03:47] [smoke-parallel run=1] restore=652ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.000s)
+[POST] first sum: +0.001s from wake
+[POST] x=-3377.735840 y=-35.730186
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=smoke-parallel run=1 dump_ms=983 restore_ms=652
+bench1
+
+[13:03:47] === All benchmarks complete ===

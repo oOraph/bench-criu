@@ -1,0 +1,67 @@
+[13:06:03] === Benchmark start: TENSOR_SIZE=60000 RUNS=2 DROP_CACHE=yes MEMLOCK_UNLIMITED=no ===
+[13:06:03] scenario: parallel-t16|criu-head-parallel|
+
+=== SCENARIO parallel-t16: image=criu-head-parallel opts='' ===
+[13:06:03] [parallel-t16 run=1] starting container image=criu-head-parallel (TENSOR_SIZE=60000)
+da3f6296d785978caa7086081602e22197e79d19af00714fddee56ea80fa2ca4
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:06:12] [parallel-t16 run=1] dump start
+[13:06:25] [parallel-t16 run=1] dump=13045ms  gpu-pages=14G  pages-*.img=321M  inventory=yes
+[13:06:25] drop caches
+[13:06:25] [parallel-t16 run=1] restore start
+(00.042970) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(01.325712) [timing] parallel restore: 710 ms (21.0 GB/s) [16 threads, 223 chunks, O_DIRECT]
+(01.326430) cuda_plugin: [timing] GPU page restore: 711 ms
+(03.686273) cuda_plugin: [timing] Driver API restore+unlock: 2360 ms
+[13:06:33] [parallel-t16 run=1] restore=3960ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=65
+[POST] device: NVIDIA A100-SXM4-80GB (+0.030s)
+[POST] first sum: +0.144s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=parallel-t16 run=1 dump_ms=13045 restore_ms=3960
+bench1
+
+[13:06:34] [parallel-t16 run=2] starting container image=criu-head-parallel (TENSOR_SIZE=60000)
+83dc6bdbd247c404c48b74945488c1d049735783585f7034ed6db251fb283ddc
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:06:43] [parallel-t16 run=2] dump start
+[13:06:56] [parallel-t16 run=2] dump=12997ms  gpu-pages=14G  pages-*.img=321M  inventory=yes
+[13:06:56] drop caches
+[13:06:56] [parallel-t16 run=2] restore start
+(00.043355) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(01.312344) [timing] parallel restore: 692 ms (21.6 GB/s) [16 threads, 223 chunks, O_DIRECT]
+(01.313196) cuda_plugin: [timing] GPU page restore: 693 ms
+(03.612467) cuda_plugin: [timing] Driver API restore+unlock: 2299 ms
+[13:07:04] [parallel-t16 run=2] restore=3855ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.028s)
+[POST] first sum: +0.135s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=parallel-t16 run=2 dump_ms=12997 restore_ms=3855
+bench1
+
+[13:07:05] === All benchmarks complete ===
