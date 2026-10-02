@@ -4,8 +4,9 @@
 #       --build-arg CRIU_REPO=https://github.com/checkpoint-restore/criu.git --build-arg CRIU_REF=4485a86da237 .
 #   docker build -f Dockerfile.vllm -t vllm-criu-ours     --build-arg CRIU_REF=fast_cuda_plugin_on_head .
 #   docker build -f Dockerfile.vllm -t vllm-criu-parallel --build-arg CRIU_REF=fast_cuda_plugin_on_head_parallel .
-ARG VLLM_IMAGE=vllm/vllm-openai:latest
-FROM ${VLLM_IMAGE} AS vllm-criu-base
+# Also used for other serving images (e.g. the HF inference toolkit for SDXL): pass APP_IMAGE.
+ARG APP_IMAGE=vllm/vllm-openai:latest
+FROM ${APP_IMAGE} AS vllm-criu-base
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     build-essential git \

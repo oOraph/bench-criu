@@ -18,6 +18,9 @@ RUNS=${RUNS:-2}
 DROP_CACHE=${DROP_CACHE:-"yes"}
 READY_TIMEOUT=${READY_TIMEOUT:-900}
 RESTORE_TIMEOUT=${RESTORE_TIMEOUT:-300}
+# SLEEP_MODE=1: start with --enable-sleep-mode, POST /sleep?level=1 before the dump (weights -> host RAM,
+# KV cache freed) and POST /wake_up after the restore; both are timed and reported.
+SLEEP_MODE=${SLEEP_MODE:-0}
 # CRIU options the shim uses for vLLM workloads
 # (+ --tcp-established --link-remap per the vLLM recipe that worked on k8s, see README)
 CRIU_BASE_OPTS=${CRIU_BASE_OPTS:-"--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap"}
@@ -56,7 +59,7 @@ run_one() {
         -v "$HF_CACHE:/root/.cache/huggingface" -v "$dump_dir:$dump_dir" "$image" >/dev/null
     sleep 1
     # all stdio fds on a file inside the container's own fs (CRIU needs resolvable mounts)
-    docker exec $CONTAINER bash -c "touch /tmp/server.log && python3 -m vllm.entrypoints.openai.api_server --model $MODEL --port $PORT --max-model-len $MAX_MODEL_LEN --gpu-memory-utilization $GPU_MEM_UTIL </tmp/server.log >>/tmp/server.log 2>&1 &"
+    docker exec $CONTAINER bash -c "touch /tmp/server.log && python3 -m vllm.entrypoints.openai.api_server --model $MODEL --port $PORT --max-model-len $MAX_MODEL_LEN --gpu-memory-utilization $GPU_MEM_UTIL $( [ "$SLEEP_MODE" = 1 ] && echo --enable-sleep-mode ) </tmp/server.log >>/tmp/server.log 2>&1 &"
 
     log "[$label run=$run] waiting for /health (timeout ${READY_TIMEOUT}s)"
     local t_start=$(date +%s) i
@@ -73,6 +76,15 @@ run_one() {
     app_pid=$(docker exec $CONTAINER pgrep -o -f "vllm.entrypoints.openai.api_server")
     log "[$label run=$run] app_pid=$app_pid (container ns) init_pid=$init_pid; tree:"
     docker exec $CONTAINER ps -o pid,ppid,rss,comm --forest 2>/dev/null | grep -vE "ps|bash|sleep|tini" | head -8 || true
+
+    local sleep_ms=n/a wake_ms=n/a
+    if [[ "$SLEEP_MODE" = 1 ]]; then
+        log "[$label run=$run] POST /sleep?level=1"
+        local ts=$(( $(date +%s%N) / 1000000 ))
+        docker exec $CONTAINER curl -sf -X POST "http://localhost:${PORT}/sleep?level=1" -o /dev/null
+        sleep_ms=$(( $(date +%s%N) / 1000000 - ts ))
+        log "[$label run=$run] sleep=${sleep_ms}ms  $(docker exec $CONTAINER curl -sf http://localhost:${PORT}/is_sleeping)"
+    fi
 
     log "[$label run=$run] dump start"
     local t0=$(( $(date +%s%N) / 1000000 )) dump_rc=0
@@ -104,6 +116,13 @@ run_one() {
     log "[$label run=$run] restore=${restore_ms}ms"
 
     local infer=FAILED infer_ms=n/a
+    if [[ "$restore_ms" != "TIMEOUT" && "$SLEEP_MODE" = 1 ]]; then
+        log "[$label run=$run] POST /wake_up"
+        local tw=$(( $(date +%s%N) / 1000000 ))
+        docker exec $CONTAINER curl -sf -X POST "http://localhost:${PORT}/wake_up" -o /dev/null
+        wake_ms=$(( $(date +%s%N) / 1000000 - tw ))
+        log "[$label run=$run] wake_up=${wake_ms}ms  $(docker exec $CONTAINER curl -sf http://localhost:${PORT}/is_sleeping)"
+    fi
     if [[ "$restore_ms" != "TIMEOUT" ]]; then
         local ti=$(( $(date +%s%N) / 1000000 )) out
         out=$(docker exec $CONTAINER curl -sf http://localhost:${PORT}/v1/completions -H 'content-type: application/json' \
@@ -114,11 +133,11 @@ run_one() {
     else
         sudo cat "$dump_dir/criu-restore.out" 2>/dev/null | head -10; sudo tail -30 "$dump_dir/restore.log" 2>/dev/null || true
     fi
-    echo "RESULT label=$label run=$run coldstart_s=$coldstart_s dump_ms=$dump_ms restore_ms=$restore_ms inference=$infer infer_ms=$infer_ms"
+    echo "RESULT label=$label run=$run coldstart_s=$coldstart_s sleep_ms=$sleep_ms dump_ms=$dump_ms restore_ms=$restore_ms wake_ms=$wake_ms inference=$infer infer_ms=$infer_ms"
     cleanup_container
 }
 
-log "=== vLLM benchmark: MODEL=$MODEL RUNS=$RUNS DROP_CACHE=$DROP_CACHE CUDA_RESTORE_THREADS=$CUDA_RESTORE_THREADS CRIU_BASE_OPTS='$CRIU_BASE_OPTS'"
+log "=== vLLM benchmark: MODEL=$MODEL SLEEP_MODE=$SLEEP_MODE RUNS=$RUNS DROP_CACHE=$DROP_CACHE CUDA_RESTORE_THREADS=$CUDA_RESTORE_THREADS CRIU_BASE_OPTS='$CRIU_BASE_OPTS'"
 IFS=';' read -ra SCENARIO_LIST <<< "$SCENARIOS"
 for sc in "${SCENARIO_LIST[@]}"; do
     IFS='|' read -r label image opts <<< "$sc"
