@@ -90,10 +90,27 @@ the array its 3.6 GB/s was an I/O-concurrency limit, not CPU. The parallel path 
 (memory-bandwidth / `process_vm_writev` bound, flat from 16 to 32 threads); on any real array it is
 disk-bound. Upstream gets no benefit from tmpfs (9.3 s).
 
+## Dump breakdown (parallel-t32 run 2, `dump.log`, 14.0 GB staging)
+
+| step | time | rate |
+|---|---|---|
+| Driver API checkpoint (driver copies VRAM → host staging pages) | 6,176 ms | 2.3 GB/s |
+| plugin `process_vm_readv` of staging pages | 1,967 ms | 7.1 GB/s |
+| plugin O_DIRECT write of `gpu-pages-*.img` | 2,483 ms | 5.6 GB/s (burst) |
+| injected `madvise(MADV_DONTNEED)` | 938 ms | |
+| CRIU core (319 MB) + rest | ~0.3 s | |
+| **total** | **11.8 s** | |
+
+More than half of the dump is the driver's own VRAM → host copy at 2.3 GB/s (cf. the GCR paper's
+3.0 GB/s measurement for cuda-checkpoint). Neither the plugin nor CRIU can touch that step today;
+only the custom-storage mode (driver ≥ 615), where the checkpointer drives the copies itself from
+the zero-copy mapped device pointer, can. Parallelising our readv+write would save at most ~2 s.
+
 ## Conclusions
 
 1. **Adopt the parallel restore** as the plugin's restore path; 16 threads is the knee (`min(ncpu, 16)`).
-2. **Dump is now the dominant cost** (11.8 s vs 4.4 s restore): serial `process_vm_readv` + O_DIRECT write.
-   The same parallelisation applies (per-chunk readv+write workers), bounded by the array's sustained
-   write bandwidth. Custom-storage (driver ≥ 615) would remove the staging copy on both sides.
+2. **Dump is now the dominant cost** (11.8 s vs 4.4 s restore), and 6.2 s of it is the driver's VRAM → host
+   copy at 2.3 GB/s. Parallelising our own readv+write saves ~2 s at best; the real lever is the
+   custom-storage mode (driver ≥ 615), which replaces the driver copy on both dump and restore
+   (also the 1.5 s restore+unlock) with copies we drive at PCIe speed, overlapped with disk I/O.
 3. With `MADV_HUGEPAGE` and no `mlock`, THP mode `madvise` is a node requirement worth asserting.
