@@ -1,0 +1,21 @@
+killing leftover GPU process 152679: python /test_app.py
+GPU0 now: 0 MiB
+=== A. driver staging path: cuda-checkpoint lock+checkpoint / restore+unlock (VRAM <-> target host memory)
+[15:43:15] app ready, container pid=67, VRAM: 14039 MiB
+[15:43:23] cuda-checkpoint checkpoint: 7591 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:43:27] cuda-checkpoint restore+unlock: 3366 ms
+[POST] x_match=True y_match=True
+[POST] SUCCESS=True
+=== B. custom storage: cuda_cs checkpoint -> /mnt/nvme/cs.img -> cuda_cs restore
+[15:43:31] app ready, container pid=67, VRAM: 14039 MiB
+region: devPtr=0x72768f400000 size=14.71 GB ctx=0x5a37de705910 stream_ctx=0x5a37de705910 device=0
+custom storage: 1 device(s), 14.71 GB mapped; lock 0 ms, checkpoint(map) 55 ms
+[timing] checkpoint: copy 10800 ms (1.4 GB/s, O_DIRECT) [disk 10537 ms, pcie-wait 8 ms], complete 59 ms -> CHECKPOINTED
+[15:43:43] cuda_cs checkpoint total: 11295 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+region: devPtr=0x7d4063400000 size=14.71 GB ctx=0x6218231ab910 stream_ctx=0x6218231ab910 device=0
+[timing] restore: restore(map) 117 ms, copy 4928 ms (3.0 GB/s, O_DIRECT) [disk 4672 ms, pcie-wait 4 ms], complete 2 ms, unlock 1 ms -> RUNNING
+[15:43:49] cuda_cs restore total: 5807 ms
+[POST] x_match=True y_match=True
+[POST] SUCCESS=True
+
+[exited with code 0]
