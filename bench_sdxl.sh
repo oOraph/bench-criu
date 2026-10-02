@@ -40,11 +40,13 @@ run_one() {
     sudo rm -rf "$dump_dir" && sudo mkdir -p "$dump_dir"
 
     log "[$label run=$run] starting container image=$image model=$HF_MODEL_ID"
-    # weights cached in $HF_CACHE (HF_HOME); first start downloads them, later starts load from NVMe
+    # The toolkit downloads HF_MODEL_ID into HF_MODEL_DIR (/opt/huggingface) at startup; mount a
+    # persistent per-model dir there so only the first start downloads (same as the June k8s setup).
+    local model_dir="$HF_CACHE/toolkit/$HF_MODEL_ID"; sudo mkdir -p "$model_dir"
     docker run -d --rm --name $CONTAINER --gpus '"device=0"' --shm-size=8g \
-        -e HF_MODEL_ID="$HF_MODEL_ID" -e HF_TASK="$HF_TASK" -e HF_HOME=/root/.cache/huggingface \
+        -e HF_MODEL_ID="$HF_MODEL_ID" -e HF_TASK="$HF_TASK" -e LOG_LEVEL=INFO \
         -e UV_USE_IO_URING=0 -e DO_NOT_TRACK=1 -e GLOO_SOCKET_IFNAME=lo \
-        -v "$HF_CACHE:/root/.cache/huggingface" -v "$dump_dir:$dump_dir" "$image" >/dev/null
+        -v "$model_dir:/opt/huggingface" -v "$dump_dir:$dump_dir" "$image" >/dev/null
     sleep 1
     # all stdio fds on a file inside the container's own fs (CRIU needs resolvable mounts)
     docker exec $CONTAINER bash -c "touch /tmp/server.log && /app/entrypoint.sh </tmp/server.log >>/tmp/server.log 2>&1 &"
