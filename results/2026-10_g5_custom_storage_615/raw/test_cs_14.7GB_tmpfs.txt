@@ -1,0 +1,12 @@
+=== A. driver staging path: cuda-checkpoint lock+checkpoint / restore+unlock (VRAM <-> target host memory)
+[15:45:04] cuda-checkpoint checkpoint: 7606 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:45:07] cuda-checkpoint restore+unlock: 3029 ms
+[POST] SUCCESS=True
+=== B. custom storage: cuda_cs checkpoint -> /mnt/tmpfs/cs.img -> cuda_cs restore
+[timing] checkpoint: copy 7024 ms (2.1 GB/s, O_DIRECT) [disk 6761 ms, pcie-wait 12 ms], complete 58 ms -> CHECKPOINTED
+[15:45:18] cuda_cs checkpoint total: 7522 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+[timing] restore: restore(map) 117 ms, copy 2410 ms (6.1 GB/s, O_DIRECT) [disk 2150 ms, pcie-wait 11 ms], complete 2 ms, unlock 1 ms -> RUNNING
+[15:45:20] cuda_cs restore total: 2861 ms
+[POST] SUCCESS=True
+
+[exited with code 0]
