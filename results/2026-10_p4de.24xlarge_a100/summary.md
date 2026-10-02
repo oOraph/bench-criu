@@ -131,3 +131,17 @@ Compared with the full (no-sleep) checkpoint on this box:
 the toolkit image lacks `iptables`, which CRIU needs to lock established TCP connections (`--tcp-established`).
 The first start still held an HTTPS session from the model download; later starts had no connection.
 Fixed by adding `iptables` to `Dockerfile.vllm`.
+
+## vLLM 0.30 + openai/gpt-oss-120b on the A100-80GB (`RUNS=1`, `--max-model-len 4096`, `--gpu-memory-utilization 0.9`)
+
+MXFP4 weights (~63 GB) on a single GPU; vLLM 0.30 runs it on Ampere. Cold start ~170 s. Checkpoint again
+fills the GPU: **71 GB of GPU pages + 3.5 GB of CPU pages** (75 GB total). Reference: NVIDIA's Dynamo Snapshot
+blog reports 31.1 s restore for this model with upstream CRIU on a B200 (NFS).
+
+| variant | dump (ms) | restore (ms) | GPU page fill | driver restore+unlock | inference |
+|---|---|---|---|---|---|
+| upstream-direct | 58,852 | 46,864 | — | — | OK (3.3 s) |
+| parallel plugin, 16 threads | 65,902 | 17,227 | 3,714 ms (20.5 GB/s) | 10,565 ms | OK (3.2 s) |
+
+Restore **−63%** (17.2 s vs 46.9 s). Same shape as Qwen3-8B: dump dominated by the driver's 37.3 s VRAM→host
+copy; restore = 3.7 s fill + 10.6 s driver copy + ~3 s CRIU core.

@@ -1,0 +1,21 @@
+=== download gpt-oss-120b
+download exit=0 in 87s
+216K	/mnt/nvme/hf/hub/models--openai--gpt-oss-120b
+gptoss bench exit=0
+[14:22:50] [gptoss-upstream-direct run=1] server READY after 167s
+[14:23:49] [gptoss-upstream-direct run=1] dump=58852ms rc=0 gpu-pages=0
+[14:24:37] [gptoss-upstream-direct run=1] restore=46864ms
+[14:24:40] [gptoss-upstream-direct run=1] inference=OK infer_ms=3258 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-upstream-direct run=1 coldstart_s=167 sleep_ms=n/a dump_ms=58852 restore_ms=46864 wake_ms=n/a inference=OK infer_ms=3258
+[14:27:37] [gptoss-parallel run=1] server READY after 170s
+(00.133828) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(37.451779) cuda_plugin: [timing] Driver API checkpoint: 37300 ms
+[14:28:43] [gptoss-parallel run=1] dump=65902ms rc=0 gpu-pages=71G pages-*.img=3.5G
+(02.637989) cuda_plugin: [timing] Driver API restore+unlock: 183 ms
+(06.357995) [timing] parallel restore: 3714 ms (20.5 GB/s) [16 threads, 1135 chunks, O_DIRECT]
+(16.923290) cuda_plugin: [timing] Driver API restore+unlock: 10565 ms
+[14:29:02] [gptoss-parallel run=1] restore=17227ms
+[14:29:05] [gptoss-parallel run=1] inference=OK infer_ms=3177 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-parallel run=1 coldstart_s=170 sleep_ms=n/a dump_ms=65902 restore_ms=17227 wake_ms=n/a inference=OK infer_ms=3177
+
+[exited with code 0]
