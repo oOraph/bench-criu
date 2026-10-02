@@ -1,0 +1,14 @@
+######## tmpfs restore, threads=2 chunk=64MB
+region: 14.71 GB in 220 chunks, 2 threads, wall 1362 ms (10.8 GB/s; 12.0 GB/s excluding 135 ms pinned alloc); per-thread avg io 1105 ms, pcie 49 ms
+######## tmpfs restore, threads=3 chunk=64MB
+region: 14.71 GB in 220 chunks, 3 threads, wall 1470 ms (10.0 GB/s; 11.4 GB/s excluding 182 ms pinned alloc); per-thread avg io 776 ms, pcie 397 ms
+######## tmpfs restore, threads=4 chunk=32MB
+region: 14.71 GB in 439 chunks, 4 threads, wall 1342 ms (11.0 GB/s; 12.0 GB/s excluding 115 ms pinned alloc); per-thread avg io 581 ms, pcie 570 ms
+######## tmpfs restore, threads=6 chunk=64MB
+region: 14.71 GB in 220 chunks, 6 threads, wall 1793 ms (8.2 GB/s; 9.9 GB/s excluding 307 ms pinned alloc); per-thread avg io 393 ms, pcie 864 ms
+######## tmpfs restore, threads=4 chunk=16MB
+region: 14.71 GB in 877 chunks, 4 threads, wall 1236 ms (11.9 GB/s; 12.5 GB/s excluding 59 ms pinned alloc); per-thread avg io 585 ms, pcie 553 ms
+######## tmpfs restore, threads=2 chunk=32MB
+region: 14.71 GB in 439 chunks, 2 threads, wall 1250 ms (11.8 GB/s; 12.5 GB/s excluding 69 ms pinned alloc); per-thread avg io 1114 ms, pcie 29 ms
+
+[exited with code 0]

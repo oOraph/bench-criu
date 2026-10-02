@@ -67,9 +67,13 @@ Revised projection for the p4de/gpt-oss case: dump 66 s → ~10–15 s, restore 
 | 8 × 64 MB | 9.3 GB/s | |
 | 16 × 64 MB | 7.1 GB/s | |
 | 32 × 64 MB | 5.0 GB/s | |
+| 2 × 64 MB | 12.0 GB/s | PCIe wait 49 ms: read-bound again |
+| 3 × 64 MB | 11.4 GB/s | |
+| 4 × 32 MB | 12.0 GB/s | |
+| 6 × 64 MB | 9.9 GB/s | |
 | 8 × 256 MB / 16 × 256 MB / 4 × 512 MB | 4.7 / 2.9 / 4.5 GB/s | large transfers into the mapping are slow |
 
-H2D into the mapping peaks around **11 GB/s on the A10G with few streams and 64 MB chunks** and degrades with
+H2D into the mapping plateaus around **12 GB/s on the A10G with 2–4 streams and 32–64 MB chunks** and degrades with
 more concurrent streams or larger transfers (vs ~20 GB/s for ordinary pinned copies on this card). Engine
 defaults changed to 4 copy threads; next design step: decouple I/O parallelism (many readers feeding a
 queue) from the copy side (2–4 streams).

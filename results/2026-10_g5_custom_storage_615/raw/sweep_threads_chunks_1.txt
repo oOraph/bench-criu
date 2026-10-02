@@ -1,0 +1,17 @@
+proto/cuda_cs.c:2
+proto/test_cs.sh:2
+3709cfb proto: CUDA_CS_CHUNK_MB to vary the transfer size
+######## tmpfs restore, threads=1 chunk=64MB
+region: 14.71 GB in 220 chunks, 1 threads, wall 2266 ms (6.5 GB/s; 6.8 GB/s excluding 90 ms pinned alloc); per-thread avg io 2130 ms, pcie 11 ms
+######## tmpfs restore, threads=4 chunk=64MB
+region: 14.71 GB in 220 chunks, 4 threads, wall 1578 ms (9.3 GB/s; 10.9 GB/s excluding 228 ms pinned alloc); per-thread avg io 576 ms, pcie 628 ms
+######## tmpfs restore, threads=8 chunk=64MB
+region: 14.71 GB in 220 chunks, 8 threads, wall 2012 ms (7.3 GB/s; 9.3 GB/s excluding 422 ms pinned alloc); per-thread avg io 305 ms, pcie 979 ms
+######## tmpfs restore, threads=8 chunk=256MB
+region: 14.71 GB in 55 chunks, 8 threads, wall 4668 ms (3.2 GB/s; 4.7 GB/s excluding 1548 ms pinned alloc); per-thread avg io 337 ms, pcie 1504 ms
+######## tmpfs restore, threads=16 chunk=256MB
+region: 14.71 GB in 55 chunks, 16 threads, wall 8205 ms (1.8 GB/s; 2.9 GB/s excluding 3058 ms pinned alloc); per-thread avg io 169 ms, pcie 1983 ms
+######## tmpfs restore, threads=4 chunk=512MB
+region: 14.71 GB in 28 chunks, 4 threads, wall 5047 ms (2.9 GB/s; 4.5 GB/s excluding 1787 ms pinned alloc); per-thread avg io 584 ms, pcie 1473 ms
+
+[exited with code 0]
