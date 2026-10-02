@@ -1,0 +1,33 @@
+# vLLM + CRIU image for the real-inference benchmark (bench_vllm.sh).
+# Build one image per CRIU variant:
+#   docker build -f Dockerfile.vllm -t vllm-criu-upstream \
+#       --build-arg CRIU_REPO=https://github.com/checkpoint-restore/criu.git --build-arg CRIU_REF=4485a86da237 .
+#   docker build -f Dockerfile.vllm -t vllm-criu-ours     --build-arg CRIU_REF=fast_cuda_plugin_on_head .
+#   docker build -f Dockerfile.vllm -t vllm-criu-parallel --build-arg CRIU_REF=fast_cuda_plugin_on_head_parallel .
+ARG VLLM_IMAGE=vllm/vllm-openai:latest
+FROM ${VLLM_IMAGE} AS vllm-criu-base
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    build-essential git \
+    libprotobuf-dev libprotobuf-c-dev protobuf-c-compiler protobuf-compiler \
+    python3-protobuf pkg-config libnftables-dev libcap-dev libbsd-dev \
+    libnet-dev libnl-3-dev libgnutls28-dev \
+    python3-yaml libaio-dev liblz4-dev uuid-dev ca-certificates wget curl \
+    tini net-tools procps && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN wget -q https://github.com/NVIDIA/cuda-checkpoint/raw/main/bin/x86_64_Linux/cuda-checkpoint \
+      -O /usr/local/bin/cuda-checkpoint && chmod +x /usr/local/bin/cuda-checkpoint
+
+FROM vllm-criu-base AS vllm-criu
+ARG CRIU_REPO=https://github.com/oOraph/criu.git
+ARG CRIU_REF=fast_cuda_plugin_on_head
+
+RUN git clone ${CRIU_REPO} /criu && cd /criu && git checkout ${CRIU_REF} && \
+    make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && \
+    criu --version
+
+# PID 1 is tini → sleep; the server is launched by the bench via docker exec so that
+# its stdio points at files inside the container's own filesystem (CRIU-friendly).
+ENTRYPOINT ["tini", "--", "sleep", "infinity"]

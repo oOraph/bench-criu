@@ -63,6 +63,23 @@ TENSOR_SIZE=100000 RUNS=5 ./bench_compare.sh
 
 Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lines for easy grepping.
 
+## Real-inference benchmark (vLLM)
+
+`bench_vllm.sh` checkpoints and restores a running `vllm serve` (OpenAI API server) inside a Docker
+container that carries CRIU, reproducing the June 2026 Kubernetes measurements
+(`results/real_inference`) on a bench box. Images come from `Dockerfile.vllm` (vLLM image + CRIU
+built from a chosen ref). Restore time is measured until `/health` answers; a completion request
+then validates the engine. CRIU options follow the shim's vLLM settings
+(`--shell-job --tcp-skip-in-flight --file-locks --ghost-limit 10485760`).
+
+```bash
+docker build -f Dockerfile.vllm -t vllm-criu-upstream --build-arg CRIU_REPO=https://github.com/checkpoint-restore/criu.git --build-arg CRIU_REF=4485a86da237 .
+docker build -f Dockerfile.vllm -t vllm-criu-ours     --build-arg CRIU_REF=fast_cuda_plugin_on_head .
+docker build -f Dockerfile.vllm -t vllm-criu-parallel --build-arg CRIU_REF=fast_cuda_plugin_on_head_parallel .
+# weights go to $HF_CACHE (default /mnt/nvme/hf), e.g. `hf download Qwen/Qwen3-8B`
+MODEL=Qwen/Qwen3-8B RUNS=2 sudo -E ./bench_vllm.sh
+```
+
 ## Results
 
 - [results/2026-10_g5.12xlarge_a10g/summary.md](results/2026-10_g5.12xlarge_a10g/summary.md) — production plugin (v4.2) vs upstream `criu-dev` head `4485a86da` on AWS `g5.12xlarge` (A10G, driver 610), `TENSOR_SIZE=60000`
