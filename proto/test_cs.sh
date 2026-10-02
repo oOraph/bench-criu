@@ -43,9 +43,9 @@ finish_app; docker rm -f $C >/dev/null
 echo; echo "=== B. custom storage: cuda_cs checkpoint -> $NVME/cs.img -> cuda_cs restore"
 start_app
 sudo rm -f $NVME/cs.img
-t0=$(date +%s%N); docker exec -e CUDA_CS_THREADS=${CUDA_CS_THREADS:-16} ${CUDA_CS_BUFFERED:+-e CUDA_CS_BUFFERED=1} $C cuda_cs checkpoint $APP_PID $NVME/cs.img; t1=$(date +%s%N)
+t0=$(date +%s%N); docker exec -e CUDA_CS_THREADS=${CUDA_CS_THREADS:-16} ${CUDA_CS_BUFFERED:+-e CUDA_CS_BUFFERED=1} ${CUDA_CS_CHUNK_MB:+-e CUDA_CS_CHUNK_MB=$CUDA_CS_CHUNK_MB} $C cuda_cs checkpoint $APP_PID $NVME/cs.img; t1=$(date +%s%N)
 log "cuda_cs checkpoint total: $(( (t1-t0)/1000000 )) ms, image $(sudo du -sh $NVME/cs.img | cut -f1), app RSS: $(rss_gb), VRAM: $(nvidia-smi --id=0 --query-gpu=memory.used --format=csv,noheader)"
 drop_caches
-t0=$(date +%s%N); docker exec -e CUDA_CS_THREADS=${CUDA_CS_THREADS:-16} ${CUDA_CS_BUFFERED:+-e CUDA_CS_BUFFERED=1} $C cuda_cs restore $APP_PID $NVME/cs.img; t1=$(date +%s%N)
+t0=$(date +%s%N); docker exec -e CUDA_CS_THREADS=${CUDA_CS_THREADS:-16} ${CUDA_CS_BUFFERED:+-e CUDA_CS_BUFFERED=1} ${CUDA_CS_CHUNK_MB:+-e CUDA_CS_CHUNK_MB=$CUDA_CS_CHUNK_MB} $C cuda_cs restore $APP_PID $NVME/cs.img; t1=$(date +%s%N)
 log "cuda_cs restore total: $(( (t1-t0)/1000000 )) ms"
 finish_app; docker rm -f $C >/dev/null

@@ -32,7 +32,7 @@
 #include <unistd.h>
 #include <unistd.h>
 
-#define CHUNK (64UL << 20)      /* 64 MiB per transfer */
+static size_t CHUNK = 64UL << 20;  /* per transfer; CUDA_CS_CHUNK_MB overrides */
 #define MAXTHR 32               /* I/O worker threads (CUDA_CS_THREADS, default min(ncpu,16)) */
 #define HDR_SIZE 4096
 
@@ -354,6 +354,7 @@ int main(int argc, char **argv)
 {
 	if (argc < 3) { fprintf(stderr, "usage: %s checkpoint|restore|state <pid> [file]\n", argv[0]); return 2; }
 	setvbuf(stdout, NULL, _IONBF, 0); setvbuf(stderr, NULL, _IONBF, 0);
+	if (getenv("CUDA_CS_CHUNK_MB")) CHUNK = (size_t)atoi(getenv("CUDA_CS_CHUNK_MB")) << 20;
 	if (load_cuda()) return 1;
 	CU(p_cuInit(0));
 	int pid = atoi(argv[2]);
