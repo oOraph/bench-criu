@@ -1,0 +1,58 @@
+993ce53 proto: load cuStreamGetCtx by its 2-arg name (cuGetProcAddress returns the 3-arg _v2 -> segfault); unbuffered output
+######## small, NVMe, 4 threads
+[POST] x_match=True y_match=True
+[POST] SUCCESS=True
+=== B. custom storage: cuda_cs checkpoint -> /mnt/nvme/cs.img -> cuda_cs restore
+custom storage: 1 device(s), 0.41 GB mapped; lock 0 ms, checkpoint(map) 54 ms
+region: 0.41 GB in 7 chunks, 7 threads, wall 884 ms (0.5 GB/s); per-thread avg io 46 ms, pcie 32 ms
+[timing] checkpoint: copy 884 ms (0.5 GB/s, O_DIRECT) [disk 46 ms, pcie-wait 32 ms], complete 48 ms -> CHECKPOINTED
+[15:52:15] cuda_cs checkpoint total: 1303 ms, image 391M, app RSS: 0.6 GB, VRAM: 0 MiB
+region: 0.41 GB in 7 chunks, 7 threads, wall 879 ms (0.5 GB/s); per-thread avg io 27 ms, pcie 57 ms
+[timing] restore: restore(map) 112 ms, copy 879 ms (0.5 GB/s, O_DIRECT) [disk 27 ms, pcie-wait 57 ms], complete 2 ms, unlock 1 ms -> RUNNING
+[15:52:16] cuda_cs restore total: 1312 ms
+[POST] x_match=True y_match=True
+[POST] SUCCESS=True
+
+######## 14.7 GB, NVMe, 16 threads, caches dropped
+[15:52:28] cuda-checkpoint checkpoint: 7578 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:52:31] cuda-checkpoint restore+unlock: 3329 ms
+[POST] SUCCESS=True
+=== B. custom storage: cuda_cs checkpoint -> /mnt/nvme/cs.img -> cuda_cs restore
+custom storage: 1 device(s), 14.71 GB mapped; lock 0 ms, checkpoint(map) 55 ms
+region: 14.71 GB in 220 chunks, 16 threads, wall 10766 ms (1.4 GB/s); per-thread avg io 9386 ms, pcie 213 ms
+[timing] checkpoint: copy 10766 ms (1.4 GB/s, O_DIRECT) [disk 9386 ms, pcie-wait 213 ms], complete 59 ms -> CHECKPOINTED
+[15:52:48] cuda_cs checkpoint total: 11264 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+region: 14.71 GB in 220 chunks, 16 threads, wall 5420 ms (2.7 GB/s); per-thread avg io 3722 ms, pcie 420 ms
+[timing] restore: restore(map) 115 ms, copy 5421 ms (2.7 GB/s, O_DIRECT) [disk 3722 ms, pcie-wait 420 ms], complete 2 ms, unlock 1 ms -> RUNNING
+[15:52:54] cuda_cs restore total: 6299 ms
+[POST] SUCCESS=True
+
+######## 14.7 GB, NVMe, 8 threads, caches dropped
+[15:53:07] cuda-checkpoint checkpoint: 7570 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:53:11] cuda-checkpoint restore+unlock: 3380 ms
+[POST] SUCCESS=True
+=== B. custom storage: cuda_cs checkpoint -> /mnt/nvme/cs.img -> cuda_cs restore
+custom storage: 1 device(s), 14.71 GB mapped; lock 0 ms, checkpoint(map) 55 ms
+region: 14.71 GB in 220 chunks, 16 threads, wall 10691 ms (1.4 GB/s); per-thread avg io 9288 ms, pcie 218 ms
+[timing] checkpoint: copy 10692 ms (1.4 GB/s, O_DIRECT) [disk 9288 ms, pcie-wait 218 ms], complete 59 ms -> CHECKPOINTED
+[15:53:28] cuda_cs checkpoint total: 11192 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+region: 14.71 GB in 220 chunks, 16 threads, wall 5358 ms (2.7 GB/s); per-thread avg io 3630 ms, pcie 394 ms
+[timing] restore: restore(map) 121 ms, copy 5359 ms (2.7 GB/s, O_DIRECT) [disk 3630 ms, pcie-wait 394 ms], complete 2 ms, unlock 1 ms -> RUNNING
+[15:53:35] cuda_cs restore total: 6246 ms
+[POST] SUCCESS=True
+
+######## 14.7 GB, tmpfs, 16 threads
+[15:53:47] cuda-checkpoint checkpoint: 7568 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:53:50] cuda-checkpoint restore+unlock: 3011 ms
+[POST] SUCCESS=True
+=== B. custom storage: cuda_cs checkpoint -> /mnt/tmpfs/cs.img -> cuda_cs restore
+custom storage: 1 device(s), 14.71 GB mapped; lock 0 ms, checkpoint(map) 55 ms
+region: 14.71 GB in 220 chunks, 16 threads, wall 7612 ms (1.9 GB/s); per-thread avg io 6292 ms, pcie 200 ms
+[timing] checkpoint: copy 7612 ms (1.9 GB/s, O_DIRECT) [disk 6292 ms, pcie-wait 200 ms], complete 58 ms -> CHECKPOINTED
+[15:54:02] cuda_cs checkpoint total: 8103 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+region: 14.71 GB in 220 chunks, 16 threads, wall 2768 ms (5.3 GB/s); per-thread avg io 197 ms, pcie 1197 ms
+[timing] restore: restore(map) 115 ms, copy 2769 ms (5.3 GB/s, O_DIRECT) [disk 197 ms, pcie-wait 1197 ms], complete 3 ms, unlock 1 ms -> RUNNING
+[15:54:06] cuda_cs restore total: 3216 ms
+[POST] SUCCESS=True
+
+[exited with code 0]

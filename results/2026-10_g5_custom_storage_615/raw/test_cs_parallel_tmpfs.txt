@@ -1,0 +1,18 @@
+######## 14.7 GB tmpfs, 16 threads
+=== A. driver staging path: cuda-checkpoint lock+checkpoint / restore+unlock (VRAM <-> target host memory)
+[15:58:21] cuda-checkpoint checkpoint: 7638 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:58:24] cuda-checkpoint restore+unlock: 3010 ms
+region: 14.71 GB in 220 chunks, 16 threads, wall 7601 ms (1.9 GB/s; 2.1 GB/s excluding 745 ms pinned alloc); per-thread avg io 6280 ms, pcie 200 ms
+[15:58:36] cuda_cs checkpoint total: 8095 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+region: 14.71 GB in 220 chunks, 16 threads, wall 2820 ms (5.2 GB/s; 7.1 GB/s excluding 745 ms pinned alloc); per-thread avg io 181 ms, pcie 1257 ms
+[15:58:40] cuda_cs restore total: 3261 ms
+######## 14.7 GB tmpfs, 32 threads
+=== A. driver staging path: cuda-checkpoint lock+checkpoint / restore+unlock (VRAM <-> target host memory)
+[15:58:51] cuda-checkpoint checkpoint: 7574 ms (VRAM now in host RAM, RSS: 14.9 GB)
+[15:58:54] cuda-checkpoint restore+unlock: 2974 ms
+region: 14.71 GB in 220 chunks, 32 threads, wall 7642 ms (1.9 GB/s; 2.4 GB/s excluding 1461 ms pinned alloc); per-thread avg io 5321 ms, pcie 187 ms
+[15:59:09] cuda_cs checkpoint total: 8152 ms, image 14G, app RSS: 0.6 GB, VRAM: 0 MiB
+region: 14.71 GB in 220 chunks, 32 threads, wall 4439 ms (3.3 GB/s; 5.0 GB/s excluding 1474 ms pinned alloc); per-thread avg io 138 ms, pcie 1574 ms
+[15:59:14] cuda_cs restore total: 4892 ms
+
+[exited with code 0]

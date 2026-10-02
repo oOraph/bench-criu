@@ -42,6 +42,27 @@ I/O side delivers, and that side is trivially parallelisable (the same lesson as
 Next step for the engine: N I/O threads over the ring buffers, which should push both directions toward the
 PCIe gen4 ceiling (~20+ GB/s on this card) when the storage allows.
 
+## Parallel engine (N worker threads, own CUDA stream + 2 pinned 64 MB buffers each), 14.7 GB
+
+| storage | threads | checkpoint (copy wall) | restore (copy wall) | notes |
+|---|---|---|---|---|
+| NVMe (g5, write ~1.4 GB/s, read ~2.7 GB/s) | 16 | 11.3 s total (10.8 s copy, per-thread I/O 9.4 s) | 6.3 s total (5.4 s copy, per-thread I/O 3.7 s) | both purely disk-bound; PCIe waits 0.2–0.4 s |
+| tmpfs (no disk) | 16 | 7.6 s (2.1 GB/s excl. 0.75 s pinned alloc; threads spend 6.3 s in `pwrite`) | 2.8 s (**7.1 GB/s** excl. alloc; PCIe wait 1.3 s/thread) | tmpfs serialises shmem writes (artefact); restore shows the mapping's H2D rate |
+| tmpfs | 32 | 7.6 s | 4.4 s (worse) | more threads do not help |
+
+Reading: on real storage the engine is storage-bound as intended. The host→device copy **into the custom-storage
+mapping runs at ~7 GB/s on the A10G**, far below the card's ~20 GB/s for ordinary pinned copies and in the same
+range as the driver's own host→VRAM copy (14.7 GB in 3.0 s). So on the restore side custom storage buys the
+overlap of disk and PCIe time and the removal of host staging, not a faster copy, unless the mapping's throughput
+can be raised (open question: intrinsic to the zero-copy mapping, or our copy pattern?). The device→host side
+showed no such limit (PCIe waits ~0.2 s while writes took 9–10 s), so the dump-side gain stands.
+Revised projection for the p4de/gpt-oss case: dump 66 s → ~10–15 s, restore 17 s → ~10–12 s (was "~7 s").
+
+## Through CRIU (branch `custom_storage`, image `criu-head-cs`, `--plugin-option=cuda_plugin.custom-storage=on`)
+
+Smoke (0.41 GB): dump 1.58 s, restore 1.52 s, `gpu-cs-66.img` 409 MB, `pages-*.img` 334 MB (no staging pages),
+tensors verified. 14.7 GB matrix: see below when run.
+
 ## Requirements / gotchas found
 
 - Driver ≥ 615 (API 13040) with the **proprietary** kernel module (open module untested with a correct pid).
