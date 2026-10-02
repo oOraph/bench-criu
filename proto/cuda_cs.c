@@ -87,7 +87,9 @@ static int load_cuda(void)
 	if (!p_cuGetProcAddress) p_cuGetProcAddress = dlsym(h, "cuGetProcAddress");
 	LOAD(cuInit); LOAD(cuGetErrorString); LOAD(cuDeviceGetCount); LOAD(cuDeviceGet);
 	LOAD(cuDevicePrimaryCtxRetain); LOAD(cuDevicePrimaryCtxRelease); LOAD(cuCtxSetCurrent);
-	LOAD(cuStreamGetCtx); LOAD(cuPointerGetAttribute); LOAD(cuCtxGetDevice); LOAD(cuMemHostAlloc); LOAD(cuMemFreeHost);
+	/* cuStreamGetCtx: cuGetProcAddress(13040) returns the _v2 (3-arg, green-context) variant; keep the 2-arg one */
+	p_cuStreamGetCtx = dlsym(h, "cuStreamGetCtx"); if (!p_cuStreamGetCtx) { fprintf(stderr, "libcuda: missing cuStreamGetCtx\n"); return -1; }
+	LOAD(cuPointerGetAttribute); LOAD(cuCtxGetDevice); LOAD(cuMemHostAlloc); LOAD(cuMemFreeHost);
 	LOAD(cuMemcpyDtoHAsync); LOAD(cuMemcpyHtoDAsync);
 	LOAD(cuEventCreate); LOAD(cuEventRecord); LOAD(cuEventSynchronize); LOAD(cuStreamSynchronize);
 	LOAD(cuStreamCreate); LOAD(cuStreamDestroy);
@@ -348,6 +350,7 @@ static int do_restore(int pid, const char *path)
 int main(int argc, char **argv)
 {
 	if (argc < 3) { fprintf(stderr, "usage: %s checkpoint|restore|state <pid> [file]\n", argv[0]); return 2; }
+	setvbuf(stdout, NULL, _IONBF, 0); setvbuf(stderr, NULL, _IONBF, 0);
 	if (load_cuda()) return 1;
 	CU(p_cuInit(0));
 	int pid = atoi(argv[2]);
