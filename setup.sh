@@ -33,7 +33,8 @@ NVIDIA_DRIVER=${NVIDIA_DRIVER:-610}
 # error 802 "system not yet initialized". FM must match the driver to the patch level and
 # Ubuntu only ships it for the -server flavour (e.g. nvidia-driver-595-server +
 # nvidia-fabricmanager-595 = 595.91.07 on 26.04; there is no FM for 610.57.04).
-# NVreg_NvLinkDisable=1 alone does NOT avoid the requirement (tested 2026-10-02).
+# Neither NVreg_NvLinkDisable=1 nor unbinding the NVSwitch devices (pci-stub) avoids the requirement,
+# even after a reboot (tested 2026-10-02 on p4de): FM is mandatory on HGX boards.
 if lspci -d 10de: | grep -qi bridge; then
     echo "NVSwitch detected: installing nvidia-driver-${NVIDIA_DRIVER}-server + nvidia-fabricmanager-${NVIDIA_DRIVER}"
     sudo apt-get install -y "nvidia-driver-${NVIDIA_DRIVER}-server" "nvidia-fabricmanager-${NVIDIA_DRIVER}"
