@@ -1,0 +1,29 @@
+=== smoke
+[08:44:34] [smoke-driverapi run=1] dump=743ms  gpu-pages=328M  pages-*.img=318M  inventory=yes
+[POST] SUCCESS=True
+RESULT label=smoke-driverapi run=1 dump_ms=743 restore_ms=559
+[08:44:39] [smoke-cli run=1] dump=831ms  gpu-pages=328M  pages-*.img=318M  inventory=yes
+[POST] SUCCESS=True
+RESULT label=smoke-cli run=1 dump_ms=831 restore_ms=880
+(00.309331) Loaded 1 GPU regions for pid 448 via O_DIRECT pread
+=== 14GB
+(05.040391) [timing] O_DIRECT pread restore: 4083 ms (3.6 GB/s) [pread=4083 ms]
+(05.041369) cuda_plugin: [timing] GPU page restore: 4085 ms
+(06.692958) cuda_plugin: [timing] Driver API restore+unlock: 1652 ms
+RESULT label=head-ours run=1 dump_ms=11780 restore_ms=6842
+(04.669366) [timing] O_DIRECT pread restore: 4074 ms (3.6 GB/s) [pread=4074 ms]
+(04.670541) cuda_plugin: [timing] GPU page restore: 4076 ms
+(06.158126) cuda_plugin: [timing] Driver API restore+unlock: 1488 ms
+RESULT label=head-ours run=2 dump_ms=11869 restore_ms=6428
+RESULT label=upstream-direct run=1 dump_ms=12633 restore_ms=8708
+RESULT label=upstream-direct run=2 dump_ms=12381 restore_ms=8598
+(04.649577) [timing] O_DIRECT pread restore: 4067 ms (3.6 GB/s) [pread=4067 ms]
+(04.650724) cuda_plugin: [timing] GPU page restore: 4069 ms
+(06.138150) cuda_plugin: [timing] Driver API restore+unlock: 1487 ms
+RESULT label=head-ours-memlock run=1 dump_ms=12281 restore_ms=6329
+(04.699475) [timing] O_DIRECT pread restore: 4106 ms (3.6 GB/s) [pread=4106 ms]
+(04.700416) cuda_plugin: [timing] GPU page restore: 4107 ms
+(06.176877) cuda_plugin: [timing] Driver API restore+unlock: 1476 ms
+RESULT label=head-ours-memlock run=2 dump_ms=11770 restore_ms=6437
+
+[exited with code 0]

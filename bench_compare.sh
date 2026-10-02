@@ -69,7 +69,7 @@ run_plugin() {
     local t0; t0=$(( $(date +%s%N) / 1000000 ))
     local dump_log dump_rc
     dump_log=$(nsenter -n -m -u -p -i -t "$container_init_pid" -- \
-        criu dump --shell-job --skip-in-flight $criu_opts -D "$dump_dir" -t "$app_pid"  2>&1) && dump_rc=0 || dump_rc=$?
+        criu dump --shell-job --skip-in-flight $criu_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log 2>&1) && dump_rc=0 || dump_rc=$?
     local dump_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 ))
     echo "$dump_log" | grep -E 'timing|Error|Warn|Err' || true
     if [ $dump_rc -ne 0 ]; then

@@ -1,0 +1,15 @@
+synced
+SETUP_EXIT=0
+instance-store NVMe devices: /dev/nvme3n1 /dev/nvme1n1 /dev/nvme5n1 /dev/nvme4n1 /dev/nvme2n1 /dev/nvme8n1 /dev/nvme6n1 /dev/nvme7n1
+mdadm: array /dev/md0 started.
+=== Setup complete ===
+NVIDIA L4, 610.57.04, Enabled
+/dev/md0 xfs  6.8T
+=== seqread 1M, 32 sync jobs, qd1 (historical)
+   READ: bw=4802MiB/s (5035MB/s), 4802MiB/s-4802MiB/s (5035MB/s-5035MB/s), io=211GiB (227GB), run=45015-45015msec
+=== seqread 1M, libaio, 8 jobs x qd32 (array ceiling)
+   READ: bw=4800MiB/s (5033MB/s), 4800MiB/s-4800MiB/s (5033MB/s-5033MB/s), io=141GiB (151GB), run=30070-30070msec
+=== raw single drive /dev/nvme1n1, libaio, 4 jobs x qd32 (read-only)
+   READ: bw=604MiB/s (633MB/s), 604MiB/s-604MiB/s (633MB/s-633MB/s), io=11.8GiB (12.7GB), run=20080-20080msec
+
+[exited with code 0]
