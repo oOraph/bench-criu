@@ -55,7 +55,7 @@ run_one() {
     docker run -d --rm --name $CONTAINER --gpus '"device=0"' --shm-size=16g \
         -e UV_USE_IO_URING=0 -e HF_HUB_OFFLINE=1 -e VLLM_NO_USAGE_STATS=1 -e DO_NOT_TRACK=1 \
         -e GLOO_SOCKET_IFNAME=lo -e TORCH_NCCL_ENABLE_MONITORING=0 -e TORCH_NCCL_DUMP_ON_TIMEOUT=0 \
-        -e VLLM_LOGGING_LEVEL=INFO \
+        -e VLLM_LOGGING_LEVEL=INFO $( [ "$SLEEP_MODE" = 1 ] && echo "-e VLLM_SERVER_DEV_MODE=1" ) \
         -v "$HF_CACHE:/root/.cache/huggingface" -v "$dump_dir:$dump_dir" "$image" >/dev/null
     sleep 1
     # all stdio fds on a file inside the container's own fs (CRIU needs resolvable mounts)
@@ -81,9 +81,14 @@ run_one() {
     if [[ "$SLEEP_MODE" = 1 ]]; then
         log "[$label run=$run] POST /sleep?level=1"
         local ts=$(( $(date +%s%N) / 1000000 ))
-        docker exec $CONTAINER curl -sf -X POST "http://localhost:${PORT}/sleep?level=1" -o /dev/null
+        # /sleep, /wake_up and /is_sleeping exist only with VLLM_SERVER_DEV_MODE=1
+        local sleep_http; sleep_http=$(docker exec $CONTAINER curl -s -o /dev/null -w '%{http_code}' -X POST "http://localhost:${PORT}/sleep?level=1")
         sleep_ms=$(( $(date +%s%N) / 1000000 - ts ))
-        log "[$label run=$run] sleep=${sleep_ms}ms  $(docker exec $CONTAINER curl -sf http://localhost:${PORT}/is_sleeping)"
+        local sleeping; sleeping=$(docker exec $CONTAINER curl -sf http://localhost:${PORT}/is_sleeping)
+        log "[$label run=$run] sleep=${sleep_ms}ms http=$sleep_http is_sleeping=$sleeping"
+        if [[ "$sleep_http" != 200 || "$sleeping" != *true* ]]; then
+            log "[$label run=$run] SLEEP FAILED"; echo "RESULT label=$label run=$run coldstart_s=$coldstart_s sleep_ms=FAILED dump_ms=FAILED restore_ms=FAILED"; cleanup_container; return 1
+        fi
     fi
 
     log "[$label run=$run] dump start"
@@ -119,9 +124,9 @@ run_one() {
     if [[ "$restore_ms" != "TIMEOUT" && "$SLEEP_MODE" = 1 ]]; then
         log "[$label run=$run] POST /wake_up"
         local tw=$(( $(date +%s%N) / 1000000 ))
-        docker exec $CONTAINER curl -sf -X POST "http://localhost:${PORT}/wake_up" -o /dev/null
+        local wake_http; wake_http=$(docker exec $CONTAINER curl -s -o /dev/null -w '%{http_code}' -X POST "http://localhost:${PORT}/wake_up")
         wake_ms=$(( $(date +%s%N) / 1000000 - tw ))
-        log "[$label run=$run] wake_up=${wake_ms}ms  $(docker exec $CONTAINER curl -sf http://localhost:${PORT}/is_sleeping)"
+        log "[$label run=$run] wake_up=${wake_ms}ms http=$wake_http is_sleeping=$(docker exec $CONTAINER curl -sf http://localhost:${PORT}/is_sleeping)"
     fi
     if [[ "$restore_ms" != "TIMEOUT" ]]; then
         local ti=$(( $(date +%s%N) / 1000000 )) out
