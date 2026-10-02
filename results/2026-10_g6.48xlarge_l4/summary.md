@@ -131,7 +131,15 @@ the restore now, and the 8-drive array removes the dump penalty.
 
 Serial port (`fast_cuda_plugin_on_head` before `9b67fbc91`) failed to restore vLLM on the Driver API
 backend: `setns(CLONE_NEWNS)` → EINVAL because CRIU is multithreaded once the backend's worker thread
-exists (multi-process tree only). Fixed by forking a helper for the bind mount; validation run below.
+exists (multi-process tree only). Fixed by forking a helper for the bind mount (`9b67fbc91`); validated:
+
+| variant | run | dump (ms) | restore (ms) | plugin pread | inference |
+|---|---|---|---|---|---|
+| serial plugin (`9b67fbc91`) | 1 | 19,112 | 9,891 | 5,617 ms (3.6 GB/s) | OK |
+| serial plugin (`9b67fbc91`) | 2 | 19,045 | 7,374 | 2,907 ms (7.0 GB/s) | OK |
+
+The serial path's rate swings with the array's burst state (3.6 vs 7.0 GB/s on consecutive runs, each
+right after a 22 GB dump + drop_caches); the parallel path was 6.4–7.1 GB/s on both runs.
 
 ## Conclusions
 

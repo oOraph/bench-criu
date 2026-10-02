@@ -1,0 +1,25 @@
+BUILD_EXIT=0
+9b67fbc91 cuda_plugin: do the gpu-pages bind mount from a forked helper
+EXIT=0
+[10:13:21] [ours run=1] server READY after 138s
+(00.240359) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(08.645454) cuda_plugin: [timing] Driver API checkpoint: 8387 ms
+[10:13:41] [ours run=1] dump=19112ms rc=0 gpu-pages=19G pages-*.img=2.9G
+(02.138201) cuda_plugin: [timing] Driver API restore+unlock: 213 ms
+(07.764658) [timing] O_DIRECT pread restore: 5617 ms (3.6 GB/s) [pread=5617 ms]
+(09.595215) cuda_plugin: [timing] Driver API restore+unlock: 1828 ms
+[10:13:52] [ours run=1] restore=9891ms
+[10:13:54] [ours run=1] inference=OK infer_ms=1763 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=ours run=1 coldstart_s=138 dump_ms=19112 restore_ms=9891 inference=OK infer_ms=1763
+[10:16:18] [ours run=2] server READY after 138s
+(00.207829) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(08.613067) cuda_plugin: [timing] Driver API checkpoint: 8387 ms
+[10:16:37] [ours run=2] dump=19045ms rc=0 gpu-pages=19G pages-*.img=2.9G
+(02.088569) cuda_plugin: [timing] Driver API restore+unlock: 203 ms
+(05.004352) [timing] O_DIRECT pread restore: 2907 ms (7.0 GB/s) [pread=2907 ms]
+(07.087235) cuda_plugin: [timing] Driver API restore+unlock: 2080 ms
+[10:16:46] [ours run=2] restore=7374ms
+[10:16:47] [ours run=2] inference=OK infer_ms=1758 text="text":" Paris. The capital of Italy is Rome. The capital of Spain is Madrid."
+RESULT label=ours run=2 coldstart_s=138 dump_ms=19045 restore_ms=7374 inference=OK infer_ms=1758
+
+[exited with code 0]
