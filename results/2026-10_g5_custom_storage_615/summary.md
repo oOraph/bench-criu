@@ -98,6 +98,24 @@ bound by the drive's read speed; custom storage hides the 1.5 s driver copy by o
 reads at 2.6 GB/s vs 3.2 GB/s for the parallel fill. The restore gain appears when the array is faster than
 the mapping's H2D rate (see the tmpfs numbers) and in host RAM: no VRAM-sized staging.
 
+## Through CRIU on vLLM 0.30 + Qwen3-8B (same image `vllm-criu-cs`, option on/off, `RUNS=2`, A10G, single NVMe)
+
+Checkpoint: 20.45 GB of VRAM (weights + KV cache on a 24 GB card) + 3 GB of CPU pages; API server + EngineCore
+process tree; inference validated after every restore.
+
+| path | run | dump (ms) | restore (ms) | GPU copy | notes |
+|---|---|---|---|---|---|
+| custom storage on | 1 | 17,324 | 10,475 | ckpt copy 14,990 ms (1.4 GB/s write) / restore copy 7,268 ms (2.8 GB/s read) | 4 copy threads |
+| custom storage on | 2 | 17,579 | 10,572 | 15,310 / 7,432 ms | |
+| parallel plugin (cs off) | 1 | 29,319 | 11,728 | driver checkpoint 10,285 ms + readv/write; fill 7,036 ms + driver restore 1,895 ms | 16 threads |
+| parallel plugin (cs off) | 2 | 29,325 | 11,756 | 10,266 ms; 7,106 + 1,895 ms | |
+
+Multi-process tree handled (both CUDA tasks go through the custom-storage hooks). **Dump −41%** (17.5 s vs 29.3 s),
+**restore −10%** (10.5 s vs 11.7 s) on this disk-bound box: the 1.9 s driver restore copy is hidden under the
+read, the rest is the drive. On the g6.48xlarge (5 GB/s) and p4de (16 GB/s) arrays the restore-side difference
+would come from the mapping's H2D rate (7–12 GB/s measured) vs the driver's copy (~7–10 GB/s), i.e. small;
+the dump-side gain (no 37 s driver copy on the A100) is the big one.
+
 ## Requirements / gotchas found
 
 - Driver ≥ 615 (API 13040) with the **proprietary** kernel module (open module untested with a correct pid).
