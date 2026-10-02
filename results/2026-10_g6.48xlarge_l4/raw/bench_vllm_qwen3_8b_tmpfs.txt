@@ -1,0 +1,55 @@
+[10:17:12] === vLLM benchmark: MODEL=Qwen/Qwen3-8B RUNS=1 DROP_CACHE=yes CUDA_RESTORE_THREADS=16 CRIU_BASE_OPTS='--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap'
+
+=== SCENARIO tmpfs-parallel: image=vllm-criu-parallel opts='' ===
+[10:17:12] [tmpfs-parallel run=1] starting container image=vllm-criu-parallel model=Qwen/Qwen3-8B
+[10:17:16] [tmpfs-parallel run=1] waiting for /health (timeout 900s)
+[10:19:36] [tmpfs-parallel run=1] server READY after 140s
+[10:19:36] [tmpfs-parallel run=1] app_pid=441 (container ns) init_pid=458912; tree:
+    PID    PPID   RSS COMMAND
+    443     441 1454508  \_ python3
+   1086     443 12532      \_ python3
+   1087     443 2627184      \_ VLLM::EngineCor
+[10:19:36] [tmpfs-parallel run=1] dump start
+(00.235934) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.246769) cuda_plugin: [timing] post-scan+diff: 6 ms, 0 new VMAs
+(08.661884) cuda_plugin: [timing] Driver API checkpoint: 8408 ms
+(08.676611) cuda_plugin: [timing] post-scan+diff: 7 ms, 1 new VMAs
+(18.865499) [timing] dump: process_vm_readv=2491 ms O_DIRECT_write=7698 ms total=10189 ms
+(18.869544) cuda_plugin: [timing] process_vm_readv dump: 10193 ms (2.0 GB/s)
+(20.171943) cuda_plugin: [timing] injected madvise(DONTNEED): 1302 ms
+[10:19:59] [tmpfs-parallel run=1] dump=23022ms rc=0 gpu-pages=19G pages-*.img=2.9G
+[10:19:59] skip drop_caches (tmpfs)
+[10:19:59] [tmpfs-parallel run=1] restore start
+(01.122843) cuda_plugin: [timing] GPU page restore: 0 ms
+(01.128157) cuda_plugin: [timing] GPU page restore: 0 ms
+(01.290536) cuda_plugin: [timing] Driver API restore+unlock: 162 ms
+(02.004089) [timing] parallel restore: 706 ms (28.8 GB/s) [16 threads, 303 chunks, O_DIRECT]
+(02.004123) cuda_plugin: [timing] GPU page restore: 706 ms
+(03.862468) cuda_plugin: [timing] Driver API restore+unlock: 1858 ms
+(03.862899) cuda_plugin: [timing] GPU page restore: 0 ms
+[10:20:03] [tmpfs-parallel run=1] restore=3885ms
+[10:20:04] [tmpfs-parallel run=1] inference=OK infer_ms=1074 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=tmpfs-parallel run=1 coldstart_s=140 dump_ms=23022 restore_ms=3885 inference=OK infer_ms=1074
+benchvllm
+
+
+=== SCENARIO tmpfs-upstream-direct: image=vllm-criu-upstream opts='--image-io-mode=direct' ===
+[10:20:05] [tmpfs-upstream-direct run=1] starting container image=vllm-criu-upstream model=Qwen/Qwen3-8B
+[10:20:08] [tmpfs-upstream-direct run=1] waiting for /health (timeout 900s)
+[10:22:01] [tmpfs-upstream-direct run=1] server READY after 113s
+[10:22:02] [tmpfs-upstream-direct run=1] app_pid=445 (container ns) init_pid=472141; tree:
+    PID    PPID   RSS COMMAND
+    447     445 1473184  \_ python3
+   1001     447 12576      \_ python3
+   1002     447 2632604      \_ VLLM::EngineCor
+[10:22:02] [tmpfs-upstream-direct run=1] dump start
+[10:22:24] [tmpfs-upstream-direct run=1] dump=22686ms rc=0 gpu-pages=0
+none pages-*.img=22G
+[10:22:24] skip drop_caches (tmpfs)
+[10:22:24] [tmpfs-upstream-direct run=1] restore start
+[10:22:39] [tmpfs-upstream-direct run=1] restore=14946ms
+[10:22:40] [tmpfs-upstream-direct run=1] inference=OK infer_ms=1072 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=tmpfs-upstream-direct run=1 coldstart_s=113 dump_ms=22686 restore_ms=14946 inference=OK infer_ms=1072
+benchvllm
+
+[10:22:41] === All vLLM benchmarks complete ===

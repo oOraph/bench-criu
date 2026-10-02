@@ -129,6 +129,17 @@ Compared with the June k8s run on the same model (baseline 14.5 s, upstream PRs 
 14–15 s restore; our dump 33 s): the serial plugin brought nothing on vLLM then, the parallel one halves
 the restore now, and the 8-drive array removes the dump penalty.
 
+From tmpfs (`BENCH_DIR=/mnt/tmpfs`, one round each), i.e. the no-disk floor on a real vLLM tree:
+
+| variant | dump (ms) | restore (ms) | GPU page fill |
+|---|---|---|---|
+| parallel plugin (16 threads) | 23,022 | 3,885 | 706 ms (28.8 GB/s) |
+| upstream head, `--image-io-mode=direct` | 22,686 | 14,946 | — |
+
+Parallel floor ≈ 1.9 s driver restore+unlock + ~1.3 s CRIU core + 0.7 s fill. Upstream is slower from RAM
+than from disk (14.9 s vs 12.9 s), as in the tensor test. Dumps are slower on tmpfs for both (writing 22 GB
+into RAM-backed files competes with the driver's VRAM→host copy for memory bandwidth).
+
 Serial port (`fast_cuda_plugin_on_head` before `9b67fbc91`) failed to restore vLLM on the Driver API
 backend: `setns(CLONE_NEWNS)` → EINVAL because CRIU is multithreaded once the backend's worker thread
 exists (multi-process tree only). Fixed by forking a helper for the bind mount (`9b67fbc91`); validated:
