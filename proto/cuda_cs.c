@@ -150,7 +150,7 @@ static int nthreads(void)
 {
 	const char *e = getenv("CUDA_CS_THREADS");
 	int n = e ? atoi(e) : 0;
-	if (n <= 0) { n = (int)sysconf(_SC_NPROCESSORS_ONLN); if (n > 16) n = 16; }
+	if (n <= 0) n = 4; /* 4 x 64 MB measured best on A10G; more streams degrade the mapping's H2D rate */
 	if (n > MAXTHR) n = MAXTHR;
 	return n < 1 ? 1 : n;
 }

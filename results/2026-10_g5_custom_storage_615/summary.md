@@ -58,6 +58,22 @@ can be raised (open question: intrinsic to the zero-copy mapping, or our copy pa
 showed no such limit (PCIe waits ~0.2 s while writes took 9–10 s), so the dump-side gain stands.
 Revised projection for the p4de/gpt-oss case: dump 66 s → ~10–15 s, restore 17 s → ~10–12 s (was "~7 s").
 
+### Copy pattern sweep (tmpfs restore, 14.7 GB, rates excluding pinned-buffer allocation)
+
+| threads × chunk | rate | note |
+|---|---|---|
+| 1 × 64 MB | 6.8 GB/s | bound by the single thread's file read; PCIe wait 11 ms |
+| **4 × 64 MB** | **10.9 GB/s** | PCIe wait 0.6 s/thread: the mapping is now the limiter |
+| 8 × 64 MB | 9.3 GB/s | |
+| 16 × 64 MB | 7.1 GB/s | |
+| 32 × 64 MB | 5.0 GB/s | |
+| 8 × 256 MB / 16 × 256 MB / 4 × 512 MB | 4.7 / 2.9 / 4.5 GB/s | large transfers into the mapping are slow |
+
+H2D into the mapping peaks around **11 GB/s on the A10G with few streams and 64 MB chunks** and degrades with
+more concurrent streams or larger transfers (vs ~20 GB/s for ordinary pinned copies on this card). Engine
+defaults changed to 4 copy threads; next design step: decouple I/O parallelism (many readers feeding a
+queue) from the copy side (2–4 streams).
+
 ## Through CRIU (branch `custom_storage`, image `criu-head-cs`, `--plugin-option=cuda_plugin.custom-storage=on`)
 
 Smoke (0.41 GB): dump 1.58 s, restore 1.52 s, `gpu-cs-66.img` 409 MB, `pages-*.img` 334 MB (no staging pages),
