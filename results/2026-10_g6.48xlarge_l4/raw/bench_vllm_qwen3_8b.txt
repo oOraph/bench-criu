@@ -1,0 +1,33 @@
+EXIT=0
+[10:00:45] [upstream-direct run=1] server READY after 139s
+[10:01:05] [upstream-direct run=1] dump=19951ms rc=0 gpu-pages=0
+[10:01:19] [upstream-direct run=1] restore=12967ms
+[10:01:21] [upstream-direct run=1] inference=OK infer_ms=1755 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=upstream-direct run=1 coldstart_s=139 dump_ms=19951 restore_ms=12967 inference=OK infer_ms=1755
+[10:03:47] [upstream-direct run=2] server READY after 140s
+[10:04:07] [upstream-direct run=2] dump=19963ms rc=0 gpu-pages=0
+[10:04:21] [upstream-direct run=2] restore=12919ms
+[10:04:22] [upstream-direct run=2] inference=OK infer_ms=1753 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=upstream-direct run=2 coldstart_s=140 dump_ms=19963 restore_ms=12919 inference=OK infer_ms=1753
+[10:06:48] [parallel run=1] server READY after 140s
+(00.244908) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(08.610797) cuda_plugin: [timing] Driver API checkpoint: 8347 ms
+[10:07:08] [parallel run=1] dump=19151ms rc=0 gpu-pages=19G pages-*.img=2.9G
+(02.097509) cuda_plugin: [timing] Driver API restore+unlock: 203 ms
+(04.952249) [timing] parallel restore: 2847 ms (7.1 GB/s) [16 threads, 303 chunks, O_DIRECT]
+(06.831025) cuda_plugin: [timing] Driver API restore+unlock: 1879 ms
+[10:07:16] [parallel run=1] restore=7119ms
+[10:07:18] [parallel run=1] inference=OK infer_ms=1762 text="text":" Paris. The capital of Italy is Rome. The capital of Spain is Madrid."
+RESULT label=parallel run=1 coldstart_s=140 dump_ms=19151 restore_ms=7119 inference=OK infer_ms=1762
+[10:09:42] [parallel run=2] server READY after 139s
+(00.236950) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(08.622019) cuda_plugin: [timing] Driver API checkpoint: 8367 ms
+[10:10:02] [parallel run=2] dump=19055ms rc=0 gpu-pages=19G pages-*.img=2.9G
+(02.108113) cuda_plugin: [timing] Driver API restore+unlock: 213 ms
+(05.284612) [timing] parallel restore: 3168 ms (6.4 GB/s) [16 threads, 303 chunks, O_DIRECT]
+(07.143001) cuda_plugin: [timing] Driver API restore+unlock: 1858 ms
+[10:10:10] [parallel run=2] restore=7436ms
+[10:10:12] [parallel run=2] inference=OK infer_ms=1753 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=parallel run=2 coldstart_s=139 dump_ms=19055 restore_ms=7436 inference=OK infer_ms=1753
+
+[exited with code 0]

@@ -106,6 +106,33 @@ More than half of the dump is the driver's own VRAM → host copy at 2.3 GB/s (c
 only the custom-storage mode (driver ≥ 615), where the checkpointer drives the copies itself from
 the zero-copy mapped device pointer, can. Parallelising our readv+write would save at most ~2 s.
 
+## Real inference: vLLM 0.30 + Qwen/Qwen3-8B (`bench_vllm.sh`, Docker, same box)
+
+Server: `python3 -m vllm.entrypoints.openai.api_server --max-model-len 4096 --gpu-memory-utilization 0.9`
+on GPU 0 (L4 23 GiB), process tree = API server + EngineCore. CRIU options
+`--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap`,
+Driver API backend, `DROP_CACHE=yes`, restore measured until `/health` answers, then a completion request.
+Checkpoint: 19 GB of GPU pages (weights + KV cache), 2.9 GB of CPU pages. Cold start ~140 s.
+
+| variant | run | dump (ms) | restore (ms) | inference |
+|---|---|---|---|---|
+| upstream head, `--image-io-mode=direct` | 1 | 19,951 | 12,967 | OK |
+| upstream head, `--image-io-mode=direct` | 2 | 19,963 | 12,919 | OK |
+| parallel plugin (16 threads) | 1 | 19,151 | 7,119 | OK |
+| parallel plugin (16 threads) | 2 | 19,055 | 7,436 | OK |
+
+Parallel restore breakdown: GPU page fill 2.8–3.2 s (6.4–7.1 GB/s for 19 GB) + Driver API restore+unlock
+1.9 s (+0.2 s for the API server task) + CRIU core/CPU pages ~2 s. **Restore −44% vs upstream** (7.3 s vs
+12.9 s); dump equal (the driver's VRAM→host copy is 8.3 s of it, see breakdown above).
+
+Compared with the June k8s run on the same model (baseline 14.5 s, upstream PRs 15 s, our serial plugin
+14–15 s restore; our dump 33 s): the serial plugin brought nothing on vLLM then, the parallel one halves
+the restore now, and the 8-drive array removes the dump penalty.
+
+Serial port (`fast_cuda_plugin_on_head` before `9b67fbc91`) failed to restore vLLM on the Driver API
+backend: `setns(CLONE_NEWNS)` → EINVAL because CRIU is multithreaded once the backend's worker thread
+exists (multi-process tree only). Fixed by forking a helper for the bind mount; validation run below.
+
 ## Conclusions
 
 1. **Adopt the parallel restore** as the plugin's restore path; 16 threads is the knee (`min(ncpu, 16)`).
