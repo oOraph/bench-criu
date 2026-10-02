@@ -31,12 +31,27 @@ drop_caches() {
     else log "skip drop caches (deactivated)"; fi
 }
 cleanup_container() { docker rm -f $CONTAINER 2>/dev/null || true; }
+# A CRIU-restored tree is re-parented into its recorded cgroup, so `docker rm -f` may not kill it and it
+# can hold the GPU for a while after the container is gone (seen: next round OOM'd at startup). Kill any
+# leftover server processes on the host and wait for GPU 0 to be released before starting a round.
+wait_gpu_free() {
+    sudo pkill -f "vllm.entrypoints.openai.api_server" 2>/dev/null; sudo pkill -f "VLLM::EngineCore" 2>/dev/null
+    sudo pkill -f "gunicorn webservice_starlette" 2>/dev/null; sudo pkill -f "uvicorn.workers.UvicornWorker" 2>/dev/null
+    local i used
+    for i in $(seq 1 120); do
+        used=$(nvidia-smi --id=0 --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null | head -1)
+        [[ -n "$used" && "$used" -lt 1024 ]] && return 0
+        sleep 1
+    done
+    log "WARNING: GPU 0 still has ${used} MiB in use after 120s"
+}
 curl_health() { docker exec $CONTAINER curl -sf http://localhost:${PORT}/health -o /dev/null 2>/dev/null; }
 
 run_one() {
     local label=$1 image=$2 run=$3 criu_opts=${4:-}
     local dump_dir=$NVME_BASE/dumpsdxl_${label}_$run
     cleanup_container
+    wait_gpu_free
     sudo rm -rf "$dump_dir" && sudo mkdir -p "$dump_dir"
 
     log "[$label run=$run] starting container image=$image model=$HF_MODEL_ID"
