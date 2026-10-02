@@ -17,7 +17,8 @@ drop_caches() { [[ "$DROP_CACHE" == yes ]] && { sync; echo 3 | sudo tee /proc/sy
 # has no CUDA state, and the checkpoint API answers CUDA_ERROR_NOT_INITIALIZED for such a pid.
 start_app() {
     docker rm -f $C >/dev/null 2>&1 || true
-    docker run -d --rm --name $C --gpus '"device=0"' -v "$NVME:$NVME" "$IMAGE" >/dev/null
+    # custom storage maps the target's VRAM into the caller -> needs CAP_SYS_PTRACE (Yama scope 1) in a container
+    docker run -d --rm --name $C --gpus '"device=0"' --cap-add SYS_PTRACE -v "$NVME:$NVME" "$IMAGE" >/dev/null
     docker cp "$CS" $C:/usr/local/bin/cuda_cs
     docker exec -e TENSOR_SIZE=$TENSOR_SIZE $C bash -c "rm -f /tmp/go; touch /tmp/app.log && nohup python /test_app.py >> /tmp/app.log 2>&1 &"
     for i in $(seq 1 120); do docker exec $C grep -q READY /tmp/app.log 2>/dev/null && break; sleep 1; done

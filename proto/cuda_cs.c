@@ -42,6 +42,8 @@ static CUresult (*p_cuDevicePrimaryCtxRetain)(CUcontext *, CUdevice);
 static CUresult (*p_cuDevicePrimaryCtxRelease)(CUdevice);
 static CUresult (*p_cuCtxSetCurrent)(CUcontext);
 static CUresult (*p_cuStreamGetCtx)(CUstream, CUcontext *);
+static CUresult (*p_cuPointerGetAttribute)(void *, CUpointer_attribute, CUdeviceptr);
+static CUresult (*p_cuCtxGetDevice)(CUdevice *);
 static CUresult (*p_cuMemHostAlloc)(void **, size_t, unsigned);
 static CUresult (*p_cuMemFreeHost)(void *);
 static CUresult (*p_cuMemcpyDtoHAsync)(void *, CUdeviceptr, size_t, CUstream);
@@ -64,7 +66,7 @@ static int load_cuda(void)
 	if (!h) { fprintf(stderr, "dlopen libcuda.so.1: %s\n", dlerror()); return -1; }
 	LOAD(cuInit); LOAD(cuGetErrorString); LOAD(cuDeviceGetCount); LOAD(cuDeviceGet);
 	LOAD(cuDevicePrimaryCtxRetain); LOAD(cuDevicePrimaryCtxRelease); LOAD(cuCtxSetCurrent);
-	LOAD(cuStreamGetCtx); LOAD(cuMemHostAlloc); LOAD(cuMemFreeHost);
+	LOAD(cuStreamGetCtx); LOAD(cuPointerGetAttribute); LOAD(cuCtxGetDevice); LOAD(cuMemHostAlloc); LOAD(cuMemFreeHost);
 	LOAD(cuMemcpyDtoHAsync); LOAD(cuMemcpyHtoDAsync);
 	LOAD(cuEventCreate); LOAD(cuEventRecord); LOAD(cuEventSynchronize); LOAD(cuStreamSynchronize);
 	LOAD(cuCheckpointProcessGetState); LOAD(cuCheckpointProcessLock);
@@ -116,9 +118,19 @@ static int xfer_region(int fd, off_t file_off, CUdeviceptr dptr, size_t size, CU
 		       int direct, double *io_ms, double *pcie_ms)
 {
 	void *buf[NBUF]; CUevent ev[NBUF];
-	CUcontext ctx;
-	CU(p_cuStreamGetCtx(st, &ctx));
+	CUcontext ctx = NULL, sctx = NULL;
+	CUdevice dev = -1;
+	/* The mapping lives in the caller's primary context of that GPU: ask the pointer which one. */
+	CUresult r = p_cuPointerGetAttribute(&ctx, CU_POINTER_ATTRIBUTE_CONTEXT, dptr);
+	if (r != CUDA_SUCCESS || !ctx) {
+		fprintf(stderr, "cuPointerGetAttribute(CONTEXT) -> %s; falling back to cuStreamGetCtx\n", cuerr(r));
+		CU(p_cuStreamGetCtx(st, &ctx));
+	}
+	p_cuStreamGetCtx(st, &sctx);
 	CU(p_cuCtxSetCurrent(ctx));
+	p_cuCtxGetDevice(&dev);
+	fprintf(stderr, "region: devPtr=%p size=%.2f GB ctx=%p stream_ctx=%p device=%d\n",
+		(void *)dptr, size / 1e9, (void *)ctx, (void *)sctx, dev);
 	for (int i = 0; i < NBUF; i++) {
 		CU(p_cuMemHostAlloc(&buf[i], CHUNK, CU_MEMHOSTALLOC_PORTABLE));
 		CU(p_cuEventCreate(&ev[i], CU_EVENT_DISABLE_TIMING));
