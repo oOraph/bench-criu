@@ -1,0 +1,29 @@
+=== vLLM
+RESULT label=upstream-direct run=1 coldstart_s=145 dump_ms=58889 restore_ms=40657 inference=OK infer_ms=1089
+RESULT label=upstream-direct run=2 coldstart_s=141 dump_ms=57908 restore_ms=40641 inference=OK infer_ms=1077
+(00.132323) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(37.089500) cuda_plugin: [timing] Driver API checkpoint: 36943 ms
+(02.226993) cuda_plugin: [timing] Driver API restore+unlock: 193 ms
+(18.140610) [timing] O_DIRECT pread restore: 15906 ms (4.8 GB/s) [pread=15906 ms]
+(27.654277) cuda_plugin: [timing] Driver API restore+unlock: 9511 ms
+RESULT label=ours run=1 coldstart_s=142 dump_ms=64972 restore_ms=27966 inference=OK infer_ms=1077
+(00.121167) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(37.602921) cuda_plugin: [timing] Driver API checkpoint: 37468 ms
+(02.193705) cuda_plugin: [timing] Driver API restore+unlock: 183 ms
+(17.931992) [timing] O_DIRECT pread restore: 15731 ms (4.8 GB/s) [pread=15731 ms]
+(27.425359) cuda_plugin: [timing] Driver API restore+unlock: 9492 ms
+RESULT label=ours run=2 coldstart_s=145 dump_ms=65244 restore_ms=27727 inference=OK infer_ms=1060
+(00.134712) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(37.411366) cuda_plugin: [timing] Driver API checkpoint: 37262 ms
+(02.201365) cuda_plugin: [timing] Driver API restore+unlock: 183 ms
+(05.864562) [timing] parallel restore: 3657 ms (20.7 GB/s) [16 threads, 1130 chunks, O_DIRECT]
+(16.084359) cuda_plugin: [timing] Driver API restore+unlock: 10220 ms
+RESULT label=parallel run=1 coldstart_s=142 dump_ms=65187 restore_ms=16387 inference=OK infer_ms=1081
+(00.125148) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(37.720733) cuda_plugin: [timing] Driver API checkpoint: 37581 ms
+(02.204947) cuda_plugin: [timing] Driver API restore+unlock: 183 ms
+(05.722431) [timing] parallel restore: 3511 ms (21.6 GB/s) [16 threads, 1130 chunks, O_DIRECT]
+(15.435157) cuda_plugin: [timing] Driver API restore+unlock: 9713 ms
+RESULT label=parallel run=2 coldstart_s=145 dump_ms=65583 restore_ms=15749 inference=OK infer_ms=1078
+
+[exited with code 0]

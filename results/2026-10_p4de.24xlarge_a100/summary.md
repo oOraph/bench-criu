@@ -48,3 +48,27 @@ Matches AWS's documented 16 GB/s aggregate; 3.2× the g6.48xlarge array.
   (~6.4 GB/s), the rest is CRIU core. Restore −56% vs upstream-direct (3.9 s vs 8.8 s).
 - Dump: 13.0 s for ours vs 11.1 s upstream; the driver's VRAM→host copy dominates both (see g6.48xlarge
   breakdown); our extra readv+write costs ~2 s at this write bandwidth.
+
+## Real inference: vLLM 0.30 + Qwen/Qwen3-8B on the A100-80GB (`bench_vllm.sh`, `RUNS=2`, `DROP_CACHE=yes`)
+
+Same server settings as on the L4 (`--gpu-memory-utilization 0.9`, `--max-model-len 4096`), but on an 80 GB
+GPU vLLM reserves 72 GB, so the checkpoint is **~71 GB of GPU pages + 3 GB of CPU pages (74 GB total)**
+instead of 22 GB on the L4. The KV cache, not the model, is the checkpoint on big GPUs.
+
+| variant | run | dump (ms) | restore (ms) | GPU page fill | driver restore+unlock | inference |
+|---|---|---|---|---|---|---|
+| upstream-direct | 1 | 58,889 | 40,657 | — | — | OK |
+| upstream-direct | 2 | 57,908 | 40,641 | — | — | OK |
+| serial plugin (`9b67fbc91`) | 1 | 64,972 | 27,966 | 15,906 ms (4.8 GB/s) | 9,511 ms | OK |
+| serial plugin | 2 | 65,244 | 27,727 | 15,731 ms (4.8 GB/s) | 9,492 ms | OK |
+| parallel plugin, 16 threads | 1 | 65,187 | 16,387 | 3,657 ms (20.7 GB/s) | 10,220 ms | OK |
+| parallel plugin, 16 threads | 2 | 65,583 | 15,749 | 3,511 ms (21.6 GB/s) | 9,713 ms | OK |
+
+- **Restore: parallel 16.1 s vs upstream 40.6 s (−61%)**; serial 27.8 s (−32%). The parallel fill of 71 GB
+  takes 3.6 s; the driver's host→VRAM copy (~10 s, ~7 GB/s) is now 2/3 of our restore.
+- **Dump: 65 s vs 58 s**, of which the driver's VRAM→host checkpoint copy is **37 s** (~1.9 GB/s) for every
+  variant; our readv+write of 71 GB adds ~7 s at this array's write bandwidth.
+- Upstream restores at 1.8 GB/s regardless of hardware (same per-byte rate as on the L4).
+- The driver-side copies (37 s dump + 10 s restore) dominate everything at this checkpoint size: that is
+  the custom-storage case. Workload-side, sleep level 1 / KV-cache unmap would shrink the checkpoint to the
+  16 GB of weights (see sleep-mode results below).
