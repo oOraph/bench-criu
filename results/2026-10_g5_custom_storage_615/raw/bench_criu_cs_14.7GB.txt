@@ -1,0 +1,22 @@
+EXIT=0
+(06.541158) cuda_cs: [timing] custom-storage restore copy: 14.71 GB, 16 threads, 5550 ms (2.7 GB/s, O_DIRECT)
+(06.550727) cuda_plugin: [timing] Driver API restore+unlock: 5936 ms
+RESULT label=cs-on run=1 dump_ms=11261 restore_ms=6773
+(06.628674) cuda_cs: [timing] custom-storage restore copy: 14.71 GB, 16 threads, 5647 ms (2.6 GB/s, O_DIRECT)
+(06.638913) cuda_plugin: [timing] Driver API restore+unlock: 6028 ms
+RESULT label=cs-on run=2 dump_ms=11527 restore_ms=6882
+(05.192977) [timing] parallel restore: 4593 ms (3.2 GB/s) [8 threads, 220 chunks, O_DIRECT]
+(06.747678) cuda_plugin: [timing] Driver API restore+unlock: 1555 ms
+RESULT label=parallel-cs-off run=1 dump_ms=19736 restore_ms=7021
+(05.197664) [timing] parallel restore: 4595 ms (3.2 GB/s) [8 threads, 220 chunks, O_DIRECT]
+(06.743113) cuda_plugin: [timing] Driver API restore+unlock: 1545 ms
+RESULT label=parallel-cs-off run=2 dump_ms=19682 restore_ms=7007
+[16:02:48] [upstream-direct run=1] DUMP FAILED (rc=1) — full output:
+RESULT label=upstream-direct run=1 dump_ms=7 restore_ms=FAILED dump_rc=1
+[16:03:49] [upstream-direct run=2] DUMP FAILED (rc=1) — full output:
+RESULT label=upstream-direct run=2 dump_ms=7 restore_ms=FAILED dump_rc=1
+--- dump breakdown cs-on run 1:
+(10.771200) cuda_cs: [timing] custom-storage checkpoint copy: 14.71 GB, 16 threads, 10517 ms (1.4 GB/s, O_DIRECT)
+(10.830205) cuda_plugin: [timing] Driver API checkpoint: 10769 ms
+
+[exited with code 0]

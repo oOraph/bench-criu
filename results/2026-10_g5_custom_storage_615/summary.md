@@ -61,7 +61,22 @@ Revised projection for the p4de/gpt-oss case: dump 66 s → ~10–15 s, restore 
 ## Through CRIU (branch `custom_storage`, image `criu-head-cs`, `--plugin-option=cuda_plugin.custom-storage=on`)
 
 Smoke (0.41 GB): dump 1.58 s, restore 1.52 s, `gpu-cs-66.img` 409 MB, `pages-*.img` 334 MB (no staging pages),
-tensors verified. 14.7 GB matrix: see below when run.
+tensors verified.
+
+14.7 GB tensor, `bench_compare.sh`, `RUNS=2`, `DROP_CACHE=yes`, same single NVMe:
+
+| path | run | dump (ms) | restore (ms) | GPU copy | driver step |
+|---|---|---|---|---|---|
+| custom storage on | 1 | 11,261 | 6,773 | 5,550 ms (2.7 GB/s read) | restore+unlock incl. copy 5,936 ms |
+| custom storage on | 2 | 11,527 | 6,882 | 5,647 ms (2.6 GB/s) | 6,028 ms |
+| parallel plugin (cs off) | 1 | 19,736 | 7,021 | 4,593 ms fill (3.2 GB/s) | restore+unlock 1,555 ms |
+| parallel plugin (cs off) | 2 | 19,682 | 7,007 | 4,595 ms fill (3.2 GB/s) | 1,545 ms |
+
+Dump: **−42%** (11.4 s vs 19.7 s): the driver's VRAM→host copy (7.6 s) and our readv/write are replaced by one
+disk-write-bound pass (checkpoint copy 10.5 s at the drive's 1.4 GB/s). Restore: tie (6.8 vs 7.0 s) — both are
+bound by the drive's read speed; custom storage hides the 1.5 s driver copy by overlapping it with the read but
+reads at 2.6 GB/s vs 3.2 GB/s for the parallel fill. The restore gain appears when the array is faster than
+the mapping's H2D rate (see the tmpfs numbers) and in host RAM: no VRAM-sized staging.
 
 ## Requirements / gotchas found
 
