@@ -70,7 +70,7 @@ container that carries CRIU, reproducing the June 2026 Kubernetes measurements
 (`results/real_inference`) on a bench box. Images come from `Dockerfile.vllm` (vLLM image + CRIU
 built from a chosen ref). Restore time is measured until `/health` answers; a completion request
 then validates the engine. CRIU options follow the shim's vLLM settings
-(`--shell-job --tcp-skip-in-flight --file-locks --ghost-limit 10485760`).
+(`--shell-job --skip-in-flight --file-locks --ghost-limit 10485760`).
 
 ```bash
 docker build -f Dockerfile.vllm -t vllm-criu-upstream --build-arg CRIU_REPO=https://github.com/checkpoint-restore/criu.git --build-arg CRIU_REF=4485a86da237 .

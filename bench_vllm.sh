@@ -19,7 +19,7 @@ DROP_CACHE=${DROP_CACHE:-"yes"}
 READY_TIMEOUT=${READY_TIMEOUT:-900}
 RESTORE_TIMEOUT=${RESTORE_TIMEOUT:-300}
 # CRIU options the shim uses for vLLM workloads
-CRIU_BASE_OPTS=${CRIU_BASE_OPTS:-"--shell-job --tcp-skip-in-flight --file-locks --ghost-limit 10485760"}
+CRIU_BASE_OPTS=${CRIU_BASE_OPTS:-"--shell-job --skip-in-flight --file-locks --ghost-limit 10485760"}
 DEFAULT_SCENARIOS="upstream-direct|vllm-criu-upstream|--image-io-mode=direct"
 DEFAULT_SCENARIOS+=";ours|vllm-criu-ours|"
 DEFAULT_SCENARIOS+=";parallel|vllm-criu-parallel|"
@@ -67,28 +67,28 @@ run_one() {
     docker exec $CONTAINER ps -o pid,ppid,rss,comm --forest 2>/dev/null | grep -vE "ps|bash|sleep|tini" | head -8 || true
 
     log "[$label run=$run] dump start"
-    local t0=$(date +%s%3N) dump_rc=0
+    local t0=$(( $(date +%s%N) / 1000000 )) dump_rc=0
     nsenter -n -m -u -p -i -t "$init_pid" -- \
-        criu dump $CRIU_BASE_OPTS $criu_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log >/dev/null 2>&1 || dump_rc=$?
-    local dump_ms=$(( $(date +%s%3N) - t0 ))
+        criu dump $CRIU_BASE_OPTS $criu_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log > "$dump_dir/criu-dump.out" 2>&1 || dump_rc=$?
+    local dump_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 ))
     sudo grep -hE 'timing|Error' "$dump_dir/dump.log" | grep -v "tun.c" | head -15 || true
     local gpu_sz pages_sz
     gpu_sz=$(sudo du -shc "$dump_dir"/gpu-pages-*.img 2>/dev/null | tail -1 | awk '{print $1}' || echo none)
     pages_sz=$(sudo du -shc "$dump_dir"/pages-*.img 2>/dev/null | tail -1 | awk '{print $1}' || echo none)
     log "[$label run=$run] dump=${dump_ms}ms rc=$dump_rc gpu-pages=${gpu_sz:-none} pages-*.img=${pages_sz:-none}"
     if [[ $dump_rc -ne 0 || ! -f "$dump_dir/inventory.img" ]]; then
-        sudo tail -30 "$dump_dir/dump.log" || true
+        sudo cat "$dump_dir/criu-dump.out" 2>/dev/null | head -10; sudo tail -30 "$dump_dir/dump.log" 2>/dev/null || true
         echo "RESULT label=$label run=$run coldstart_s=$coldstart_s dump_ms=$dump_ms restore_ms=FAILED"; cleanup_container; return 1
     fi
 
     drop_caches
     log "[$label run=$run] restore start"
-    t0=$(date +%s%3N)
+    t0=$(( $(date +%s%N) / 1000000 ))
     nsenter -n -m -u -p -i -t "$init_pid" -- \
-        bash -c "criu restore $CRIU_BASE_OPTS $criu_opts -D $dump_dir --manage-cgroups -v3 -o restore.log" >/dev/null 2>&1 &
+        bash -c "criu restore $CRIU_BASE_OPTS $criu_opts -D $dump_dir --manage-cgroups -v3 -o restore.log" > "$dump_dir/criu-restore.out" 2>&1 &
     local restore_pid=$! restore_ms=TIMEOUT
     for i in $(seq 1 $((RESTORE_TIMEOUT*10))); do
-        if curl_health; then restore_ms=$(( $(date +%s%3N) - t0 )); break; fi
+        if curl_health; then restore_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 )); break; fi
         sleep 0.1
     done
     disown $restore_pid 2>/dev/null || true
@@ -97,14 +97,14 @@ run_one() {
 
     local infer=FAILED infer_ms=n/a
     if [[ "$restore_ms" != "TIMEOUT" ]]; then
-        local ti=$(date +%s%3N) out
+        local ti=$(( $(date +%s%N) / 1000000 )) out
         out=$(docker exec $CONTAINER curl -sf http://localhost:${PORT}/v1/completions -H 'content-type: application/json' \
               -d "{\"model\":\"$MODEL\",\"prompt\":\"The capital of France is\",\"max_tokens\":16,\"temperature\":0}" 2>/dev/null || true)
-        infer_ms=$(( $(date +%s%3N) - ti ))
+        infer_ms=$(( $(( $(date +%s%N) / 1000000 )) - ti ))
         echo "$out" | grep -q '"text"' && infer=OK
         log "[$label run=$run] inference=$infer infer_ms=${infer_ms} text=$(echo "$out" | grep -o '"text":"[^"]*"' | head -1)"
     else
-        sudo tail -30 "$dump_dir/restore.log" || true
+        sudo cat "$dump_dir/criu-restore.out" 2>/dev/null | head -10; sudo tail -30 "$dump_dir/restore.log" 2>/dev/null || true
     fi
     echo "RESULT label=$label run=$run coldstart_s=$coldstart_s dump_ms=$dump_ms restore_ms=$restore_ms inference=$infer infer_ms=$infer_ms"
     cleanup_container
