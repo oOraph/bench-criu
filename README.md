@@ -69,8 +69,11 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 container that carries CRIU, reproducing the June 2026 Kubernetes measurements
 (`results/real_inference`) on a bench box. Images come from `Dockerfile.vllm` (vLLM image + CRIU
 built from a chosen ref). Restore time is measured until `/health` answers; a completion request
-then validates the engine. CRIU options follow the shim's vLLM settings
-(`--shell-job --skip-in-flight --file-locks --ghost-limit 10485760`).
+then validates the engine. CRIU options follow the shim's vLLM settings plus the k8s recipe
+(`--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap`), and the
+server runs with `UV_USE_IO_URING=0` (uvloop would use io_uring, undumpable), `HF_HUB_OFFLINE=1
+VLLM_NO_USAGE_STATS=1 DO_NOT_TRACK=1` (no open HTTPS sessions), `GLOO_SOCKET_IFNAME=lo`,
+`TORCH_NCCL_ENABLE_MONITORING=0 TORCH_NCCL_DUMP_ON_TIMEOUT=0`.
 
 ```bash
 docker build -f Dockerfile.vllm -t vllm-criu-upstream --build-arg CRIU_REPO=https://github.com/checkpoint-restore/criu.git --build-arg CRIU_REF=4485a86da237 .

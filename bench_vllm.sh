@@ -19,7 +19,8 @@ DROP_CACHE=${DROP_CACHE:-"yes"}
 READY_TIMEOUT=${READY_TIMEOUT:-900}
 RESTORE_TIMEOUT=${RESTORE_TIMEOUT:-300}
 # CRIU options the shim uses for vLLM workloads
-CRIU_BASE_OPTS=${CRIU_BASE_OPTS:-"--shell-job --skip-in-flight --file-locks --ghost-limit 10485760"}
+# (+ --tcp-established --link-remap per the vLLM recipe that worked on k8s, see README)
+CRIU_BASE_OPTS=${CRIU_BASE_OPTS:-"--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap"}
 DEFAULT_SCENARIOS="upstream-direct|vllm-criu-upstream|--image-io-mode=direct"
 DEFAULT_SCENARIOS+=";ours|vllm-criu-ours|"
 DEFAULT_SCENARIOS+=";parallel|vllm-criu-parallel|"
@@ -43,8 +44,15 @@ run_one() {
     sudo rm -rf "$dump_dir" && sudo mkdir -p "$dump_dir"
 
     log "[$label run=$run] starting container image=$image model=$MODEL"
+    # Env that makes a vLLM server dumpable (recipe from the k8s runs):
+    #  UV_USE_IO_URING=0        uvloop in the API server would use io_uring, which CRIU can't dump
+    #  HF_HUB_OFFLINE / VLLM_NO_USAGE_STATS / DO_NOT_TRACK  no lingering HTTPS sessions to the Hub
+    #  GLOO_SOCKET_IFNAME=lo    Gloo groups (created even single-GPU) must not bind the container IP
+    #  TORCH_NCCL_*=0           no NCCL monitoring threads / dump-on-timeout
     docker run -d --rm --name $CONTAINER --gpus '"device=0"' --shm-size=16g \
-        -e HF_HUB_OFFLINE=1 -e VLLM_LOGGING_LEVEL=INFO \
+        -e UV_USE_IO_URING=0 -e HF_HUB_OFFLINE=1 -e VLLM_NO_USAGE_STATS=1 -e DO_NOT_TRACK=1 \
+        -e GLOO_SOCKET_IFNAME=lo -e TORCH_NCCL_ENABLE_MONITORING=0 -e TORCH_NCCL_DUMP_ON_TIMEOUT=0 \
+        -e VLLM_LOGGING_LEVEL=INFO \
         -v "$HF_CACHE:/root/.cache/huggingface" -v "$dump_dir:$dump_dir" "$image" >/dev/null
     sleep 1
     # all stdio fds on a file inside the container's own fs (CRIU needs resolvable mounts)
