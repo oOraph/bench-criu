@@ -143,7 +143,7 @@ struct hdr { uint32_t magic; uint32_t ndev; uint64_t size[32]; };
 struct xfer {
 	int fd; off_t file_off; CUdeviceptr dptr; size_t size; CUcontext ctx; int dir, direct;
 	size_t nchunks; atomic_size_t next; atomic_int err;
-	double io_ms[MAXTHR], pcie_ms[MAXTHR];
+	double io_ms[MAXTHR], pcie_ms[MAXTHR], alloc_ms[MAXTHR];
 };
 
 static int nthreads(void)
@@ -160,7 +160,7 @@ static void *xfer_worker(void *p)
 {
 	struct warg *w = p; struct xfer *x = w->x; int id = w->id;
 	void *buf[2] = {NULL, NULL}; CUevent ev[2]; CUstream st = NULL; int inflight[2] = {0, 0};
-	double io = 0, pc = 0;
+	double io = 0, pc = 0, talloc = now_ms();
 	CUresult r;
 
 	if ((r = p_cuCtxSetCurrent(x->ctx)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuCtxSetCurrent: %s\n", id, cuerr(r)); goto fail; }
@@ -169,6 +169,7 @@ static void *xfer_worker(void *p)
 		if ((r = p_cuMemHostAlloc(&buf[i], CHUNK, CU_MEMHOSTALLOC_PORTABLE)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuMemHostAlloc: %s\n", id, cuerr(r)); goto fail; }
 		if ((r = p_cuEventCreate(&ev[i], CU_EVENT_DISABLE_TIMING)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuEventCreate: %s\n", id, cuerr(r)); goto fail; }
 	}
+	x->alloc_ms[id] = now_ms() - talloc;
 
 	for (int b = 0;; b ^= 1) {
 		size_t k = atomic_fetch_add(&x->next, 1);
@@ -230,10 +231,10 @@ static int xfer_region(int fd, off_t file_off, CUdeviceptr dptr, size_t size, CU
 	double wall = now_ms() - t0;
 	/* the driver synchronises its own stream in OperationComplete; make sure ours are done too */
 	CU(p_cuStreamSynchronize(st));
-	double io = 0, pc = 0;
-	for (int i = 0; i < n; i++) { io += x.io_ms[i]; pc += x.pcie_ms[i]; }
-	fprintf(stderr, "region: %.2f GB in %zu chunks, %d threads, wall %.0f ms (%.1f GB/s); per-thread avg io %.0f ms, pcie %.0f ms\n",
-		size / 1e9, x.nchunks, n, wall, size / wall / 1e6, io / n, pc / n);
+	double io = 0, pc = 0, al = 0;
+	for (int i = 0; i < n; i++) { io += x.io_ms[i]; pc += x.pcie_ms[i]; al += x.alloc_ms[i]; }
+	fprintf(stderr, "region: %.2f GB in %zu chunks, %d threads, wall %.0f ms (%.1f GB/s; %.1f GB/s excluding %.0f ms pinned alloc); per-thread avg io %.0f ms, pcie %.0f ms\n",
+		size / 1e9, x.nchunks, n, wall, size / wall / 1e6, size / (wall - al / n) / 1e6, al / n, io / n, pc / n);
 	*io_ms += io / n; *pcie_ms += pc / n;
 	return atomic_load(&x.err) ? -1 : 0;
 }
@@ -241,7 +242,9 @@ static int xfer_region(int fd, off_t file_off, CUdeviceptr dptr, size_t size, CU
 static int open_image(const char *path, int write, int *direct)
 {
 	int flags = write ? (O_WRONLY | O_CREAT | O_TRUNC) : O_RDONLY;
-	int fd = open(path, flags | O_DIRECT, 0600);
+	int fd;
+	if (getenv("CUDA_CS_BUFFERED")) { *direct = 0; fd = open(path, flags, 0600); if (fd < 0) perror(path); return fd; }
+	fd = open(path, flags | O_DIRECT, 0600);
 	*direct = 1;
 	if (fd < 0 && errno == EINVAL) { fd = open(path, flags, 0600); *direct = 0; }
 	if (fd < 0) perror(path);
