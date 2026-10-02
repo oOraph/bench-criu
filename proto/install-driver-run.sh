@@ -10,13 +10,17 @@ export DEBIAN_FRONTEND=noninteractive
 sudo apt-get install -y -qq dkms build-essential "linux-headers-$(uname -r)" >/dev/null
 docker ps -q | xargs -r docker rm -f >/dev/null 2>&1 || true
 sudo systemctl stop nvidia-persistenced 2>/dev/null || true
+sudo pkill nvidia-persistenced 2>/dev/null || true
+sudo nvidia-smi -pm 0 >/dev/null 2>&1 || true   # legacy persistence keeps the module busy
 sudo rmmod nvidia_uvm nvidia_drm nvidia_modeset nvidia 2>/dev/null || true
 # purge the packaged driver but keep the container toolkit (its packages also match *nvidia*)
 sudo apt-mark hold nvidia-container-toolkit nvidia-container-toolkit-base libnvidia-container1 libnvidia-container-tools >/dev/null 2>&1 || true
 sudo apt-get purge -y -qq 'nvidia-driver-*' 'nvidia-dkms-*' 'nvidia-kernel-*' 'nvidia-utils-*' 'nvidia-compute-utils-*' 'nvidia-firmware-*' 'libnvidia-*-[0-9]*' 'xserver-xorg-video-nvidia-*' 'nvidia-persistenced' >/dev/null 2>&1 || true
 sudo apt-get autoremove -y -qq >/dev/null 2>&1 || true
 sudo apt-mark unhold nvidia-container-toolkit nvidia-container-toolkit-base libnvidia-container1 libnvidia-container-tools >/dev/null 2>&1 || true
-sudo sh "$RUN" --silent --dkms --no-questions --disable-nouveau --no-cc-version-check
+# The installer defaults to the OPEN kernel module on Turing+; the checkpoint API returns
+# CUDA_ERROR_NOT_INITIALIZED (3) for every target under it (2026-10-02, 615.71.09, A10G). Use proprietary.
+sudo sh "$RUN" --silent --dkms --no-questions --disable-nouveau --no-cc-version-check --kernel-module-type=proprietary
 sudo modprobe nvidia && sudo modprobe nvidia_uvm
 sudo nvidia-smi -pm 1
 # the .run installer does not ship the persistenced unit the Ubuntu package had; a stale CDI spec may
