@@ -72,3 +72,23 @@ instead of 22 GB on the L4. The KV cache, not the model, is the checkpoint on bi
 - The driver-side copies (37 s dump + 10 s restore) dominate everything at this checkpoint size: that is
   the custom-storage case. Workload-side, sleep level 1 / KV-cache unmap would shrink the checkpoint to the
   16 GB of weights (see sleep-mode results below).
+
+## Real inference: huggingface-inference-toolkit 0.5.6 + stabilityai/stable-diffusion-xl-base-1.0 (`bench_sdxl.sh`, `RUNS=2`)
+
+Image `raphael31415/huggingface-inference-toolkit:gpu-2` (torch 2.5.1, diffusers 0.33.1) + CRIU; gunicorn/uvicorn
+server, text-to-image; restore measured until `/health`, then a real generation (~7.5 s on the A100).
+Checkpoint: 7.4 GB GPU pages + 3.1–3.5 GB CPU pages. Cold start ~22 s from the NVMe model dir.
+
+| variant | run | dump (ms) | restore (ms) | GPU page fill | driver restore+unlock | inference |
+|---|---|---|---|---|---|---|
+| upstream-direct | 1 | 6,680 | FAILED (see raw) | — | — | — |
+| upstream-direct | 2 | 7,764 | 7,713 | — | — | OK |
+| serial plugin | 1 | 8,594 | 6,906 | 1,784 ms (4.4 GB/s) | 1,942 ms | OK |
+| serial plugin | 2 | 8,362 | 6,395 | 1,622 ms (4.8 GB/s) | 1,911 ms | OK |
+| parallel plugin, 16 threads | 1 | 8,745 | 5,934 | 397 ms (19.9 GB/s) | 2,002 ms | OK |
+| parallel plugin, 16 threads | 2 | 8,811 | 5,679 | 408 ms (19.4 GB/s) | 1,982 ms | OK |
+
+- Restore: parallel 5.8 s vs upstream 7.7 s (−25%). With only 7.4 GB of GPU pages the fixed costs dominate:
+  driver restore+unlock ~2 s, CRIU core on 3+ GB of CPU pages and the gunicorn tree ~3 s.
+- Dump: ~8.5 s ours vs 7.8 s upstream; driver checkpoint copy 4.1 s, our readv+write 2.4 s.
+- June k8s reference (L4): baseline 6.3 s restore, ours 5.6 s, upstream PRs 7.8 s; dump 9.6 / 15.2 / 9.1 s.

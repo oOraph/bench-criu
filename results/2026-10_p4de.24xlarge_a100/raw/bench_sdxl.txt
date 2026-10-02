@@ -1,0 +1,173 @@
+[13:34:50] === SDXL/inference-toolkit benchmark: MODEL=stabilityai/stable-diffusion-xl-base-1.0 RUNS=2 DROP_CACHE=yes CUDA_RESTORE_THREADS=16
+
+=== SCENARIO upstream-direct: image=sdxl-criu-upstream opts='--image-io-mode=direct' ===
+[13:34:50] [upstream-direct run=1] starting container image=sdxl-criu-upstream model=stabilityai/stable-diffusion-xl-base-1.0
+[13:34:55] [upstream-direct run=1] waiting for /health (timeout 900s)
+[13:35:27] [upstream-direct run=1] server READY after 32s
+[13:35:28] [upstream-direct run=1] app_pid=66 (container ns) init_pid=205658; tree:
+    PID    PPID   RSS COMMAND
+     66      64 27252  \_ gunicorn
+     68      66 4267560      \_ gunicorn
+[13:35:28] [upstream-direct run=1] dump start
+(04.521875) Error (criu/util.c:656): sh exited, status=127
+(04.521941) Error (criu/netfilter.c:105): Iptables configuration failed
+(04.521944) Error (criu/sk-tcp.c:81): tcp: Failed to lock TCP connection 6da93
+(04.522020) Error (criu/cr-dump.c:1550): Dump files (pid: 68) failed with -1
+(06.667140) Error (criu/cr-dump.c:2005): Dumping FAILED.
+[13:35:34] [upstream-direct run=1] dump=6680ms rc=1 gpu-pages=0
+none pages-*.img=35M
+(04.519642) 68 fdinfo 6: pos:                0 flags:             4001/0x1
+(04.519649) Dumping pipe 21 with id 0x127 pipe_id 0x61d7c
+(04.519663) 68 fdinfo 7: pos:                0 flags:                2/0x1
+(04.519688) epoll: Dumping eventpoll: id 0x000128 flags 0x02
+(04.519692) epoll: Dumping: eventpoll-tfd: id 0x000128 tfd        8 events 0x000019 data 0x00000000000008
+(04.519694) epoll: Dumping: eventpoll-tfd: id 0x000128 tfd        3 events 0x000019 data 0x00000000000003
+(04.519706) 68 fdinfo 8: pos:                0 flags:             4002/0x1
+(04.519723) sockets: No filter for socket
+(04.519725) unix: Dumping unix socket at 8
+(04.519735) 68 fdinfo 9: pos:                0 flags:             4002/0x1
+(04.519749) sockets: No filter for socket
+(04.519750) unix: Dumping unix socket at 9
+(04.519755) unix: 	Dumped: id 0x12a ino 400770 peer 400769 type 1 state 1 name 0 bytes
+(04.519759) unix: 	Dumped: id 0x129 ino 400769 peer 400770 type 1 state 1 name 0 bytes
+(04.519770) 68 fdinfo 10: pos:                0 flags:                2/0x1
+(04.519788) sockets: No filter for socket
+(04.519789) inet: Dumping inet socket at 10
+(04.519797) tcp: Dumping TCP connection
+(04.519798) tcp: 	Turning repair on for socket 6da93
+sh: 1: iptables: not found
+(04.521875) Error (criu/util.c:656): sh exited, status=127
+(04.521941) Error (criu/netfilter.c:105): Iptables configuration failed
+(04.521944) Error (criu/sk-tcp.c:81): tcp: Failed to lock TCP connection 6da93
+(04.521993) ----------------------------------------
+(04.522020) Error (criu/cr-dump.c:1550): Dump files (pid: 68) failed with -1
+(04.522589) net: Unlock network
+(04.523785) cuda_plugin: resuming devices on pid 68
+(06.665578) cuda_plugin: finished Driver API backend for stage 0 with error -1
+(06.665786) Unfreezing tasks into 1
+(06.667140) Error (criu/cr-dump.c:2005): Dumping FAILED.
+RESULT label=upstream-direct run=1 coldstart_s=32 dump_ms=6680 restore_ms=FAILED
+benchsdxl
+
+[13:35:35] [upstream-direct run=2] starting container image=sdxl-criu-upstream model=stabilityai/stable-diffusion-xl-base-1.0
+[13:35:38] [upstream-direct run=2] waiting for /health (timeout 900s)
+[13:35:46] [upstream-direct run=2] server READY after 8s
+[13:35:46] [upstream-direct run=2] app_pid=65 (container ns) init_pid=206833; tree:
+    PID    PPID   RSS COMMAND
+     65      63 27384  \_ gunicorn
+     67      65 3589232      \_ gunicorn
+[13:35:46] [upstream-direct run=2] dump start
+[13:35:54] [upstream-direct run=2] dump=7764ms rc=0 gpu-pages=0
+none pages-*.img=11G
+[13:35:54] drop caches
+[13:36:00] [upstream-direct run=2] restore start
+[13:36:08] [upstream-direct run=2] restore=7713ms
+[13:36:16] [upstream-direct run=2] inference=OK infer_ms=7463
+RESULT label=upstream-direct run=2 coldstart_s=8 dump_ms=7764 restore_ms=7713 inference=OK infer_ms=7463
+benchsdxl
+
+
+=== SCENARIO ours: image=sdxl-criu-ours opts='' ===
+[13:36:16] [ours run=1] starting container image=sdxl-criu-ours model=stabilityai/stable-diffusion-xl-base-1.0
+[13:36:20] [ours run=1] waiting for /health (timeout 900s)
+[13:36:42] [ours run=1] server READY after 22s
+[13:36:42] [ours run=1] app_pid=66 (container ns) init_pid=208285; tree:
+    PID    PPID   RSS COMMAND
+     66      64 27068  \_ gunicorn
+     68      66 3306436      \_ gunicorn
+[13:36:42] [ours run=1] dump start
+(04.263205) cuda_plugin: [timing] Driver API checkpoint: 4155 ms
+(04.270050) cuda_plugin: [timing] post-scan+diff: 3 ms, 1 new VMAs
+(06.693523) [timing] dump: process_vm_readv=1758 ms O_DIRECT_write=665 ms total=2423 ms
+(06.696485) cuda_plugin: [timing] process_vm_readv dump: 2426 ms (3.3 GB/s)
+(07.013752) cuda_plugin: [timing] injected madvise(DONTNEED): 317 ms
+[13:36:51] [ours run=1] dump=8594ms rc=0 gpu-pages=7.4G pages-*.img=2.9G
+[13:36:51] drop caches
+[13:36:52] [ours run=1] restore start
+(02.921424) cuda_plugin: [timing] GPU page restore: 0 ms
+(04.716587) [timing] O_DIRECT pread restore: 1784 ms (4.4 GB/s) [pread=1784 ms]
+(04.717782) cuda_plugin: [timing] GPU page restore: 1786 ms
+(06.659309) cuda_plugin: [timing] Driver API restore+unlock: 1942 ms
+[13:36:59] [ours run=1] restore=6906ms
+[13:37:07] [ours run=1] inference=OK infer_ms=7549
+RESULT label=ours run=1 coldstart_s=22 dump_ms=8594 restore_ms=6906 inference=OK infer_ms=7549
+benchsdxl
+
+[13:37:08] [ours run=2] starting container image=sdxl-criu-ours model=stabilityai/stable-diffusion-xl-base-1.0
+[13:37:12] [ours run=2] waiting for /health (timeout 900s)
+[13:37:33] [ours run=2] server READY after 21s
+[13:37:33] [ours run=2] app_pid=65 (container ns) init_pid=209667; tree:
+    PID    PPID   RSS COMMAND
+     65      63 27156  \_ gunicorn
+     67      65 2844884      \_ gunicorn
+[13:37:33] [ours run=2] dump start
+(04.187932) cuda_plugin: [timing] Driver API checkpoint: 4095 ms
+(04.194208) cuda_plugin: [timing] post-scan+diff: 3 ms, 1 new VMAs
+(06.577357) [timing] dump: process_vm_readv=1732 ms O_DIRECT_write=651 ms total=2383 ms
+(06.579769) cuda_plugin: [timing] process_vm_readv dump: 2386 ms (3.3 GB/s)
+(06.899830) cuda_plugin: [timing] injected madvise(DONTNEED): 320 ms
+[13:37:42] [ours run=2] dump=8362ms rc=0 gpu-pages=7.3G pages-*.img=2.5G
+[13:37:42] drop caches
+[13:37:43] [ours run=2] restore start
+(02.603086) cuda_plugin: [timing] GPU page restore: 0 ms
+(04.234947) [timing] O_DIRECT pread restore: 1622 ms (4.8 GB/s) [pread=1622 ms]
+(04.236167) cuda_plugin: [timing] GPU page restore: 1624 ms
+(06.147509) cuda_plugin: [timing] Driver API restore+unlock: 1911 ms
+[13:37:49] [ours run=2] restore=6395ms
+[13:37:58] [ours run=2] inference=OK infer_ms=8178
+RESULT label=ours run=2 coldstart_s=21 dump_ms=8362 restore_ms=6395 inference=OK infer_ms=8178
+benchsdxl
+
+
+=== SCENARIO parallel: image=sdxl-criu-parallel opts='' ===
+[13:37:58] [parallel run=1] starting container image=sdxl-criu-parallel model=stabilityai/stable-diffusion-xl-base-1.0
+[13:38:02] [parallel run=1] waiting for /health (timeout 900s)
+[13:38:24] [parallel run=1] server READY after 22s
+[13:38:24] [parallel run=1] app_pid=66 (container ns) init_pid=211129; tree:
+    PID    PPID   RSS COMMAND
+     66      64 27224  \_ gunicorn
+     68      66 3870576      \_ gunicorn
+[13:38:24] [parallel run=1] dump start
+(04.260292) cuda_plugin: [timing] Driver API checkpoint: 4155 ms
+(04.267094) cuda_plugin: [timing] post-scan+diff: 3 ms, 1 new VMAs
+(06.670065) [timing] dump: process_vm_readv=1746 ms O_DIRECT_write=656 ms total=2402 ms
+(06.672574) cuda_plugin: [timing] process_vm_readv dump: 2405 ms (3.3 GB/s)
+(06.983886) cuda_plugin: [timing] injected madvise(DONTNEED): 311 ms
+[13:38:33] [parallel run=1] dump=8745ms rc=0 gpu-pages=7.4G pages-*.img=3.5G
+[13:38:33] drop caches
+[13:38:34] [parallel run=1] restore start
+(03.276881) cuda_plugin: [timing] GPU page restore: 0 ms
+(03.683273) [timing] parallel restore: 397 ms (19.9 GB/s) [16 threads, 118 chunks, O_DIRECT]
+(03.683319) cuda_plugin: [timing] GPU page restore: 398 ms
+(05.685725) cuda_plugin: [timing] Driver API restore+unlock: 2002 ms
+[13:38:40] [parallel run=1] restore=5934ms
+[13:38:48] [parallel run=1] inference=OK infer_ms=7414
+RESULT label=parallel run=1 coldstart_s=22 dump_ms=8745 restore_ms=5934 inference=OK infer_ms=7414
+benchsdxl
+
+[13:38:48] [parallel run=2] starting container image=sdxl-criu-parallel model=stabilityai/stable-diffusion-xl-base-1.0
+[13:38:52] [parallel run=2] waiting for /health (timeout 900s)
+[13:39:14] [parallel run=2] server READY after 22s
+[13:39:14] [parallel run=2] app_pid=65 (container ns) init_pid=212593; tree:
+    PID    PPID   RSS COMMAND
+     65      63 27012  \_ gunicorn
+     67      65 3534848      \_ gunicorn
+[13:39:14] [parallel run=2] dump start
+(04.281816) cuda_plugin: [timing] Driver API checkpoint: 4185 ms
+(04.288400) cuda_plugin: [timing] post-scan+diff: 3 ms, 1 new VMAs
+(06.692892) [timing] dump: process_vm_readv=1745 ms O_DIRECT_write=659 ms total=2404 ms
+(06.695593) cuda_plugin: [timing] process_vm_readv dump: 2407 ms (3.3 GB/s)
+(07.010096) cuda_plugin: [timing] injected madvise(DONTNEED): 314 ms
+[13:39:23] [parallel run=2] dump=8811ms rc=0 gpu-pages=7.4G pages-*.img=3.1G
+[13:39:23] drop caches
+[13:39:25] [parallel run=2] restore start
+(03.033867) cuda_plugin: [timing] GPU page restore: 0 ms
+(03.451310) [timing] parallel restore: 408 ms (19.4 GB/s) [16 threads, 118 chunks, O_DIRECT]
+(03.451353) cuda_plugin: [timing] GPU page restore: 408 ms
+(05.433715) cuda_plugin: [timing] Driver API restore+unlock: 1982 ms
+[13:39:30] [parallel run=2] restore=5679ms
+[13:39:38] [parallel run=2] inference=OK infer_ms=7427
+RESULT label=parallel run=2 coldstart_s=22 dump_ms=8811 restore_ms=5679 inference=OK infer_ms=7427
+benchsdxl
+
+[13:39:38] === All SDXL benchmarks complete ===
