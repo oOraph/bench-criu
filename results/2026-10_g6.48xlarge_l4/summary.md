@@ -149,8 +149,12 @@ exists (multi-process tree only). Fixed by forking a helper for the bind mount (
 | serial plugin (`9b67fbc91`) | 1 | 19,112 | 9,891 | 5,617 ms (3.6 GB/s) | OK |
 | serial plugin (`9b67fbc91`) | 2 | 19,045 | 7,374 | 2,907 ms (7.0 GB/s) | OK |
 
-The serial path's rate swings with the array's burst state (3.6 vs 7.0 GB/s on consecutive runs, each
-right after a 22 GB dump + drop_caches); the parallel path was 6.4–7.1 GB/s on both runs.
+Three more serial rounds all gave 2,981–2,985 ms pread (6.8 GB/s) and 7,196–7,229 ms restore, so run 1
+above (3.6 GB/s, 9.9 s) was a one-off (first restore after the image rebuild), not burst-state variance as
+first suspected. On this array and this workload, serial ≈ parallel ≈ 7.2 s: both are limited by the
+disk (19 GB in ~3 s = sustained 5.0 GB/s + burst credit). The parallel design's advantage appears when the
+disk is not the limit (tmpfs: 3.9 s vs serial ~7.2 s; tensor test from disk: 2.0 s vs 4.1 s fill), and it
+has no bind-mount / setns dependency.
 
 ## Conclusions
 

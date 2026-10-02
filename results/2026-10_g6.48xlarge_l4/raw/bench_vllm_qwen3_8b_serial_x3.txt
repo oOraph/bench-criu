@@ -1,0 +1,18 @@
+EXIT=0
+(02.118240) cuda_plugin: [timing] Driver API restore+unlock: 213 ms
+(05.113945) [timing] O_DIRECT pread restore: 2985 ms (6.8 GB/s) [pread=2985 ms]
+(06.943979) cuda_plugin: [timing] Driver API restore+unlock: 1828 ms
+RESULT label=ours3 run=1 coldstart_s=110 dump_ms=19269 restore_ms=7229 inference=OK infer_ms=1746
+(02.081615) cuda_plugin: [timing] Driver API restore+unlock: 213 ms
+(05.073231) [timing] O_DIRECT pread restore: 2981 ms (6.8 GB/s) [pread=2981 ms]
+(06.903940) cuda_plugin: [timing] Driver API restore+unlock: 1828 ms
+RESULT label=ours3 run=2 coldstart_s=138 dump_ms=19229 restore_ms=7196 inference=OK infer_ms=1754
+(02.096940) cuda_plugin: [timing] Driver API restore+unlock: 213 ms
+(05.087955) [timing] O_DIRECT pread restore: 2981 ms (6.8 GB/s) [pread=2980 ms]
+(06.918073) cuda_plugin: [timing] Driver API restore+unlock: 1828 ms
+RESULT label=ours3 run=3 coldstart_s=140 dump_ms=19190 restore_ms=7213 inference=OK infer_ms=1754
+6
+6
+6
+
+[exited with code 0]
