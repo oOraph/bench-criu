@@ -59,11 +59,27 @@ static CUresult (*p_cuCheckpointProcessRestore)(int, CUcheckpointRestoreArgs *);
 static CUresult (*p_cuCheckpointProcessUnlock)(int, CUcheckpointUnlockArgs *);
 static CUresult (*p_cuCheckpointOperationComplete)(CUcheckpointOperationHandle);
 
-#define LOAD(sym) do { p_##sym = dlsym(h, #sym); if (!p_##sym) { fprintf(stderr, "libcuda: missing %s\n", #sym); return -1; } } while (0)
+/*
+ * Driver symbols are ABI-versioned (cuMemcpyDtoHAsync -> cuMemcpyDtoHAsync_v2, ...): dlsym() of the
+ * bare name returns the oldest ABI. Resolve through cuGetProcAddress with the header's CUDA version,
+ * which returns the ABI the header declares; fall back to dlsym for symbols it does not know.
+ */
+static CUresult (*p_cuGetProcAddress)(const char *, void **, int, cuuint64_t, CUdriverProcAddressQueryResult *);
+static void *resolve(void *h, const char *name)
+{
+	void *fn = NULL;
+	CUdriverProcAddressQueryResult q;
+	if (p_cuGetProcAddress && p_cuGetProcAddress(name, &fn, CUDA_VERSION, CU_GET_PROC_ADDRESS_DEFAULT, &q) == CUDA_SUCCESS && fn)
+		return fn;
+	return dlsym(h, name);
+}
+#define LOAD(sym) do { p_##sym = resolve(h, #sym); if (!p_##sym) { fprintf(stderr, "libcuda: missing %s\n", #sym); return -1; } } while (0)
 static int load_cuda(void)
 {
 	void *h = dlopen("libcuda.so.1", RTLD_NOW);
 	if (!h) { fprintf(stderr, "dlopen libcuda.so.1: %s\n", dlerror()); return -1; }
+	p_cuGetProcAddress = dlsym(h, "cuGetProcAddress_v2");
+	if (!p_cuGetProcAddress) p_cuGetProcAddress = dlsym(h, "cuGetProcAddress");
 	LOAD(cuInit); LOAD(cuGetErrorString); LOAD(cuDeviceGetCount); LOAD(cuDeviceGet);
 	LOAD(cuDevicePrimaryCtxRetain); LOAD(cuDevicePrimaryCtxRelease); LOAD(cuCtxSetCurrent);
 	LOAD(cuStreamGetCtx); LOAD(cuPointerGetAttribute); LOAD(cuCtxGetDevice); LOAD(cuMemHostAlloc); LOAD(cuMemFreeHost);
@@ -232,7 +248,11 @@ static int do_checkpoint(int pid, const char *path)
 	t0 = now_ms();
 	for (unsigned i = 0; i < info->deviceCount; i++) {
 		CUcheckpointCustomStoragePerDeviceData *d = &info->perDeviceData[i];
-		if (xfer_region(fd, off, d->devPtr, d->size, d->stream, 0, direct, &io_ms, &pcie_ms)) return -1;
+		if (xfer_region(fd, off, d->devPtr, d->size, d->stream, 0, direct, &io_ms, &pcie_ms)) {
+			fprintf(stderr, "copy failed; completing the operation anyway to leave the target in a defined state\n");
+			p_cuCheckpointOperationComplete(info->handle);
+			return -1;
+		}
 		off += (d->size + 4095) & ~4095UL;
 	}
 	double t_copy = now_ms() - t0;
@@ -273,7 +293,11 @@ static int do_restore(int pid, const char *path)
 	for (unsigned i = 0; i < info->deviceCount; i++) {
 		CUcheckpointCustomStoragePerDeviceData *d = &info->perDeviceData[i];
 		if (d->size != h.size[i]) { fprintf(stderr, "size mismatch dev %u: image %lu, driver %lu\n", i, (unsigned long)h.size[i], (unsigned long)d->size); return -1; }
-		if (xfer_region(fd, off, d->devPtr, d->size, d->stream, 1, direct, &io_ms, &pcie_ms)) return -1;
+		if (xfer_region(fd, off, d->devPtr, d->size, d->stream, 1, direct, &io_ms, &pcie_ms)) {
+			fprintf(stderr, "copy failed; completing the operation anyway\n");
+			p_cuCheckpointOperationComplete(info->handle);
+			return -1;
+		}
 		off += (d->size + 4095) & ~4095UL; total += d->size;
 	}
 	double t_copy = now_ms() - t0;
