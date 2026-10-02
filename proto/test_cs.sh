@@ -25,6 +25,8 @@ finish_app() {
     docker exec $C grep -E "x_match|SUCCESS" /tmp/app.log | tail -2
 }
 mkdir -p /tmp/cs
+# the driver-path baseline needs NVIDIA's cuda-checkpoint on the host
+command -v cuda-checkpoint >/dev/null || { sudo curl -fsSL -o /usr/local/bin/cuda-checkpoint https://github.com/NVIDIA/cuda-checkpoint/raw/main/bin/x86_64_Linux/cuda-checkpoint && sudo chmod +x /usr/local/bin/cuda-checkpoint; }
 
 echo "=== A. driver staging path: cuda-checkpoint lock+checkpoint / restore+unlock (VRAM <-> target host memory)"
 start_app
