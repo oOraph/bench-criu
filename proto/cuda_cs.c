@@ -27,10 +27,13 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <pthread.h>
+#include <stdatomic.h>
+#include <unistd.h>
 #include <unistd.h>
 
 #define CHUNK (64UL << 20)      /* 64 MiB per transfer */
-#define NBUF  4                 /* pinned ring buffer depth */
+#define MAXTHR 32               /* I/O worker threads (CUDA_CS_THREADS, default min(ncpu,16)) */
 #define HDR_SIZE 4096
 
 /* ---- libcuda via dlopen (so the binary builds/runs without the toolkit) ---- */
@@ -52,6 +55,8 @@ static CUresult (*p_cuEventCreate)(CUevent *, unsigned);
 static CUresult (*p_cuEventRecord)(CUevent, CUstream);
 static CUresult (*p_cuEventSynchronize)(CUevent);
 static CUresult (*p_cuStreamSynchronize)(CUstream);
+static CUresult (*p_cuStreamCreate)(CUstream *, unsigned);
+static CUresult (*p_cuStreamDestroy)(CUstream);
 static CUresult (*p_cuCheckpointProcessGetState)(int, CUprocessState *);
 static CUresult (*p_cuCheckpointProcessLock)(int, CUcheckpointLockArgs *);
 static CUresult (*p_cuCheckpointProcessCheckpoint)(int, CUcheckpointCheckpointArgs *);
@@ -85,6 +90,7 @@ static int load_cuda(void)
 	LOAD(cuStreamGetCtx); LOAD(cuPointerGetAttribute); LOAD(cuCtxGetDevice); LOAD(cuMemHostAlloc); LOAD(cuMemFreeHost);
 	LOAD(cuMemcpyDtoHAsync); LOAD(cuMemcpyHtoDAsync);
 	LOAD(cuEventCreate); LOAD(cuEventRecord); LOAD(cuEventSynchronize); LOAD(cuStreamSynchronize);
+	LOAD(cuStreamCreate); LOAD(cuStreamDestroy);
 	LOAD(cuCheckpointProcessGetState); LOAD(cuCheckpointProcessLock);
 	LOAD(cuCheckpointProcessCheckpoint); LOAD(cuCheckpointProcessRestore);
 	LOAD(cuCheckpointProcessUnlock); LOAD(cuCheckpointOperationComplete);
@@ -125,85 +131,109 @@ struct hdr { uint32_t magic; uint32_t ndev; uint64_t size[32]; };
 #define MAGIC 0x43554353 /* "CUCS" */
 
 /*
- * Move one device's mapped region between the device pointer and the file at
- * file_off, chunked through NBUF pinned buffers so that disk I/O of chunk k
- * overlaps the PCIe transfer of chunk k+1.  dir: 0 = checkpoint (D2H + write),
- * 1 = restore (read + H2D).
+ * Move one device's mapped region between the device pointer and the file at file_off with N worker
+ * threads.  Each worker owns a CUDA stream in the mapping's context and two pinned 64 MB buffers and
+ * pulls chunk indices from a shared counter:
+ *   checkpoint: DtoH(chunk) on its stream -> wait -> pwrite        (next chunk's DtoH overlaps the write)
+ *   restore:    pread(chunk) -> HtoD on its stream, alternating buffers so the next pread overlaps the HtoD
+ * All worker streams are synchronised before returning (required before cuCheckpointOperationComplete).
  */
+struct xfer {
+	int fd; off_t file_off; CUdeviceptr dptr; size_t size; CUcontext ctx; int dir, direct;
+	size_t nchunks; atomic_size_t next; atomic_int err;
+	double io_ms[MAXTHR], pcie_ms[MAXTHR];
+};
+
+static int nthreads(void)
+{
+	const char *e = getenv("CUDA_CS_THREADS");
+	int n = e ? atoi(e) : 0;
+	if (n <= 0) { n = (int)sysconf(_SC_NPROCESSORS_ONLN); if (n > 16) n = 16; }
+	if (n > MAXTHR) n = MAXTHR;
+	return n < 1 ? 1 : n;
+}
+
+struct warg { struct xfer *x; int id; };
+static void *xfer_worker(void *p)
+{
+	struct warg *w = p; struct xfer *x = w->x; int id = w->id;
+	void *buf[2] = {NULL, NULL}; CUevent ev[2]; CUstream st = NULL; int inflight[2] = {0, 0};
+	double io = 0, pc = 0;
+	CUresult r;
+
+	if ((r = p_cuCtxSetCurrent(x->ctx)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuCtxSetCurrent: %s\n", id, cuerr(r)); goto fail; }
+	if ((r = p_cuStreamCreate(&st, CU_STREAM_NON_BLOCKING)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuStreamCreate: %s\n", id, cuerr(r)); goto fail; }
+	for (int i = 0; i < 2; i++) {
+		if ((r = p_cuMemHostAlloc(&buf[i], CHUNK, CU_MEMHOSTALLOC_PORTABLE)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuMemHostAlloc: %s\n", id, cuerr(r)); goto fail; }
+		if ((r = p_cuEventCreate(&ev[i], CU_EVENT_DISABLE_TIMING)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] cuEventCreate: %s\n", id, cuerr(r)); goto fail; }
+	}
+
+	for (int b = 0;; b ^= 1) {
+		size_t k = atomic_fetch_add(&x->next, 1);
+		if (k >= x->nchunks || atomic_load(&x->err)) break;
+		size_t off = k * CHUNK, len = x->size - off < CHUNK ? x->size - off : CHUNK;
+		size_t iolen = x->direct ? ((len + 4095) & ~4095UL) : len;
+		double t;
+		if (inflight[b]) { t = now_ms(); p_cuEventSynchronize(ev[b]); pc += now_ms() - t; inflight[b] = 0; }
+		if (x->dir == 0) {
+			t = now_ms();
+			if ((r = p_cuMemcpyDtoHAsync(buf[b], x->dptr + off, len, st)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] DtoH: %s\n", id, cuerr(r)); goto fail; }
+			p_cuEventRecord(ev[b], st);
+			p_cuEventSynchronize(ev[b]);      /* the write needs the data; the other buffer's write overlapped this */
+			pc += now_ms() - t;
+			t = now_ms();
+			if (pwrite(x->fd, buf[b], iolen, x->file_off + off) != (ssize_t)iolen) { perror("pwrite"); goto fail; }
+			io += now_ms() - t;
+		} else {
+			t = now_ms();
+			if (pread(x->fd, buf[b], iolen, x->file_off + off) < (ssize_t)len) { perror("pread"); goto fail; }
+			io += now_ms() - t;
+			t = now_ms();
+			if ((r = p_cuMemcpyHtoDAsync(x->dptr + off, buf[b], len, st)) != CUDA_SUCCESS) { fprintf(stderr, "[w%d] HtoD: %s\n", id, cuerr(r)); goto fail; }
+			p_cuEventRecord(ev[b], st);
+			pc += now_ms() - t;
+			inflight[b] = 1;
+		}
+	}
+	{ double t = now_ms(); p_cuStreamSynchronize(st); pc += now_ms() - t; }
+	goto out;
+fail:
+	atomic_store(&x->err, 1);
+out:
+	x->io_ms[id] = io; x->pcie_ms[id] = pc;
+	if (st) { p_cuStreamSynchronize(st); p_cuStreamDestroy(st); }
+	for (int i = 0; i < 2; i++) if (buf[i]) p_cuMemFreeHost(buf[i]);
+	return NULL;
+}
+
 static int xfer_region(int fd, off_t file_off, CUdeviceptr dptr, size_t size, CUstream st, int dir,
 		       int direct, double *io_ms, double *pcie_ms)
 {
-	void *buf[NBUF]; CUevent ev[NBUF];
-	CUcontext ctx = NULL, sctx = NULL;
-	CUdevice dev = -1;
-	/* The mapping lives in the caller's primary context of that GPU: ask the pointer which one. */
+	struct xfer x; memset(&x, 0, sizeof(x));
+	CUcontext ctx = NULL;
 	CUresult r = p_cuPointerGetAttribute(&ctx, CU_POINTER_ATTRIBUTE_CONTEXT, dptr);
-	if (r != CUDA_SUCCESS || !ctx) {
-		fprintf(stderr, "cuPointerGetAttribute(CONTEXT) -> %s; falling back to cuStreamGetCtx\n", cuerr(r));
+	if (r != CUDA_SUCCESS || !ctx)
 		CU(p_cuStreamGetCtx(st, &ctx));
-	}
-	p_cuStreamGetCtx(st, &sctx);
 	CU(p_cuCtxSetCurrent(ctx));
-	p_cuCtxGetDevice(&dev);
-	fprintf(stderr, "region: devPtr=%p size=%.2f GB ctx=%p stream_ctx=%p device=%d\n",
-		(void *)dptr, size / 1e9, (void *)ctx, (void *)sctx, dev);
-	for (int i = 0; i < NBUF; i++) {
-		CU(p_cuMemHostAlloc(&buf[i], CHUNK, CU_MEMHOSTALLOC_PORTABLE));
-		CU(p_cuEventCreate(&ev[i], CU_EVENT_DISABLE_TIMING));
-	}
-	size_t nchunks = (size + CHUNK - 1) / CHUNK;
-	int ret = -1;
+	x.fd = fd; x.file_off = file_off; x.dptr = dptr; x.size = size; x.ctx = ctx; x.dir = dir; x.direct = direct;
+	x.nchunks = (size + CHUNK - 1) / CHUNK;
+	atomic_init(&x.next, 0); atomic_init(&x.err, 0);
 
-	if (dir == 0) {
-		/* checkpoint: issue D2H for chunk k, then write chunk k-? as events complete */
-		size_t issued = 0, written = 0;
-		while (written < nchunks) {
-			while (issued < nchunks && issued - written < NBUF) {
-				size_t off = issued * CHUNK, len = size - off < CHUNK ? size - off : CHUNK;
-				double t = now_ms();
-				CU(p_cuMemcpyDtoHAsync(buf[issued % NBUF], dptr + off, len, st));
-				CU(p_cuEventRecord(ev[issued % NBUF], st));
-				*pcie_ms += now_ms() - t; /* issue cost only; completion overlaps the write below */
-				issued++;
-			}
-			size_t k = written, off = k * CHUNK, len = size - off < CHUNK ? size - off : CHUNK;
-			double t = now_ms();
-			CU(p_cuEventSynchronize(ev[k % NBUF]));
-			*pcie_ms += now_ms() - t;
-			t = now_ms();
-			size_t wlen = direct ? ((len + 4095) & ~4095UL) : len; /* O_DIRECT needs 4K multiples; buffer is page aligned */
-			if (pwrite(fd, buf[k % NBUF], wlen, file_off + off) != (ssize_t)wlen) { perror("pwrite"); goto out; }
-			*io_ms += now_ms() - t;
-			written++;
-		}
-	} else {
-		/* restore: read chunk k into a free buffer, issue H2D; wait on the event before reusing the buffer */
-		size_t issued = 0;
-		int inflight[NBUF] = {0};
-		while (issued < nchunks) {
-			int b = issued % NBUF;
-			if (inflight[b]) { double t = now_ms(); CU(p_cuEventSynchronize(ev[b])); *pcie_ms += now_ms() - t; inflight[b] = 0; }
-			size_t off = issued * CHUNK, len = size - off < CHUNK ? size - off : CHUNK;
-			size_t rlen = direct ? ((len + 4095) & ~4095UL) : len;
-			double t = now_ms();
-			ssize_t n = pread(fd, buf[b], rlen, file_off + off);
-			if (n < (ssize_t)len) { perror("pread"); goto out; }
-			*io_ms += now_ms() - t;
-			t = now_ms();
-			CU(p_cuMemcpyHtoDAsync(dptr + off, buf[b], len, st));
-			CU(p_cuEventRecord(ev[b], st));
-			*pcie_ms += now_ms() - t;
-			inflight[b] = 1;
-			issued++;
-		}
-		double t = now_ms();
-		CU(p_cuStreamSynchronize(st));
-		*pcie_ms += now_ms() - t;
-	}
-	ret = 0;
-out:
-	for (int i = 0; i < NBUF; i++) p_cuMemFreeHost(buf[i]);
-	return ret;
+	int n = nthreads();
+	if ((size_t)n > x.nchunks) n = (int)x.nchunks;
+	pthread_t th[MAXTHR]; struct warg wa[MAXTHR];
+	double t0 = now_ms();
+	for (int i = 0; i < n; i++) { wa[i].x = &x; wa[i].id = i; pthread_create(&th[i], NULL, xfer_worker, &wa[i]); }
+	for (int i = 0; i < n; i++) pthread_join(th[i], NULL);
+	double wall = now_ms() - t0;
+	/* the driver synchronises its own stream in OperationComplete; make sure ours are done too */
+	CU(p_cuStreamSynchronize(st));
+	double io = 0, pc = 0;
+	for (int i = 0; i < n; i++) { io += x.io_ms[i]; pc += x.pcie_ms[i]; }
+	fprintf(stderr, "region: %.2f GB in %zu chunks, %d threads, wall %.0f ms (%.1f GB/s); per-thread avg io %.0f ms, pcie %.0f ms\n",
+		size / 1e9, x.nchunks, n, wall, size / wall / 1e6, io / n, pc / n);
+	*io_ms += io / n; *pcie_ms += pc / n;
+	return atomic_load(&x.err) ? -1 : 0;
 }
 
 static int open_image(const char *path, int write, int *direct)
