@@ -1,0 +1,37 @@
+BUILD_EXIT=0
+374fd1d9ca45
+=== smoke
+[POST] SUCCESS=True
+RESULT label=psmoke run=1 dump_ms=665 restore_ms=554
+(00.005036) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(00.044483) cuda_plugin: Loaded UUIDs for 1 checkpoint CUDA GPUs
+(00.044708) Collected [usr/lib/x86_64-linux-gnu/libpthread.so.0] ID 0x39
+(00.331937) [timing] parallel restore: 108 ms (3.2 GB/s) [6 threads, 6 chunks, O_DIRECT]
+(00.331951) Loaded 1 GPU regions for pid 444 via parallel process_vm_writev
+=== 14GB
+(02.730931) [timing] parallel restore: 2139 ms (6.8 GB/s) [16 threads, 219 chunks, O_DIRECT]
+(02.731708) cuda_plugin: [timing] GPU page restore: 2140 ms
+(04.309525) cuda_plugin: [timing] Driver API restore+unlock: 1578 ms
+RESULT label=parallel-t16 run=1 dump_ms=11912 restore_ms=4521
+(02.710384) [timing] parallel restore: 2105 ms (7.0 GB/s) [16 threads, 219 chunks, O_DIRECT]
+(02.710510) cuda_plugin: [timing] GPU page restore: 2105 ms
+(04.238237) cuda_plugin: [timing] Driver API restore+unlock: 1528 ms
+RESULT label=parallel-t16 run=2 dump_ms=11841 restore_ms=4508
+(02.580440) [timing] parallel restore: 1995 ms (7.3 GB/s) [32 threads, 219 chunks, O_DIRECT]
+(02.580569) cuda_plugin: [timing] GPU page restore: 1996 ms
+(04.098094) cuda_plugin: [timing] Driver API restore+unlock: 1518 ms
+RESULT label=parallel-t32 run=1 dump_ms=11840 restore_ms=4382
+(02.562008) [timing] parallel restore: 1976 ms (7.4 GB/s) [32 threads, 219 chunks, O_DIRECT]
+(02.562064) cuda_plugin: [timing] GPU page restore: 1976 ms
+(04.099958) cuda_plugin: [timing] Driver API restore+unlock: 1538 ms
+RESULT label=parallel-t32 run=2 dump_ms=11845 restore_ms=4385
+(03.079378) [timing] parallel restore: 2479 ms (5.9 GB/s) [8 threads, 219 chunks, O_DIRECT]
+(03.079432) cuda_plugin: [timing] GPU page restore: 2479 ms
+(04.586738) cuda_plugin: [timing] Driver API restore+unlock: 1507 ms
+RESULT label=parallel-t8 run=1 dump_ms=11851 restore_ms=4814
+(02.821771) [timing] parallel restore: 2215 ms (6.6 GB/s) [8 threads, 219 chunks, O_DIRECT]
+(02.823147) cuda_plugin: [timing] GPU page restore: 2217 ms
+(04.320823) cuda_plugin: [timing] Driver API restore+unlock: 1498 ms
+RESULT label=parallel-t8 run=2 dump_ms=11815 restore_ms=4584
+
+[exited with code 0]

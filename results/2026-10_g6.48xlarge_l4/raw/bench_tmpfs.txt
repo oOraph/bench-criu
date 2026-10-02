@@ -1,0 +1,12 @@
+(00.836066) [timing] parallel restore: 609 ms (24.0 GB/s) [16 threads, 219 chunks, O_DIRECT]
+(00.836101) cuda_plugin: [timing] GPU page restore: 609 ms
+RESULT label=tmpfs-par-t16 run=1 dump_ms=14775 restore_ms=2401
+(00.848445) [timing] parallel restore: 611 ms (24.0 GB/s) [32 threads, 219 chunks, O_DIRECT]
+(00.848479) cuda_plugin: [timing] GPU page restore: 611 ms
+RESULT label=tmpfs-par-t32 run=1 dump_ms=14885 restore_ms=2425
+(02.175285) [timing] O_DIRECT pread restore: 1950 ms (7.5 GB/s) [pread=1950 ms]
+(02.175690) cuda_plugin: [timing] GPU page restore: 1951 ms
+RESULT label=tmpfs-serial run=1 dump_ms=14893 restore_ms=3707
+RESULT label=tmpfs-upstream-direct run=1 dump_ms=13807 restore_ms=9333
+
+[exited with code 0]

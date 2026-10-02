@@ -51,7 +51,49 @@ branch `fast_cuda_plugin_on_head` incl. `3c9682e21` (no mlock pre-fault), Driver
 - The mlock-free build (`3c9682e21`) compiled and passed on both backends; raising the memlock
   limit no longer changes anything (control).
 
-## Next
+## Parallel restore (branch `fast_cuda_plugin_on_head_parallel`, commit `415e9795a`)
 
-Parallel restore (June WIP, now commit `415e9795a` on `fast_cuda_plugin_on_head_parallel`):
-N plugin threads, O_DIRECT reads into bounce buffers + `process_vm_writev`. Results below when run.
+June 2026 WIP applied on the port: `CUDA_RESTORE_THREADS` plugin threads read 64 MB chunks of
+`gpu-pages-*.img` (O_DIRECT) into bounce buffers and fill the target VMAs with `process_vm_writev`,
+so the page faults run in parallel across cores. Image `criu-head-parallel`. Same 14.7 GB tensor,
+`DROP_CACHE=yes`, Driver API backend.
+
+| threads | run | dump (ms) | GPU page restore | rate | restore total (ms) |
+|---|---|---|---|---|---|
+| 8 | 1 | 11,851 | 2,479 ms | 5.9 GB/s | 4,814 |
+| 8 | 2 | 11,815 | 2,215 ms | 6.6 GB/s | 4,584 |
+| 16 | 1 | 11,912 | 2,139 ms | 6.8 GB/s | 4,521 |
+| 16 | 2 | 11,841 | 2,105 ms | 7.0 GB/s | 4,508 |
+| 32 | 1 | 11,840 | 1,995 ms | 7.3 GB/s | 4,382 |
+| 32 | 2 | 11,845 | 1,976 ms | 7.4 GB/s | 4,385 |
+
+Restore total: **4.4 s** vs 6.4 s serial (−31%) vs 8.6 s upstream-direct (−49%). Remaining: Driver API
+restore+unlock ~1.5 s + CRIU ~0.9 s.
+
+### Why above the 5.0 GB/s array ceiling: instance-store burst allowance
+
+fio per-second log (libaio 8×qd32, after 20 s idle): **9,459 MiB/s in the first second, then 4,805 MiB/s
+sustained**; a 3 s burst averages 6,331 MiB/s. A 2 s restore rides the burst bucket, which is the
+realistic situation for a restore after idle. The sustained 4.8 GiB/s applies to long transfers (dumps).
+
+### No-disk ceilings (tmpfs, `BENCH_DIR=/mnt/tmpfs`, kernel 7.0 accepts O_DIRECT on tmpfs)
+
+| scenario | GPU page restore | rate | restore total |
+|---|---|---|---|
+| serial (head-ours) | 1,950 ms | 7.5 GB/s | 3,707 ms |
+| parallel 16 threads | 609 ms | 24.0 GB/s | 2,401 ms |
+| parallel 32 threads | 611 ms | 24.0 GB/s | 2,425 ms |
+| upstream-direct | — | — | 9,333 ms |
+
+The serial path tops out at 7.5 GB/s even from RAM (one 64 MB request in flight, no overlap), so on
+the array its 3.6 GB/s was an I/O-concurrency limit, not CPU. The parallel path reaches 24 GB/s
+(memory-bandwidth / `process_vm_writev` bound, flat from 16 to 32 threads); on any real array it is
+disk-bound. Upstream gets no benefit from tmpfs (9.3 s).
+
+## Conclusions
+
+1. **Adopt the parallel restore** as the plugin's restore path; 16 threads is the knee (`min(ncpu, 16)`).
+2. **Dump is now the dominant cost** (11.8 s vs 4.4 s restore): serial `process_vm_readv` + O_DIRECT write.
+   The same parallelisation applies (per-chunk readv+write workers), bounded by the array's sustained
+   write bandwidth. Custom-storage (driver ≥ 615) would remove the staging copy on both sides.
+3. With `MADV_HUGEPAGE` and no `mlock`, THP mode `madvise` is a node requirement worth asserting.
