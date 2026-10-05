@@ -37,9 +37,10 @@ sudo apt-get update
 # R610 adds legacy CUDA IPC support to cuda-checkpoint; override with NVIDIA_DRIVER=590.
 NVIDIA_DRIVER=${NVIDIA_DRIVER:-610}
 # NVSwitch systems (p4d/p4de/p5, HGX boards) need NVIDIA Fabric Manager or CUDA fails with
-# error 802 "system not yet initialized". FM must match the driver to the patch level and
-# Ubuntu only ships it for the -server flavour (e.g. nvidia-driver-595-server +
-# nvidia-fabricmanager-595 = 595.91.07 on 26.04; there is no FM for 610.57.04).
+# error 802 "system not yet initialized". FM must match the driver to the patch level. Ubuntu's
+# archive ships it only for the -server flavour (nvidia-driver-595-server + nvidia-fabricmanager-595
+# = 595.91.07 on 26.04); NVIDIA's CUDA apt repo ships `nvidia-fabricmanager` for every driver
+# version (610.57.04, 615.71.09, ...) — see proto/install-driver-run.sh for that path.
 # Neither NVreg_NvLinkDisable=1 nor unbinding the NVSwitch devices (pci-stub) avoids the requirement,
 # even after a reboot (tested 2026-10-02 on p4de): FM is mandatory on HGX boards.
 if [ "${SKIP_DRIVER:-0}" = 1 ]; then

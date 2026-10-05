@@ -124,4 +124,5 @@ the dump-side gain (no 37 s driver copy on the A100) is the big one.
 - Load driver symbols via `cuGetProcAddress` (dlsym gives legacy ABIs → `CUDA_ERROR_INVALID_CONTEXT` on memcpy).
 - `cuPointerGetAttribute(CONTEXT)` on the mapped pointer returns NULL; use `cuStreamGetCtx` on the per-device stream.
 - `CUDA_ERROR_NOT_INITIALIZED` from the checkpoint API = "pid has no CUDA state" (don't pass the shell wrapper's pid).
-- No Fabric Manager exists for 615 → not usable on NVSwitch boxes (p4d/p4de/p5) yet.
+- On NVSwitch boxes (p4d/p4de/p5) Fabric Manager 615.71.09 is needed: it is NOT in Ubuntu's archive but IS in
+  NVIDIA's CUDA apt repo (`nvidia-fabricmanager` 615.71.09-2ubuntu1); `proto/install-driver-run.sh` installs it.

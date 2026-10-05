@@ -12,9 +12,11 @@
 | OS | Ubuntu 26.04 LTS, kernel 7.0.0-1006-aws, THP `madvise` |
 
 Driver note: p4de is an NVSwitch (HGX) system; CUDA returns error 802 "system not yet initialized" until
-NVIDIA Fabric Manager runs, and FM must match the driver to the patch level. Ubuntu 26.04 ships FM only
-for 595.91.07 (`nvidia-driver-595-server` + `nvidia-fabricmanager-595`); no FM exists for 610.57.04 or
-615.71.09, and `NVreg_NvLinkDisable=1` does not lift the requirement. Hence 595 on this box (610 elsewhere).
+NVIDIA Fabric Manager runs, and FM must match the driver to the patch level. Ubuntu's archive ships FM only
+for 595.91.07 (`nvidia-driver-595-server` + `nvidia-fabricmanager-595`), and `NVreg_NvLinkDisable=1` does not
+lift the requirement. Hence 595 on this box (610 elsewhere). Correction (2026-10-05): NVIDIA's CUDA apt repo
+does ship `nvidia-fabricmanager` 610.57.04 and 615.71.09 (ubuntu2204/2404/2604), so 610 or 615 + FM is
+possible on HGX boxes; see `proto/install-driver-run.sh`.
 
 ## Storage throughput (fio)
 

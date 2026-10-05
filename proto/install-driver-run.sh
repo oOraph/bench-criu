@@ -1,6 +1,8 @@
 #!/bin/bash
-# Replace the Ubuntu-packaged NVIDIA driver with NVIDIA's .run installer (e.g. 615.71.09, which has no apt
-# package yet). Non-NVSwitch boxes only (no Fabric Manager exists for 615). Use on a disposable VM.
+# Replace the Ubuntu-packaged NVIDIA driver with NVIDIA's .run installer (e.g. 615.71.09, which has no
+# Ubuntu-archive package yet). On NVSwitch (HGX) boxes the matching Fabric Manager is installed from
+# NVIDIA's CUDA apt repo, which ships `nvidia-fabricmanager` for every driver version (610.57.04,
+# 615.71.09, ...; Ubuntu's archive only has 595). Use on a disposable VM.
 set -euo pipefail
 VER=${1:-615.71.09}
 RUN=/mnt/nvme/drv/NVIDIA-Linux-x86_64-$VER.run
@@ -31,5 +33,19 @@ sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml >/dev/null 2>&1 || tr
 sudo systemctl restart docker
 nvidia-smi --query-gpu=name,driver_version,persistence_mode --format=csv,noheader
 nm -D --defined-only /usr/lib/x86_64-linux-gnu/libcuda.so.1 | grep -c cuCheckpointOperationComplete && echo "custom-storage API present"
+# NVSwitch systems: CUDA returns error 802 until Fabric Manager (same version as the driver) runs
+if lspci -d 10de: | grep -qi bridge; then
+    . /etc/os-release; REPO="ubuntu${VERSION_ID//./}"
+    if [ ! -f /etc/apt/sources.list.d/cuda-${REPO}-x86_64.list ]; then
+        curl -fsSL -o /tmp/cuda-keyring.deb "https://developer.download.nvidia.com/compute/cuda/repos/${REPO}/x86_64/cuda-keyring_1.1-1_all.deb" && sudo dpkg -i /tmp/cuda-keyring.deb
+        sudo apt-get update -qq
+    fi
+    FMVER=$(apt-cache madison nvidia-fabricmanager | awk -v v="$VER" '$3 ~ "^"v {print $3}' | sort -V | tail -1)
+    [ -n "$FMVER" ] || { echo "no nvidia-fabricmanager $VER in the CUDA repo"; exit 1; }
+    sudo apt-get install -y -qq nvidia-fabricmanager="$FMVER"
+    sudo systemctl enable --now nvidia-fabricmanager
+    for i in $(seq 1 90); do nvidia-smi -q 2>/dev/null | grep -A1 '^ *Fabric' | grep -q 'State *: Completed' && break; sleep 2; done
+    nvidia-smi -q | grep -A2 '^ *Fabric' | head -3
+fi
 # nvidia-container-toolkit keeps working with .run drivers (libnvidia-container discovers the libs)
 docker run --rm --gpus all ubuntu:24.04 nvidia-smi -L | head -1
