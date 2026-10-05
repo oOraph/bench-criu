@@ -1,7 +1,7 @@
 # bench-criu
 
 Checkpoint/restore benchmarks for GPU (CUDA / PyTorch / vLLM) workloads with CRIU and the NVIDIA
-`cuda-checkpoint` driver API, comparing upstream CRIU with the changes we propose upstream
+`cuda-checkpoint` driver API, comparing upstream CRIU with the changes we intend to propose upstream
 ([oOraph/criu `upstream-cuda-custom-storage`](https://github.com/oOraph/criu/tree/upstream-cuda-custom-storage)).
 
 ## Headline result (2026-10-05)
