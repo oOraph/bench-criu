@@ -17,15 +17,16 @@
 | parallel plugin (cs off) | 12,959 / 13,009 ms | 3,854 / 3,966 ms | fill 895 / 851 ms (16.7–17.5 GB/s) + driver restore 2,126 / 2,275 ms |
 | upstream head, direct | 11,225 / 11,236 ms | 9,010 / 8,870 ms | — |
 
-## vLLM 0.30 + gpt-oss-120b (76.2 GB of GPU memory mapped + 3.7 GB CPU pages, inference validated)
+## vLLM 0.30 + gpt-oss-120b (76.2 GB of GPU memory mapped + 3.7 GB CPU pages, inference validated on every run)
 
-| path | run | dump (ms) | restore (ms) | GPU copy |
-|---|---|---|---|---|
-| custom storage on | 1 | **11,481** | **10,556** | ckpt copy 8,534 ms (8.9 GB/s); restore copy 7,088 ms (10.8 GB/s) |
-| custom storage on | 2 | **11,497** | **10,553** | 8,633 ms (8.8 GB/s); 7,081 ms (10.8 GB/s) |
-| parallel plugin (cs off) | 1 | 66,699 | 16,914 | driver checkpoint 37,999 ms; fill 3,547 ms (21.5 GB/s) + driver restore 10,352 ms |
+| path | dump (ms) | restore (ms) | GPU copy detail |
+|---|---|---|---|
+| custom storage on | **11,481 / 11,497** | **10,556 / 10,553** | ckpt copy 8,534 / 8,633 ms (8.9 GB/s); restore copy 7,088 / 7,081 ms (10.8 GB/s) |
+| parallel plugin (cs off) | 66,699 / 65,554 | 16,914 / 16,981 | driver checkpoint ~38 s; fill 3,547 ms (21.5 GB/s) + driver restore 10,352 ms |
+| upstream head, direct | 59,378 / 58,467 | 41,928 / 42,314 | — |
 
-(remaining rounds appended below when the session completes)
+Cold start of the server (weights from NVMe, KV-cache allocation) is 177–185 s on every run; the restore
+replaces that with 10.6 s.
 
 ## Reading
 
@@ -35,4 +36,5 @@
 - The copy rate into the mapping on the A100 (10.8 GB/s H2D, 8.9 GB/s D2H with 4 threads) matches the A10G
   plateau (~12 GB/s); the array (16 GB/s) is not the limit. The remaining restore lever is CRIU core (~3 s);
   the remaining copy lever is the mapping's rate (copy-engine/NUMA placement experiments pending).
-- Against upstream criu-dev on this workload: restore 46.9 s (2026-10-02) → 10.6 s, dump 58.9 s → 11.5 s.
+- Against upstream criu-dev on the same box and driver: restore 42 s → 10.6 s (−75%), dump 59 s → 11.5 s (−80%).
+  Upstream on driver 615 restores a little faster than on 595 (46.9 s on 2026-10-02): the driver's host→VRAM copy got cheaper.
