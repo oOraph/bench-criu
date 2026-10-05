@@ -1,11 +1,17 @@
-# Custom storage on HGX: p4de.24xlarge, driver 615.71.09 + Fabric Manager 615 (2026-10-05)
+# Custom storage on an A100 with a fast RAID-0: p4de.24xlarge, driver 615.71.09 (2026-10-05)
+
+Goal: validate the CUDA 13.4 custom-storage path on an A100-80GB with a storage backend fast enough
+(8× NVMe RAID-0, 16 GB/s) that the disk is not the bottleneck. p4de was the only such box available; its
+NVSwitch fabric is irrelevant to the test (single GPU, no tensor parallelism: CRIU + cuda plugin do not
+handle multi-GPU TP workloads) but it forces Fabric Manager to be installed at the exact driver version,
+which is why the setup section mentions it.
 
 ## Setup
 
 | Component | Detail |
 |---|---|
-| Instance | AWS `p4de.24xlarge` (open CR, us-east-1c), 8× A100-SXM4-80GB (GPU 0 used), 8× NVMe RAID-0 = 16.1 GB/s |
-| Driver | **615.71.09 proprietary** via NVIDIA's `.run` + **`nvidia-fabricmanager` 615.71.09-2ubuntu1 from NVIDIA's CUDA apt repo** (`proto/install-driver-run.sh`); FM log: "Successfully configured all the available GPUs and NVSwitches" |
+| Instance | AWS `p4de.24xlarge` (open CR, us-east-1c), A100-SXM4-80GB (GPU 0 only), 8× NVMe RAID-0 = 16.1 GB/s |
+| Driver | **615.71.09 proprietary** via NVIDIA's `.run` (`proto/install-driver-run.sh`). Required on this box only: `nvidia-fabricmanager` 615.71.09-2ubuntu1 from NVIDIA's CUDA apt repo (the Ubuntu archive stops at 595); FM log: "Successfully configured all the available GPUs and NVSwitches" |
 | Images | `criu-head-cs` / `vllm-criu-cs` built from branch `upstream-cuda-custom-storage` (the clean PR branch); `criu-upstream-head` / `vllm-criu-upstream` from criu-dev 4485a86da |
 | Driver | `run_p4de_cs.sh` (one-shot session), `RUNS=2`, `DROP_CACHE=yes` |
 
