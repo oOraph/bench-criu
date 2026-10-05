@@ -8,20 +8,25 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Instance-store NVMe = NVMe disks that are not the root/EBS volume and carry no
 # partition or filesystem. Stripe them all (RAID-0); with a single disk, use it directly.
+if mountpoint -q /mnt/nvme; then
+    echo "/mnt/nvme already mounted ($(findmnt -no SOURCE,SIZE /mnt/nvme)), skipping the array setup"
+    NVME_DEVS=()
+else
 mapfile -t NVME_DEVS < <(lsblk -dnpo NAME,TYPE,MOUNTPOINTS,FSTYPE | awk '$2=="disk" && $1 ~ /nvme/ && $3=="" && $4==""' | awk '{print $1}' | while read -r d; do [ -z "$(lsblk -nro NAME "$d" | tail -n +2)" ] && echo "$d"; done)
 echo "instance-store NVMe devices: ${NVME_DEVS[*]:-none}"
-if [ "${#NVME_DEVS[@]}" -eq 0 ]; then echo "no free NVMe device found, aborting"; exit 1; fi
-if [ "${#NVME_DEVS[@]}" -eq 1 ]; then
+if [ "${#NVME_DEVS[@]}" -eq 0 ] && ! mountpoint -q /mnt/nvme; then echo "no free NVMe device found, aborting"; exit 1; fi
+if [ "${#NVME_DEVS[@]}" -eq 0 ]; then :; elif [ "${#NVME_DEVS[@]}" -eq 1 ]; then
     DATA_DEV=${NVME_DEVS[0]}
 else
     sudo apt-get update && sudo apt-get install -y mdadm
     sudo mdadm --create /dev/md0 --level=0 --raid-devices="${#NVME_DEVS[@]}" "${NVME_DEVS[@]}"
     DATA_DEV=/dev/md0
 fi
-sudo mkfs.xfs "$DATA_DEV"
+[ "${#NVME_DEVS[@]}" -eq 0 ] || sudo mkfs.xfs "$DATA_DEV"
 
 sudo mkdir -p /mnt/nvme
 sudo mount "$DATA_DEV" /mnt/nvme
+fi
 
 echo "=== [1/2] NVIDIA driver ==="
 # SKIP_DRIVER=1 keeps a preinstalled driver (e.g. Lambda Labs / HGX nodes whose driver must match the
@@ -69,8 +74,10 @@ if [ "$NVSWITCH" = 1 ]; then
 fi
 # Enable persistence mode: keeps driver loaded between processes.
 # Critical for restore performance: ~10s without, ~2.5s with.
+if [ "${SKIP_DRIVER:-0}" != 1 ]; then
 sudo nvidia-smi -pm 1
 nvidia-smi
+fi
 
 #echo "=== [2/6] cuda-checkpoint (from NVIDIA/cuda-checkpoint GitHub) ==="
 #git clone --depth=1 https://github.com/NVIDIA/cuda-checkpoint.git ~/cuda-checkpoint
