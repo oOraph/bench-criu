@@ -1,91 +1,117 @@
 # bench-criu
 
-Benchmark comparing CRIU checkpoint/restore performance for GPU (CUDA/PyTorch) workloads across different CRIU builds.
+Checkpoint/restore benchmarks for GPU (CUDA / PyTorch / vLLM) workloads with CRIU and the NVIDIA
+`cuda-checkpoint` driver API, comparing upstream CRIU with our fork
+([oOraph/criu](https://github.com/oOraph/criu)).
 
-## What it measures
+## Headline result (2026-10-05)
 
-The benchmark runs a PyTorch test application that allocates GPU tensors of configurable size (`TENSOR_SIZE`, default 60 000), checkpoints it with CRIU, then restores it and verifies tensor integrity. It reports:
+vLLM serving **gpt-oss-120b** on an **A100-80GB** (AWS `p4de.24xlarge`, 8× NVMe RAID-0 at 16 GB/s,
+driver 615.71.09). vLLM fills the card with KV cache, so the checkpoint is **76 GB of GPU memory**
+regardless of the model (Qwen3-8B gives the same numbers). Cold start of the server is 3 minutes.
 
-- **Dump time** — time (ms) for `criu dump` (run inside the container's namespaces via `nsenter`) to checkpoint the process and flush GPU memory to disk
-- **Restore time** — time (ms) from `criu restore` (also run inside the container's namespaces) until the process is live and writing output again
-- **GPU pages size** — size of the dumped GPU memory image
-- **CPU pages size** — size of the dumped host memory pages
+![gpt-oss-120b on A100: dump/restore seconds per CRIU variant](results/2026-10_p4de_custom_storage_615/gptoss-120b-a100.png)
 
-Three CRIU builds are compared head-to-head:
+| variant | dump | restore | what it does |
+|---|---|---|---|
+| upstream `criu-dev` `4485a86da`, `--image-io-mode=direct` | 59 s | 42 s | driver copies VRAM to host RAM, CRIU writes those pages like any other memory |
+| our plugin, parallel staging pages | 66 s | 17 s | driver still copies VRAM↔host RAM; the plugin moves the staging pages itself with O_DIRECT and 16 `process_vm_writev` threads (21 GB/s on restore), bypassing the page cache |
+| our plugin + **CUDA custom storage** (driver ≥ 615) | **11.5 s** | **10.6 s** | the plugin reads/writes VRAM directly through driver-exposed device mappings, pinned buffers and CUDA streams; no host staging copy at all |
 
-| Label | Branch | Description |
+Restore is now 7 s of VRAM copy (10.8 GB/s into the mapping) plus 3 s of CRIU work on the 3.7 GB of CPU
+pages and the process tree. Details, per-run numbers and raw logs:
+[results/2026-10_p4de_custom_storage_615/](results/2026-10_p4de_custom_storage_615/summary.md).
+
+## What is compared
+
+| Image target | Source | Description |
 |---|---|---|
-| `orig` | `criu-dev` | Baseline / upstream-tracking build |
-| `new` | `criu-optimized` | Optimized CRIU build (contains https://github.com/checkpoint-restore/criu/pull/3021 + 3022 on top of criu-dev) |
-| `home-made` | `fast-cuda-1` | Experimental fast CUDA checkpoint plugin (optimization scoped to the cuda plugin only where we offload gpu memory pages to drive with O_DIRECT) |
+| `criu-upstream-head` | `checkpoint-restore/criu` `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads behind `--image-io-mode=direct`), LZ4 |
+| `criu-ref` (`CRIU_REF=…`) | `oOraph/criu` branch of your choice | our fork. `fast_cuda_plugin_on_head` = staging pages via O_DIRECT (serial restore); `fast_cuda_plugin_on_head_parallel` = + parallel `process_vm_writev` restore; `upstream-cuda-custom-storage` = clean series for the upstream PR: custom storage + staging-page offload |
+| `criu-v42-ours` | tag `v4.2-cuda-plugin-optim` | what production ran until 2026-10 |
+| `criu-local` | the checkout at `../criu` | for local iteration |
+| `criu-dev`, `criu-optimized`, `criu-fast-cuda-1` | June 2026 builds | kept for the June results |
 
-### 2026-10 variants
+`Dockerfile.vllm` builds the same CRIU variants into a vLLM image (`APP_IMAGE`, `CRIU_REPO`, `CRIU_REF`).
 
-| Label | Image target | Description |
-|---|---|---|
-| `v42-ours` | `criu-v42-ours` | CRIU v4.2 + custom CUDA plugin (tag `v4.2-cuda-plugin-optim`, what production runs) |
-| `upstream` | `criu-upstream-head` | upstream `criu-dev` pinned at `4485a86da` (2026-10-01): libcuda driver-api backend, PR #3021/#3022, LZ4 |
-| `upstream-direct` | `criu-upstream-head` | same + `--image-io-mode=direct` (O_DIRECT/AIO page reads are OFF by default since PR #3066) |
-| `upstream-cli-direct` | `criu-upstream-head` | same + `--plugin-option=cuda_plugin.backend=cuda-checkpoint` (CLI backend instead of libcuda) |
+### Why the plugin is faster
 
-Scenarios are defined in `bench_compare.sh` as `label|image|extra criu options` (options are passed to both dump and restore). Override with `SCENARIOS="a|img|opts;b|img2|opts2"`.
+With `cuda-checkpoint` the driver copies all of VRAM into the target process's host memory, and CRIU
+then dumps that memory as ordinary pages. Upstream pays the driver copy (A100: ~38 s for 76 GB at
+~2 GB/s on dump, ~10 s on restore) plus a page-cache-bound write/read of the same volume. Our plugin
+detects the staging VMAs, writes them with O_DIRECT and drops them from the target (dump), and on
+restore fills them in parallel straight from disk before the driver copies them back. With the
+CUDA 13.4 custom-storage API (driver ≥ 615) the driver copy disappears entirely: the plugin streams VRAM
+to and from disk itself, and the time is the disk or PCIe time, whichever is slower.
+
+## Benchmarks
+
+| Script | What it measures |
+|---|---|
+| `bench_compare.sh` | synthetic: a torch app holding `TENSOR_SIZE`² floats (60 000 ≈ 14.9 GB), dump and restore with integrity check; scenarios `label\|image\|criu options` |
+| `bench_vllm.sh` | real inference: `vllm serve` checkpointed while serving, restore timed until `/health` answers, then a completion validates the engine; `SLEEP_MODE=1` adds vLLM sleep level 1 before the dump |
+| `bench_sdxl.sh` | huggingface-inference-toolkit + SDXL |
+| `fio.sh` | storage ceiling of the box (sync qd1, libaio qd32, raw single drive) |
+| `run_p4de_cs.sh` | the one-shot session behind the headline result (driver, images, weights, tensor + vLLM matrices) |
+| `proto/` | standalone custom-storage prototype (`cuda_cs.c`), driver `.run` installer with Fabric Manager handling, probes |
+
+CRIU runs as root on the host and enters the app container's namespaces with `nsenter`, as runc does.
+Dump directories live on the NVMe array; caches are dropped between dump and restore (`DROP_CACHE=yes`).
+
+### vLLM dumpability recipe
+
+The server must be started with `UV_USE_IO_URING=0` (uvloop would use io_uring, undumpable),
+`HF_HUB_OFFLINE=1 VLLM_NO_USAGE_STATS=1 DO_NOT_TRACK=1` (no open HTTPS sessions to the Hub),
+`GLOO_SOCKET_IFNAME=lo` and `TORCH_NCCL_ENABLE_MONITORING=0 TORCH_NCCL_DUMP_ON_TIMEOUT=0`.
+CRIU options: `--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap`.
+Sleep mode needs `VLLM_SERVER_DEV_MODE=1`. `bench_vllm.sh` sets all of this.
 
 ## Setup
 
-The benchmark targets a bare-metal machine with:
-- 4× NVMe drives striped into a RAID-0 at `/mnt/nvme` (for maximum I/O throughput)
-- NVIDIA GPU with driver persistence mode enabled (`nvidia-smi -pm 1`)
-- Docker + nvidia-container-toolkit
-
-Run `setup.sh` to install everything (NVIDIA driver, Docker, nvidia-container-toolkit, RAID array). BEWARE, use in a disposable vm.
-The script auto-detects the free instance-store NVMe disks and stripes them (a single disk is used as is). Driver version defaults to `NVIDIA_DRIVER=610` (Ubuntu 26.04 ships 610.57.04 and 595.91.07 as of 2026-10).
-
-## Build
+Disposable VM with NVMe instance store, an NVIDIA GPU, Ubuntu 24.04/26.04.
 
 ```bash
-docker build --target criu-dev -t criu-dev .
-docker build --target criu-optimized -t criu-optimized .
-docker build --target criu-fast-cuda-1 -t criu-fast-cuda-1 .
-# 2026-10 variants
-docker build --target criu-v42-ours -t criu-v42-ours .
+./setup.sh                      # NVIDIA driver (NVIDIA_DRIVER=610 from the Ubuntu archive), Docker, nvidia-container-toolkit,
+                                # RAID-0 of the free NVMe drives at /mnt/nvme (single drive used as is)
+SKIP_DRIVER=1 ./setup.sh        # keep a preinstalled driver
+sudo proto/install-driver-run.sh 615.71.09   # proprietary driver from NVIDIA's .run (needed for custom storage, driver >= 615);
+                                             # on NVSwitch boards (p4d/p4de/p5) also installs the matching nvidia-fabricmanager
+                                             # from NVIDIA's CUDA apt repo (the Ubuntu archive stops at 595)
+```
+
+Fast storage matters: on a single NVMe (g5: ~2.5 GB/s read) every variant is disk-bound and the gains
+shrink; the 16 GB/s array of the p4de is what exposes the plugin ceilings.
+
+## Build and run
+
+```bash
 docker build --target criu-upstream-head -t criu-upstream-head .
-```
+docker build --target criu-ref -t criu-head-cs --build-arg CRIU_REF=upstream-cuda-custom-storage .
 
-## Run
+# synthetic
+SCENARIOS="cs-on|criu-head-cs|--plugin-option=cuda_plugin.custom-storage=on;upstream-direct|criu-upstream-head|--image-io-mode=direct" \
+  TENSOR_SIZE=60000 RUNS=2 sudo -E ./bench_compare.sh
 
-```bash
-# Run all three scenarios, 2 rounds each
-./bench_compare.sh
-
-# Tune parameters
-TENSOR_SIZE=100000 RUNS=5 ./bench_compare.sh
-```
-
-Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lines for easy grepping.
-
-## Real-inference benchmark (vLLM)
-
-`bench_vllm.sh` checkpoints and restores a running `vllm serve` (OpenAI API server) inside a Docker
-container that carries CRIU, reproducing the June 2026 Kubernetes measurements
-(`results/real_inference`) on a bench box. Images come from `Dockerfile.vllm` (vLLM image + CRIU
-built from a chosen ref). Restore time is measured until `/health` answers; a completion request
-then validates the engine. CRIU options follow the shim's vLLM settings plus the k8s recipe
-(`--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap`), and the
-server runs with `UV_USE_IO_URING=0` (uvloop would use io_uring, undumpable), `HF_HUB_OFFLINE=1
-VLLM_NO_USAGE_STATS=1 DO_NOT_TRACK=1` (no open HTTPS sessions), `GLOO_SOCKET_IFNAME=lo`,
-`TORCH_NCCL_ENABLE_MONITORING=0 TORCH_NCCL_DUMP_ON_TIMEOUT=0`.
-
-```bash
+# vLLM
 docker build -f Dockerfile.vllm -t vllm-criu-upstream --build-arg CRIU_REPO=https://github.com/checkpoint-restore/criu.git --build-arg CRIU_REF=4485a86da237 .
-docker build -f Dockerfile.vllm -t vllm-criu-ours     --build-arg CRIU_REF=fast_cuda_plugin_on_head .
-docker build -f Dockerfile.vllm -t vllm-criu-parallel --build-arg CRIU_REF=fast_cuda_plugin_on_head_parallel .
-# weights go to $HF_CACHE (default /mnt/nvme/hf), e.g. `hf download Qwen/Qwen3-8B`
-MODEL=Qwen/Qwen3-8B RUNS=2 sudo -E ./bench_vllm.sh
+docker build -f Dockerfile.vllm -t vllm-criu-cs --build-arg CRIU_REF=upstream-cuda-custom-storage .
+hf download openai/gpt-oss-120b --cache-dir /mnt/nvme/hf   # weights go to $HF_CACHE
+MODEL=openai/gpt-oss-120b RUNS=2 \
+  SCENARIOS="cs-on|vllm-criu-cs|--plugin-option=cuda_plugin.custom-storage=on;upstream-direct|vllm-criu-upstream|--image-io-mode=direct" \
+  sudo -E ./bench_vllm.sh
 ```
 
-## Results
+Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lines.
 
-- [results/2026-10_g5.12xlarge_a10g/summary.md](results/2026-10_g5.12xlarge_a10g/summary.md) — production plugin (v4.2) vs upstream `criu-dev` head `4485a86da` on AWS `g5.12xlarge` (A10G, driver 610), `TENSOR_SIZE=60000`
-- [results/mini_benchmark/summary.md](results/mini_benchmark/summary.md) — synthetic benchmark on AWS `g6.12xlarge` (NVIDIA L4, `TENSOR_SIZE=60000`)
-- [results/real_inference/summary.md](results/real_inference/summary.md) — real inference workloads (SDXL, Llama-3.1-8B, Qwen3-8B) via runc checkpoint / restore + cuda plugin + cuda-checkpoint
-- [results/vllm_sleep_awake/summary.md](results/vllm_sleep_awake/summary.md) — vLLM cooperative sleep/wake-up benchmark (Llama-3.1-8B, Qwen3-8B)
+## All results
+
+| Date | Box | What | Link |
+|---|---|---|---|
+| 2026-10-05 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **custom storage vs parallel plugin vs upstream**, tensor + gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_custom_storage_615/summary.md) |
+| 2026-10-02 | p4de.24xlarge, A100-80GB, driver 595 | plugin ceilings with the disk out of the way: serial vs parallel restore, upstream; SDXL, Qwen3-8B (plain and sleep level 1) and gpt-oss-120b through vLLM; the "driver copy" measurements that motivated custom storage | [summary](results/2026-10_p4de.24xlarge_a100/summary.md) |
+| 2026-10-02 | g5.12xlarge, A10G, driver 615 | first custom-storage prototype measurements (standalone tool, single NVMe, tmpfs ceiling) | [summary](results/2026-10_g5_custom_storage_615/summary.md) |
+| 2026-10-02 | g6.48xlarge, 8× L4, 8× NVMe capped at 5 GB/s | is the plugin or the disk the bottleneck (tensor test, mlock control) | [summary](results/2026-10_g6.48xlarge_l4/summary.md) |
+| 2026-10-01 | g5.12xlarge, A10G, single NVMe | production plugin (v4.2) vs upstream head | [summary](results/2026-10_g5.12xlarge_a10g/summary.md) |
+| 2026-06 | g6.12xlarge, L4 | synthetic mini benchmark, June builds | [summary](results/mini_benchmark/summary.md) |
+| 2026-06 | g6.12xlarge, L4, Kubernetes | real inference (SDXL, Llama-3.1-8B, Qwen3-8B) via runc checkpoint/restore | [summary](results/real_inference/summary.md) |
+| 2026-06 | g6.12xlarge, L4 | vLLM cooperative sleep/wake-up (Llama-3.1-8B, Qwen3-8B) | [summary](results/vllm_sleep_awake/summary.md) |
