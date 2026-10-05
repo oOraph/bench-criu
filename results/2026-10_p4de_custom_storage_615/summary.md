@@ -36,5 +36,5 @@ replaces that with 10.6 s.
 - The copy rate into the mapping on the A100 (10.8 GB/s H2D, 8.9 GB/s D2H with 4 threads) matches the A10G
   plateau (~12 GB/s); the array (16 GB/s) is not the limit. The remaining restore lever is CRIU core (~3 s);
   the remaining copy lever is the mapping's rate (copy-engine/NUMA placement experiments pending).
-- Against upstream criu-dev on the same box and driver: restore 42 s → 10.6 s (−75%), dump 59 s → 11.5 s (−80%).
+- **Against upstream criu-dev on the same box and driver: restore 42 s → 10.6 s (−75%), dump 59 s → 11.5 s (−80%).**
   Upstream measured 46.9 s restore on the 2026-10-02 p4de (driver 595); the 42 s here is a different box and driver, cause not isolated.
