@@ -26,11 +26,11 @@ pages and the process tree. Details, per-run numbers and raw logs:
 
 | Image target | Source | Description |
 |---|---|---|
-| `criu-upstream-head` | `checkpoint-restore/criu` `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads behind `--image-io-mode=direct`), LZ4 |
+| `criu-upstream-head` | `checkpoint-restore/criu` `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads), `--image-io-mode=direct` (PR #3066, off by default), LZ4 |
 | `criu-ref` (`CRIU_REF=…`) | `oOraph/criu` branch of your choice | our fork. `fast_cuda_plugin_on_head` = staging pages via O_DIRECT (serial restore); `fast_cuda_plugin_on_head_parallel` = + parallel `process_vm_writev` restore; `upstream-cuda-custom-storage` = clean series for the upstream PR: custom storage + staging-page offload |
-| `criu-v42-ours` | tag `v4.2-cuda-plugin-optim` | what production ran until 2026-10 |
-| `criu-local` | the checkout at `../criu` | for local iteration |
-| `criu-dev`, `criu-optimized`, `criu-fast-cuda-1` | June 2026 builds | kept for the June results |
+| `criu-v42-ours` | tag `v4.2-cuda-plugin-optim` (= branch `fast_cuda_plugin_final`) | what production runs (2026-10): CRIU v4.2 + our plugin, serial restore |
+| `criu-local` | `./criu-src` (git-ignored; rsync your checkout into it) | validate a branch without pushing it |
+| `criu-dev`, `criu-optimized`, `criu-fast-cuda-1` | `criu-dev` @ `4d76d1acd`, branch `optim1`, branch `fast-cuda-1` | June 2026 trio: baseline before PR #3021/#3022, baseline + both PRs, baseline + our plugin; kept for the June results |
 
 `Dockerfile.vllm` builds the same CRIU variants into a vLLM image (`APP_IMAGE`, `CRIU_REPO`, `CRIU_REF`).
 
