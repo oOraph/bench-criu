@@ -6,7 +6,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-variants = ["upstream criu-dev\n(--image-io-mode=direct)", "our plugin\n(parallel staging pages)", "our plugin\n+ CUDA custom storage"]
+variants = ["upstream criu-dev\n(--image-io-mode=direct)", "our branch, custom storage off\n(parallel staging-page offload)", "our branch, custom storage on\n(driver >= 615)"]
 dump = [(59.378 + 58.467) / 2, (66.699 + 65.554) / 2, (11.481 + 11.497) / 2]
 restore = [(41.928 + 42.314) / 2, (16.914 + 16.981) / 2, (10.556 + 10.553) / 2]
 

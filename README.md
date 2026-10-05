@@ -1,8 +1,8 @@
 # bench-criu
 
 Checkpoint/restore benchmarks for GPU (CUDA / PyTorch / vLLM) workloads with CRIU and the NVIDIA
-`cuda-checkpoint` driver API, comparing upstream CRIU with our fork
-([oOraph/criu](https://github.com/oOraph/criu)).
+`cuda-checkpoint` driver API, comparing upstream CRIU with the changes we propose upstream
+([oOraph/criu `upstream-cuda-custom-storage`](https://github.com/oOraph/criu/tree/upstream-cuda-custom-storage)).
 
 ## Headline result (2026-10-05)
 
@@ -15,8 +15,8 @@ regardless of the model (Qwen3-8B gives the same numbers). Cold start of the ser
 | variant | dump | restore | what it does |
 |---|---|---|---|
 | upstream `criu-dev` `4485a86da`, `--image-io-mode=direct` | 59 s | 42 s | driver copies VRAM to host RAM, CRIU writes those pages like any other memory |
-| our plugin, parallel staging pages | 66 s | 17 s | driver still copies VRAM↔host RAM; the plugin moves the staging pages itself with O_DIRECT and 16 `process_vm_writev` threads (21 GB/s on restore), bypassing the page cache |
-| our plugin + **CUDA custom storage** (driver ≥ 615) | **11.5 s** | **10.6 s** | the plugin reads/writes VRAM directly through driver-exposed device mappings, pinned buffers and CUDA streams; no host staging copy at all |
+| our branch, custom storage off | 66 s | 17 s | driver still copies VRAM↔host RAM; the plugin moves the staging pages itself with O_DIRECT and 16 `process_vm_writev` threads (21 GB/s on restore), bypassing the page cache |
+| our branch, **custom storage on** (driver ≥ 615) | **11.5 s** | **10.6 s** | the plugin reads/writes VRAM directly through driver-exposed device mappings, pinned buffers and CUDA streams; no host staging copy at all |
 
 Restore is now 7 s of VRAM copy (10.8 GB/s into the mapping) plus 3 s of CRIU work on the 3.7 GB of CPU
 pages and the process tree. Details, per-run numbers and raw logs:
@@ -26,13 +26,12 @@ pages and the process tree. Details, per-run numbers and raw logs:
 
 | Image target | Source | Description |
 |---|---|---|
-| `criu-upstream-head` | `checkpoint-restore/criu` `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads), `--image-io-mode=direct` (PR #3066, off by default), LZ4 |
-| `criu-ref` (`CRIU_REF=…`) | `oOraph/criu` branch of your choice | our fork. `fast_cuda_plugin_on_head` = staging pages via O_DIRECT (serial restore); `fast_cuda_plugin_on_head_parallel` = + parallel `process_vm_writev` restore; `upstream-cuda-custom-storage` = clean series for the upstream PR: custom storage + staging-page offload |
-| `criu-v42-ours` | tag `v4.2-cuda-plugin-optim` (= branch `fast_cuda_plugin_final`) | CRIU v4.2 + our plugin, serial restore (the pre-October state of the fork) |
-| `criu-local` | `./criu-src` (git-ignored; rsync your checkout into it) | validate a branch without pushing it |
-| `criu-dev`, `criu-optimized`, `criu-fast-cuda-1` | `criu-dev` @ `4d76d1acd`, branch `optim1`, branch `fast-cuda-1` | June 2026 trio: baseline before PR #3021/#3022, baseline + both PRs, baseline + our plugin; kept for the June results |
+| `criu-upstream-head` | [checkpoint-restore/criu](https://github.com/checkpoint-restore/criu) `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads), `--image-io-mode=direct` (PR #3066, off by default), LZ4 |
+| `criu-ref` with `CRIU_REF=upstream-cuda-custom-storage` | [oOraph/criu](https://github.com/oOraph/criu/tree/upstream-cuda-custom-storage) | upstream head + the series proposed upstream: staging-page offload (O_DIRECT, parallel `process_vm_writev` restore) and CUDA custom storage (`--plugin-option=cuda_plugin.custom-storage=auto\|on\|off`, `auto` enables it on driver ≥ 615) |
 
-`Dockerfile.vllm` builds the same CRIU variants into a vLLM image (`APP_IMAGE`, `CRIU_REPO`, `CRIU_REF`).
+`Dockerfile.vllm` builds either CRIU into a vLLM image (`APP_IMAGE`, `CRIU_REPO`, `CRIU_REF`). Older
+targets in the `Dockerfile` (`criu-dev`, `criu-optimized`, `criu-fast-cuda-1`, `criu-v42-ours`) are the
+builds behind the earlier result sets and are described in those summaries.
 
 ### Why the plugin is faster
 

@@ -28,9 +28,9 @@ Sequential read, 1M block, 32 parallel jobs, `ioengine=sync`, `iodepth=1`:
 - `RUNS=2`, `DROP_CACHE=yes` (page cache dropped between dump and restore)
 - Dump dir on `/mnt/nvme` (RAID-0 NVMe)
 - Images compared:
-  - **orig** (`criu-dev`): upstream CRIU, no CUDA plugin
-  - **new** (`criu-optimized`): upstream CRIU + PR #2022 (native AIO page reads + O_DIRECT), no CUDA plugin
-  - **home-made** (`criu-fast-cuda-1`): upstream CRIU + [custom CUDA plugin](https://github.com/oOraph/criu/tree/fast_cuda_plugin_final) (GPU pages offloaded to `gpu-pages-*.img`)
+  - **orig** (`criu-dev`, Dockerfile target of the same name = upstream `criu-dev` @ `4d76d1acd`, just before PR #3021/#3022 were merged): upstream CRIU, no CUDA plugin
+  - **new** (`criu-optimized` = branch `optim1`): upstream CRIU + PR #2022 (native AIO page reads + O_DIRECT), no CUDA plugin
+  - **home-made** (`criu-fast-cuda-1` = branch `fast-cuda-1`): upstream CRIU + [custom CUDA plugin](https://github.com/oOraph/criu/tree/fast_cuda_plugin_final) (GPU pages offloaded to `gpu-pages-*.img`)
 
 ## Results
 
