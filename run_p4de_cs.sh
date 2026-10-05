@@ -1,5 +1,5 @@
 #!/bin/bash
-# End-to-end session for an HGX box (p4de): driver 615 + Fabric Manager, images, weights, then the
+# End-to-end session on a p4de (single A100-80GB + 8× NVMe RAID-0 at 16 GB/s; the NVSwitch board only matters because it forces driver 615 + matching Fabric Manager), images, weights, then the
 # custom-storage matrix. Run from ~/bench-criu on the box after `setup.sh` (SKIP_DRIVER=1) has installed
 # Docker/toolkit and the NVMe array. Each phase appends to ~/p4de-cs-status.txt; logs in ~/.
 #   CRIU_REF=upstream-cuda-custom-storage ./run_p4de_cs.sh
