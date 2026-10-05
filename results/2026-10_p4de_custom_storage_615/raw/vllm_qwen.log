@@ -1,0 +1,116 @@
+[08:59:23] === vLLM benchmark: MODEL=Qwen/Qwen3-8B SLEEP_MODE=0 RUNS=2 DROP_CACHE=yes CUDA_RESTORE_THREADS=16 CRIU_BASE_OPTS='--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap'
+
+=== SCENARIO qwen-cs-on: image=vllm-criu-cs opts='--plugin-option=cuda_plugin.custom-storage=on' ===
+[08:59:24] [qwen-cs-on run=1] starting container image=vllm-criu-cs model=Qwen/Qwen3-8B
+[08:59:28] [qwen-cs-on run=1] waiting for /health (timeout 900s)
+[09:01:51] [qwen-cs-on run=1] server READY after 143s
+[09:01:51] [qwen-cs-on run=1] app_pid=63 (container ns) init_pid=143127; tree:
+    PID    PPID   RSS COMMAND
+     65      63 1462464  \_ python3
+    676      65 12608      \_ python3
+    677      65 2660972      \_ VLLM::EngineCor
+[09:01:51] [qwen-cs-on run=1] dump start
+(00.288128) cuda_plugin: [timing] Driver API checkpoint: 162 ms
+(08.979347) cuda_cs: [timing] custom-storage checkpoint copy: 75.87 GB, 4 threads, 8568 ms (8.9 GB/s, O_DIRECT)
+(09.092084) cuda_plugin: [timing] Driver API checkpoint: 8804 ms
+[09:02:02] [qwen-cs-on run=1] dump=11218ms rc=0 gpu-pages=0
+none pages-*.img=3.0G
+[09:02:02] drop caches
+[09:02:03] [qwen-cs-on run=1] restore start
+(02.450104) cuda_plugin: [timing] Driver API restore+unlock: 314 ms
+(09.751558) cuda_cs: [timing] custom-storage restore copy: 75.87 GB, 4 threads, 7069 ms (10.7 GB/s, O_DIRECT)
+(09.780459) cuda_plugin: [timing] Driver API restore+unlock: 7330 ms
+[09:02:13] [qwen-cs-on run=1] restore=10089ms
+[09:02:14] [qwen-cs-on run=1] inference=OK infer_ms=785 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=qwen-cs-on run=1 coldstart_s=143 sleep_ms=n/a dump_ms=11218 restore_ms=10089 wake_ms=n/a inference=OK infer_ms=785
+benchvllm
+
+[09:02:17] [qwen-cs-on run=2] starting container image=vllm-criu-cs model=Qwen/Qwen3-8B
+[09:02:21] [qwen-cs-on run=2] waiting for /health (timeout 900s)
+[09:04:45] [qwen-cs-on run=2] server READY after 144s
+[09:04:45] [qwen-cs-on run=2] app_pid=64 (container ns) init_pid=152169; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1458524  \_ python3
+    668      66 12504      \_ python3
+    669      66 2665632      \_ VLLM::EngineCor
+[09:04:45] [qwen-cs-on run=2] dump start
+(00.279619) cuda_plugin: [timing] Driver API checkpoint: 162 ms
+(08.974145) cuda_cs: [timing] custom-storage checkpoint copy: 75.87 GB, 4 threads, 8569 ms (8.9 GB/s, O_DIRECT)
+(09.084956) cuda_plugin: [timing] Driver API checkpoint: 8805 ms
+[09:04:56] [qwen-cs-on run=2] dump=11082ms rc=0 gpu-pages=0
+none pages-*.img=3.0G
+[09:04:56] drop caches
+[09:04:57] [qwen-cs-on run=2] restore start
+(02.415948) cuda_plugin: [timing] Driver API restore+unlock: 314 ms
+(09.719749) cuda_cs: [timing] custom-storage restore copy: 75.87 GB, 4 threads, 7066 ms (10.7 GB/s, O_DIRECT)
+(09.745434) cuda_plugin: [timing] Driver API restore+unlock: 7329 ms
+[09:05:07] [qwen-cs-on run=2] restore=10050ms
+[09:05:08] [qwen-cs-on run=2] inference=OK infer_ms=791 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=qwen-cs-on run=2 coldstart_s=144 sleep_ms=n/a dump_ms=11082 restore_ms=10050 wake_ms=n/a inference=OK infer_ms=791
+benchvllm
+
+
+=== SCENARIO qwen-cs-off: image=vllm-criu-cs opts='--plugin-option=cuda_plugin.custom-storage=off' ===
+[09:05:10] [qwen-cs-off run=1] starting container image=vllm-criu-cs model=Qwen/Qwen3-8B
+[09:05:14] [qwen-cs-off run=1] waiting for /health (timeout 900s)
+[09:07:37] [qwen-cs-off run=1] server READY after 143s
+[09:07:37] [qwen-cs-off run=1] app_pid=64 (container ns) init_pid=161313; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1458716  \_ python3
+    682      66 12616      \_ python3
+    683      66 2664588      \_ VLLM::EngineCor
+[09:07:37] [qwen-cs-off run=1] dump start
+(00.120152) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.128248) cuda_plugin: [timing] post-scan+diff: 4 ms, 0 new VMAs
+(37.239547) cuda_plugin: [timing] Driver API checkpoint: 37105 ms
+(37.250674) cuda_plugin: [timing] post-scan+diff: 5 ms, 1 new VMAs
+(60.123957) [timing] dump: process_vm_readv=16522 ms O_DIRECT_write=6351 ms total=22873 ms
+(60.127374) cuda_plugin: [timing] process_vm_readv dump: 22877 ms (3.3 GB/s)
+(63.169936) cuda_plugin: [timing] injected madvise(DONTNEED): 3043 ms
+[09:08:42] [qwen-cs-off run=1] dump=65076ms rc=0 gpu-pages=71G pages-*.img=3.0G
+[09:08:42] drop caches
+[09:08:43] [qwen-cs-off run=1] restore start
+(02.103458) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.121394) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.294664) cuda_plugin: [timing] Driver API restore+unlock: 173 ms
+(05.787593) [timing] parallel restore: 3487 ms (21.8 GB/s) [16 threads, 1131 chunks, O_DIRECT]
+(05.787667) cuda_plugin: [timing] GPU page restore: 3488 ms
+(15.349636) cuda_plugin: [timing] Driver API restore+unlock: 9562 ms
+(15.349887) cuda_plugin: [timing] GPU page restore: 0 ms
+[09:08:59] [qwen-cs-off run=1] restore=15662ms
+[09:09:00] [qwen-cs-off run=1] inference=OK infer_ms=802 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=qwen-cs-off run=1 coldstart_s=143 sleep_ms=n/a dump_ms=65076 restore_ms=15662 wake_ms=n/a inference=OK infer_ms=802
+benchvllm
+
+[09:09:02] [qwen-cs-off run=2] starting container image=vllm-criu-cs model=Qwen/Qwen3-8B
+[09:09:06] [qwen-cs-off run=2] waiting for /health (timeout 900s)
+[09:11:29] [qwen-cs-off run=2] server READY after 143s
+[09:11:29] [qwen-cs-off run=2] app_pid=63 (container ns) init_pid=170530; tree:
+    PID    PPID   RSS COMMAND
+     65      63 1425452  \_ python3
+    670      65 12564      \_ python3
+    671      65 2673988      \_ VLLM::EngineCor
+[09:11:29] [qwen-cs-off run=2] dump start
+(00.125664) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.133752) cuda_plugin: [timing] post-scan+diff: 4 ms, 0 new VMAs
+(37.713517) cuda_plugin: [timing] Driver API checkpoint: 37574 ms
+(37.725168) cuda_plugin: [timing] post-scan+diff: 6 ms, 1 new VMAs
+(61.048161) [timing] dump: process_vm_readv=16823 ms O_DIRECT_write=6498 ms total=23322 ms
+(61.051457) cuda_plugin: [timing] process_vm_readv dump: 23326 ms (3.3 GB/s)
+(64.092807) cuda_plugin: [timing] injected madvise(DONTNEED): 3041 ms
+[09:12:35] [qwen-cs-off run=2] dump=65970ms rc=0 gpu-pages=71G pages-*.img=2.9G
+[09:12:35] drop caches
+[09:12:36] [qwen-cs-off run=2] restore start
+(02.100739) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.115816) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.288207) cuda_plugin: [timing] Driver API restore+unlock: 172 ms
+(06.005834) [timing] parallel restore: 3711 ms (20.4 GB/s) [16 threads, 1131 chunks, O_DIRECT]
+(06.005886) cuda_plugin: [timing] GPU page restore: 3712 ms
+(16.354358) cuda_plugin: [timing] Driver API restore+unlock: 10348 ms
+(16.354796) cuda_plugin: [timing] GPU page restore: 0 ms
+[09:12:53] [qwen-cs-off run=2] restore=16656ms
+[09:12:54] [qwen-cs-off run=2] inference=OK infer_ms=801 text="text":" Paris. The capital of Italy is Rome. The capital of Germany is Berlin."
+RESULT label=qwen-cs-off run=2 coldstart_s=143 sleep_ms=n/a dump_ms=65970 restore_ms=16656 wake_ms=n/a inference=OK infer_ms=801
+benchvllm
+
+[09:12:56] === All vLLM benchmarks complete ===

@@ -1,0 +1,62 @@
+[08:14:29] === driver 615.71.09 + Fabric Manager
+NVIDIA A100-SXM4-80GB, 615.71.09, Enabled
+    Fabric
+        State                                          : N/A
+[08:20:31] (bench image not built yet, CUDA check deferred)
+[08:20:31] === fio
+=== seqread 1M, 32 sync jobs, qd1 (historical)
+   READ: bw=15.0GiB/s (16.1GB/s), 15.0GiB/s-15.0GiB/s (16.1GB/s-16.1GB/s), io=673GiB (723GB), run=45004-45004msec
+=== seqread 1M, libaio, 8 jobs x qd32 (array ceiling)
+   READ: bw=15.0GiB/s (16.1GB/s), 15.0GiB/s-15.0GiB/s (16.1GB/s-16.1GB/s), io=449GiB (482GB), run=30018-30018msec
+=== raw single drive /dev/nvme1n1, libaio, 4 jobs x qd32 (read-only)
+   READ: bw=1918MiB/s (2011MB/s), 1918MiB/s-1918MiB/s (2011MB/s-2011MB/s), io=37.5GiB (40.3GB), run=20034-20034msec
+[08:22:42] === images (CRIU bench + vLLM) and weights
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+cuda ok NVIDIA A100-SXM4-80GB
+[08:30:24] === smoke
+RESULT label=smoke-cs-on run=1 dump_ms=1080 restore_ms=970
+RESULT label=smoke-cs-off run=1 dump_ms=1014 restore_ms=648
+RESULT label=smoke-upstream run=1 dump_ms=906 restore_ms=755
+[08:30:39] === tensor 14.7 GB
+(02.715465) cuda_cs: [timing] custom-storage restore copy: 14.92 GB, 4 threads, 1636 ms (9.1 GB/s, O_DIRECT)
+(02.730281) cuda_plugin: [timing] Driver API restore+unlock: 2086 ms
+RESULT label=cs-on run=1 dump_ms=2484 restore_ms=2988
+(02.643994) cuda_cs: [timing] custom-storage restore copy: 14.92 GB, 4 threads, 1617 ms (9.2 GB/s, O_DIRECT)
+(02.655057) cuda_plugin: [timing] Driver API restore+unlock: 2005 ms
+RESULT label=cs-on run=2 dump_ms=2489 restore_ms=2874
+(01.530535) [timing] parallel restore: 895 ms (16.7 GB/s) [8 threads, 223 chunks, O_DIRECT]
+(03.656317) cuda_plugin: [timing] Driver API restore+unlock: 2126 ms
+RESULT label=cs-off run=1 dump_ms=12959 restore_ms=3854
+(01.488889) [timing] parallel restore: 851 ms (17.5 GB/s) [8 threads, 223 chunks, O_DIRECT]
+(03.764713) cuda_plugin: [timing] Driver API restore+unlock: 2275 ms
+RESULT label=cs-off run=2 dump_ms=13009 restore_ms=3966
+RESULT label=upstream-direct run=1 dump_ms=11225 restore_ms=9010
+RESULT label=upstream-direct run=2 dump_ms=11236 restore_ms=8870
+[08:33:26] === vLLM gpt-oss-120b
+(09.015358) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8534 ms (8.9 GB/s, O_DIRECT)
+(09.155072) cuda_plugin: [timing] Driver API checkpoint: 8850 ms
+(10.205040) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 7088 ms (10.8 GB/s, O_DIRECT)
+(10.247498) cuda_plugin: [timing] Driver API restore+unlock: 7432 ms
+RESULT label=gptoss-cs-on run=1 coldstart_s=185 sleep_ms=n/a dump_ms=11481 restore_ms=10556 wake_ms=n/a inference=OK infer_ms=2843
+(09.085851) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8633 ms (8.8 GB/s, O_DIRECT)
+(09.219138) cuda_plugin: [timing] Driver API checkpoint: 8943 ms
+(10.193882) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 7081 ms (10.8 GB/s, O_DIRECT)
+(10.242541) cuda_plugin: [timing] Driver API restore+unlock: 7431 ms
+RESULT label=gptoss-cs-on run=2 coldstart_s=180 sleep_ms=n/a dump_ms=11497 restore_ms=10553 wake_ms=n/a inference=OK infer_ms=2865
+(38.151952) cuda_plugin: [timing] Driver API checkpoint: 37999 ms
+(06.255259) [timing] parallel restore: 3547 ms (21.5 GB/s) [16 threads, 1136 chunks, O_DIRECT]
+(16.607455) cuda_plugin: [timing] Driver API restore+unlock: 10352 ms
+RESULT label=gptoss-cs-off run=1 coldstart_s=179 sleep_ms=n/a dump_ms=66699 restore_ms=16914 wake_ms=n/a inference=OK infer_ms=2884
+(37.351544) cuda_plugin: [timing] Driver API checkpoint: 37207 ms
+(06.256350) [timing] parallel restore: 3564 ms (21.4 GB/s) [16 threads, 1136 chunks, O_DIRECT]
+(16.669365) cuda_plugin: [timing] Driver API restore+unlock: 10413 ms
+RESULT label=gptoss-cs-off run=2 coldstart_s=178 sleep_ms=n/a dump_ms=65554 restore_ms=16981 wake_ms=n/a inference=OK infer_ms=2895
+RESULT label=gptoss-upstream-direct run=1 coldstart_s=177 sleep_ms=n/a dump_ms=59378 restore_ms=41928 wake_ms=n/a inference=OK infer_ms=2938
+RESULT label=gptoss-upstream-direct run=2 coldstart_s=183 sleep_ms=n/a dump_ms=58467 restore_ms=42314 wake_ms=n/a inference=OK infer_ms=2903
+[08:59:23] === vLLM Qwen3-8B
+RESULT label=qwen-cs-on run=1 coldstart_s=143 sleep_ms=n/a dump_ms=11218 restore_ms=10089 wake_ms=n/a inference=OK infer_ms=785
+RESULT label=qwen-cs-on run=2 coldstart_s=144 sleep_ms=n/a dump_ms=11082 restore_ms=10050 wake_ms=n/a inference=OK infer_ms=791
+RESULT label=qwen-cs-off run=1 coldstart_s=143 sleep_ms=n/a dump_ms=65076 restore_ms=15662 wake_ms=n/a inference=OK infer_ms=802
+RESULT label=qwen-cs-off run=2 coldstart_s=143 sleep_ms=n/a dump_ms=65970 restore_ms=16656 wake_ms=n/a inference=OK infer_ms=801
+[09:12:56] === all done

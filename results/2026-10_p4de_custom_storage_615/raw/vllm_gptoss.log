@@ -1,0 +1,154 @@
+[08:33:26] === vLLM benchmark: MODEL=openai/gpt-oss-120b SLEEP_MODE=0 RUNS=2 DROP_CACHE=yes CUDA_RESTORE_THREADS=16 CRIU_BASE_OPTS='--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap'
+
+=== SCENARIO gptoss-cs-on: image=vllm-criu-cs opts='--plugin-option=cuda_plugin.custom-storage=on' ===
+[08:33:26] [gptoss-cs-on run=1] starting container image=vllm-criu-cs model=openai/gpt-oss-120b
+[08:33:31] [gptoss-cs-on run=1] waiting for /health (timeout 1500s)
+[08:36:36] [gptoss-cs-on run=1] server READY after 185s
+[08:36:36] [gptoss-cs-on run=1] app_pid=64 (container ns) init_pid=77566; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1671792  \_ python3
+    852      66 12580      \_ python3
+    853      66 3168348      \_ VLLM::EngineCor
+[08:36:36] [gptoss-cs-on run=1] dump start
+(00.304573) cuda_plugin: [timing] Driver API checkpoint: 162 ms
+(09.015358) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8534 ms (8.9 GB/s, O_DIRECT)
+(09.155072) cuda_plugin: [timing] Driver API checkpoint: 8850 ms
+[08:36:48] [gptoss-cs-on run=1] dump=11481ms rc=0 gpu-pages=0
+none pages-*.img=3.7G
+[08:36:48] drop caches
+[08:36:49] [gptoss-cs-on run=1] restore start
+(02.815205) cuda_plugin: [timing] Driver API restore+unlock: 304 ms
+(10.205040) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 7088 ms (10.8 GB/s, O_DIRECT)
+(10.247498) cuda_plugin: [timing] Driver API restore+unlock: 7432 ms
+[08:37:00] [gptoss-cs-on run=1] restore=10556ms
+[08:37:02] [gptoss-cs-on run=1] inference=OK infer_ms=2843 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-cs-on run=1 coldstart_s=185 sleep_ms=n/a dump_ms=11481 restore_ms=10556 wake_ms=n/a inference=OK infer_ms=2843
+benchvllm
+
+[08:37:05] [gptoss-cs-on run=2] starting container image=vllm-criu-cs model=openai/gpt-oss-120b
+[08:37:09] [gptoss-cs-on run=2] waiting for /health (timeout 1500s)
+[08:40:09] [gptoss-cs-on run=2] server READY after 180s
+[08:40:09] [gptoss-cs-on run=2] app_pid=63 (container ns) init_pid=88559; tree:
+    PID    PPID   RSS COMMAND
+     65      63 1649888  \_ python3
+    842      65 12648      \_ python3
+    843      65 3169060      \_ VLLM::EngineCor
+[08:40:09] [gptoss-cs-on run=2] dump start
+(00.276334) cuda_plugin: [timing] Driver API checkpoint: 162 ms
+(09.085851) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8633 ms (8.8 GB/s, O_DIRECT)
+(09.219138) cuda_plugin: [timing] Driver API checkpoint: 8943 ms
+[08:40:20] [gptoss-cs-on run=2] dump=11497ms rc=0 gpu-pages=0
+none pages-*.img=3.6G
+[08:40:20] drop caches
+[08:40:21] [gptoss-cs-on run=2] restore start
+(02.810570) cuda_plugin: [timing] Driver API restore+unlock: 315 ms
+(10.193882) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 7081 ms (10.8 GB/s, O_DIRECT)
+(10.242541) cuda_plugin: [timing] Driver API restore+unlock: 7431 ms
+[08:40:32] [gptoss-cs-on run=2] restore=10553ms
+[08:40:35] [gptoss-cs-on run=2] inference=OK infer_ms=2865 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-cs-on run=2 coldstart_s=180 sleep_ms=n/a dump_ms=11497 restore_ms=10553 wake_ms=n/a inference=OK infer_ms=2865
+benchvllm
+
+
+=== SCENARIO gptoss-cs-off: image=vllm-criu-cs opts='--plugin-option=cuda_plugin.custom-storage=off' ===
+[08:40:37] [gptoss-cs-off run=1] starting container image=vllm-criu-cs model=openai/gpt-oss-120b
+[08:40:40] [gptoss-cs-off run=1] waiting for /health (timeout 1500s)
+[08:43:39] [gptoss-cs-off run=1] server READY after 179s
+[08:43:39] [gptoss-cs-off run=1] app_pid=64 (container ns) init_pid=99312; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1678144  \_ python3
+    840      66 12588      \_ python3
+    841      66 3175808      \_ VLLM::EngineCor
+[08:43:39] [gptoss-cs-off run=1] dump start
+(00.136115) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.147432) cuda_plugin: [timing] post-scan+diff: 6 ms, 0 new VMAs
+(38.151952) cuda_plugin: [timing] Driver API checkpoint: 37999 ms
+(38.162744) cuda_plugin: [timing] post-scan+diff: 6 ms, 1 new VMAs
+(61.372333) [timing] dump: process_vm_readv=16828 ms O_DIRECT_write=6380 ms total=23209 ms
+(61.375463) cuda_plugin: [timing] process_vm_readv dump: 23213 ms (3.3 GB/s)
+(64.423033) cuda_plugin: [timing] injected madvise(DONTNEED): 3048 ms
+[08:44:46] [gptoss-cs-off run=1] dump=66699ms rc=0 gpu-pages=71G pages-*.img=3.7G
+[08:44:46] drop caches
+[08:44:47] [gptoss-cs-off run=1] restore start
+(02.512383) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.529815) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.702403) cuda_plugin: [timing] Driver API restore+unlock: 173 ms
+(06.255259) [timing] parallel restore: 3547 ms (21.5 GB/s) [16 threads, 1136 chunks, O_DIRECT]
+(06.255340) cuda_plugin: [timing] GPU page restore: 3548 ms
+(16.607455) cuda_plugin: [timing] Driver API restore+unlock: 10352 ms
+(16.607764) cuda_plugin: [timing] GPU page restore: 0 ms
+[08:45:04] [gptoss-cs-off run=1] restore=16914ms
+[08:45:07] [gptoss-cs-off run=1] inference=OK infer_ms=2884 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-cs-off run=1 coldstart_s=179 sleep_ms=n/a dump_ms=66699 restore_ms=16914 wake_ms=n/a inference=OK infer_ms=2884
+benchvllm
+
+[08:45:10] [gptoss-cs-off run=2] starting container image=vllm-criu-cs model=openai/gpt-oss-120b
+[08:45:14] [gptoss-cs-off run=2] waiting for /health (timeout 1500s)
+[08:48:12] [gptoss-cs-off run=2] server READY after 178s
+[08:48:12] [gptoss-cs-off run=2] app_pid=64 (container ns) init_pid=110044; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1684604  \_ python3
+    845      66 12576      \_ python3
+    846      66 3169228      \_ VLLM::EngineCor
+[08:48:12] [gptoss-cs-off run=2] dump start
+(00.127489) cuda_plugin: [timing] Driver API checkpoint: 11 ms
+(00.138470) cuda_plugin: [timing] post-scan+diff: 6 ms, 0 new VMAs
+(37.351544) cuda_plugin: [timing] Driver API checkpoint: 37207 ms
+(37.362843) cuda_plugin: [timing] post-scan+diff: 6 ms, 1 new VMAs
+(60.388278) [timing] dump: process_vm_readv=16653 ms O_DIRECT_write=6371 ms total=23025 ms
+(60.391208) cuda_plugin: [timing] process_vm_readv dump: 23028 ms (3.3 GB/s)
+(63.432317) cuda_plugin: [timing] injected madvise(DONTNEED): 3041 ms
+[08:49:17] [gptoss-cs-off run=2] dump=65554ms rc=0 gpu-pages=71G pages-*.img=3.7G
+[08:49:17] drop caches
+[08:49:19] [gptoss-cs-off run=2] restore start
+(02.497109) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.513778) cuda_plugin: [timing] GPU page restore: 0 ms
+(02.686295) cuda_plugin: [timing] Driver API restore+unlock: 173 ms
+(06.256350) [timing] parallel restore: 3564 ms (21.4 GB/s) [16 threads, 1136 chunks, O_DIRECT]
+(06.256429) cuda_plugin: [timing] GPU page restore: 3565 ms
+(16.669365) cuda_plugin: [timing] Driver API restore+unlock: 10413 ms
+(16.669878) cuda_plugin: [timing] GPU page restore: 0 ms
+[08:49:36] [gptoss-cs-off run=2] restore=16981ms
+[08:49:38] [gptoss-cs-off run=2] inference=OK infer_ms=2895 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-cs-off run=2 coldstart_s=178 sleep_ms=n/a dump_ms=65554 restore_ms=16981 wake_ms=n/a inference=OK infer_ms=2895
+benchvllm
+
+
+=== SCENARIO gptoss-upstream-direct: image=vllm-criu-upstream opts='--image-io-mode=direct' ===
+[08:49:41] [gptoss-upstream-direct run=1] starting container image=vllm-criu-upstream model=openai/gpt-oss-120b
+[08:49:45] [gptoss-upstream-direct run=1] waiting for /health (timeout 1500s)
+[08:52:42] [gptoss-upstream-direct run=1] server READY after 177s
+[08:52:42] [gptoss-upstream-direct run=1] app_pid=64 (container ns) init_pid=121097; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1677228  \_ python3
+    841      66 12604      \_ python3
+    842      66 3168908      \_ VLLM::EngineCor
+[08:52:42] [gptoss-upstream-direct run=1] dump start
+[08:53:41] [gptoss-upstream-direct run=1] dump=59378ms rc=0 gpu-pages=0
+none pages-*.img=75G
+[08:53:41] drop caches
+[08:53:42] [gptoss-upstream-direct run=1] restore start
+[08:54:24] [gptoss-upstream-direct run=1] restore=41928ms
+[08:54:27] [gptoss-upstream-direct run=1] inference=OK infer_ms=2938 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-upstream-direct run=1 coldstart_s=177 sleep_ms=n/a dump_ms=59378 restore_ms=41928 wake_ms=n/a inference=OK infer_ms=2938
+benchvllm
+
+[08:54:30] [gptoss-upstream-direct run=2] starting container image=vllm-criu-upstream model=openai/gpt-oss-120b
+[08:54:33] [gptoss-upstream-direct run=2] waiting for /health (timeout 1500s)
+[08:57:36] [gptoss-upstream-direct run=2] server READY after 183s
+[08:57:36] [gptoss-upstream-direct run=2] app_pid=64 (container ns) init_pid=132027; tree:
+    PID    PPID   RSS COMMAND
+     66      64 1679188  \_ python3
+    843      66 12596      \_ python3
+    844      66 3169748      \_ VLLM::EngineCor
+[08:57:36] [gptoss-upstream-direct run=2] dump start
+[08:58:35] [gptoss-upstream-direct run=2] dump=58467ms rc=0 gpu-pages=0
+none pages-*.img=75G
+[08:58:35] drop caches
+[08:58:36] [gptoss-upstream-direct run=2] restore start
+[08:59:18] [gptoss-upstream-direct run=2] restore=42314ms
+[08:59:21] [gptoss-upstream-direct run=2] inference=OK infer_ms=2903 text="text":" Paris.\n\nGreat! If you have any more questions or need further assistance,"
+RESULT label=gptoss-upstream-direct run=2 coldstart_s=183 sleep_ms=n/a dump_ms=58467 restore_ms=42314 wake_ms=n/a inference=OK infer_ms=2903
+benchvllm
+
+[08:59:23] === All vLLM benchmarks complete ===

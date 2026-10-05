@@ -25,8 +25,18 @@
 | parallel plugin (cs off) | 66,699 / 65,554 | 16,914 / 16,981 | driver checkpoint ~38 s; fill 3,547 ms (21.5 GB/s) + driver restore 10,352 ms |
 | upstream head, direct | 59,378 / 58,467 | 41,928 / 42,314 | — |
 
-Cold start of the server (weights from NVMe, KV-cache allocation) is 177–185 s on every run; the restore
-replaces that with 10.6 s.
+Cold start of the server (weights from NVMe, KV-cache allocation) is 177–185 s on every gpt-oss run and 143–144 s
+for Qwen3-8B; the restore replaces that with ~10 s.
+
+## vLLM 0.30 + Qwen3-8B (75.9 GB of GPU memory mapped: same KV-cache fill as gpt-oss, inference validated on every run)
+
+| path | dump (ms) | restore (ms) | GPU copy detail |
+|---|---|---|---|
+| custom storage on | **11,218 / 11,082** | **10,089 / 10,050** | ckpt copy 8,568 / 8,569 ms (8.9 GB/s); restore copy 7,069 / 7,066 ms (10.7 GB/s) |
+| parallel plugin (cs off) | 65,076 / 65,970 | 15,662 / 16,656 | driver checkpoint 37.1 / 37.6 s + process_vm_readv 16.5 s + O_DIRECT write 6.4 s + madvise 3.0 s; driver restore 9.6 / 10.3 s |
+
+Qwen3-8B (16 GB of weights) and gpt-oss-120b (~60 GB of weights) checkpoint in the same time: vLLM fills the
+80 GB card with KV cache either way, so the volume moved is the GPU memory in use, not the model size.
 
 ## Reading
 
@@ -38,3 +48,5 @@ replaces that with 10.6 s.
   the remaining copy lever is the mapping's rate (copy-engine/NUMA placement experiments pending).
 - **Against upstream criu-dev on the same box and driver: restore 42 s → 10.6 s (−75%), dump 59 s → 11.5 s (−80%).**
   Upstream measured 46.9 s restore on the 2026-10-02 p4de (driver 595); the 42 s here is a different box and driver, cause not isolated.
+
+Raw logs in `raw/` (run.log = session driver, bench_tensor.log, vllm_gptoss.log, vllm_qwen.log, status file).

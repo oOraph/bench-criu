@@ -1,0 +1,189 @@
+[08:30:39] === Benchmark start: TENSOR_SIZE=60000 RUNS=2 DROP_CACHE=yes MEMLOCK_UNLIMITED=no ===
+[08:30:39] scenario: cs-on|criu-head-cs|--plugin-option=cuda_plugin.custom-storage=on
+[08:30:39] scenario: cs-off|criu-head-cs|--plugin-option=cuda_plugin.custom-storage=off
+[08:30:39] scenario: upstream-direct|criu-upstream-head|--image-io-mode=direct
+
+=== SCENARIO cs-on: image=criu-head-cs opts='--plugin-option=cuda_plugin.custom-storage=on' ===
+[08:30:39] [cs-on run=1] starting container image=criu-head-cs (TENSOR_SIZE=60000)
+26f36e4052560804575ade3d5f31803b5da7fca95c2e134b8553f88499c48b6b
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[08:30:41] [cs-on run=1] dump start
+[08:30:44] [cs-on run=1] dump=2484ms  gpu-pages=none  pages-*.img=337M  inventory=yes
+[08:30:44] drop caches
+[08:30:52] [cs-on run=1] restore start
+(00.042943) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(02.715465) cuda_cs: [timing] custom-storage restore copy: 14.92 GB, 4 threads, 1636 ms (9.1 GB/s, O_DIRECT)
+(02.730281) cuda_plugin: [timing] Driver API restore+unlock: 2086 ms
+[08:30:59] [cs-on run=1] restore=2988ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=65
+[POST] device: NVIDIA A100-SXM4-80GB (+0.028s)
+[POST] first sum: +0.133s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=cs-on run=1 dump_ms=2484 restore_ms=2988
+bench1
+
+[08:31:00] [cs-on run=2] starting container image=criu-head-cs (TENSOR_SIZE=60000)
+d51c3ff16fad57fa4a66b28a8ef3f8a42171da6829cc7d2f74fa6ebc8ce7041b
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=64
+[PRE]  READY — waiting for /tmp/go to proceed
+[08:31:08] [cs-on run=2] dump start
+[08:31:10] [cs-on run=2] dump=2489ms  gpu-pages=none  pages-*.img=337M  inventory=yes
+[08:31:10] drop caches
+[08:31:11] [cs-on run=2] restore start
+(00.041290) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(02.643994) cuda_cs: [timing] custom-storage restore copy: 14.92 GB, 4 threads, 1617 ms (9.2 GB/s, O_DIRECT)
+(02.655057) cuda_plugin: [timing] Driver API restore+unlock: 2005 ms
+[08:31:18] [cs-on run=2] restore=2874ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=64
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=64
+[POST] device: NVIDIA A100-SXM4-80GB (+0.028s)
+[POST] first sum: +0.135s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=cs-on run=2 dump_ms=2489 restore_ms=2874
+bench1
+
+
+=== SCENARIO cs-off: image=criu-head-cs opts='--plugin-option=cuda_plugin.custom-storage=off' ===
+[08:31:18] [cs-off run=1] starting container image=criu-head-cs (TENSOR_SIZE=60000)
+039bd0d4d68faa2586b67decc4aaa772f7ea593caf53375f12698f11414f4ecb
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[08:31:26] [cs-off run=1] dump start
+[08:31:39] [cs-off run=1] dump=12959ms  gpu-pages=14G  pages-*.img=322M  inventory=yes
+[08:31:39] drop caches
+[08:31:39] [cs-off run=1] restore start
+(00.043656) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(01.530535) [timing] parallel restore: 895 ms (16.7 GB/s) [8 threads, 223 chunks, O_DIRECT]
+(01.530571) cuda_plugin: [timing] GPU page restore: 896 ms
+(03.656317) cuda_plugin: [timing] Driver API restore+unlock: 2126 ms
+[08:31:47] [cs-off run=1] restore=3854ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=65
+[POST] device: NVIDIA A100-SXM4-80GB (+0.027s)
+[POST] first sum: +0.130s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=cs-off run=1 dump_ms=12959 restore_ms=3854
+bench1
+
+[08:31:48] [cs-off run=2] starting container image=criu-head-cs (TENSOR_SIZE=60000)
+eed453659ced4ea03181787a9eebff02ec88b30ad4f4e4143e4e4c9a51aae37f
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[08:31:57] [cs-off run=2] dump start
+[08:32:10] [cs-off run=2] dump=13009ms  gpu-pages=14G  pages-*.img=322M  inventory=yes
+[08:32:10] drop caches
+[08:32:10] [cs-off run=2] restore start
+(00.044607) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(01.488889) [timing] parallel restore: 851 ms (17.5 GB/s) [8 threads, 223 chunks, O_DIRECT]
+(01.489533) cuda_plugin: [timing] GPU page restore: 852 ms
+(03.764713) cuda_plugin: [timing] Driver API restore+unlock: 2275 ms
+[08:32:18] [cs-off run=2] restore=3966ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.026s)
+[POST] first sum: +0.130s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=cs-off run=2 dump_ms=13009 restore_ms=3966
+bench1
+
+
+=== SCENARIO upstream-direct: image=criu-upstream-head opts='--image-io-mode=direct' ===
+[08:32:19] [upstream-direct run=1] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+7293855e25f4e75d8cfefab39e84d833ddd130b5828aa5dfcebbd81da99b2374
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[08:32:28] [upstream-direct run=1] dump start
+[08:32:39] [upstream-direct run=1] dump=11225ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[08:32:39] drop caches
+[08:32:39] [upstream-direct run=1] restore start
+(00.042365) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[08:32:52] [upstream-direct run=1] restore=9010ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.030s)
+[POST] first sum: +0.138s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream-direct run=1 dump_ms=11225 restore_ms=9010
+bench1
+
+[08:32:53] [upstream-direct run=2] starting container image=criu-upstream-head (TENSOR_SIZE=60000)
+5fa115ef6337f6b35d1e018178ce41c5d2da860465e6241dca7feec760b5e69e
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[08:33:01] [upstream-direct run=2] dump start
+[08:33:12] [upstream-direct run=2] dump=11236ms  gpu-pages=none  pages-*.img=15G  inventory=yes
+[08:33:12] drop caches
+[08:33:12] [upstream-direct run=2] restore start
+(00.042796) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+[08:33:25] [upstream-direct run=2] restore=8870ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=27632.570312 y=268.357544 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.029s)
+[POST] first sum: +0.139s from wake
+[POST] x=27632.570312 y=268.357544
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] SUCCESS=True
+RESULT label=upstream-direct run=2 dump_ms=11236 restore_ms=8870
+bench1
+
+[08:33:26] === All benchmarks complete ===
