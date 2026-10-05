@@ -120,7 +120,7 @@ the dump-side gain (no 37 s driver copy on the A100) is the big one.
 
 - Driver ≥ 615 (API 13040) with the **proprietary** kernel module (open module untested with a correct pid).
 - Caller needs **CAP_SYS_PTRACE** (Yama scope 1) to map another process's VRAM: in a plain container
-  `cuCheckpointProcessCheckpoint` fails with `CUDA_ERROR_OPERATING_SYSTEM` (304). The shim runs CRIU on the host, fine.
+  `cuCheckpointProcessCheckpoint` fails with `CUDA_ERROR_OPERATING_SYSTEM` (304). CRIU run from the host (as runc does) is fine.
 - Load driver symbols via `cuGetProcAddress` (dlsym gives legacy ABIs → `CUDA_ERROR_INVALID_CONTEXT` on memcpy).
 - `cuPointerGetAttribute(CONTEXT)` on the mapped pointer returns NULL; use `cuStreamGetCtx` on the per-device stream.
 - `CUDA_ERROR_NOT_INITIALIZED` from the checkpoint API = "pid has no CUDA state" (don't pass the shell wrapper's pid).

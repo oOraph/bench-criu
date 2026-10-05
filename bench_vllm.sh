@@ -21,7 +21,7 @@ RESTORE_TIMEOUT=${RESTORE_TIMEOUT:-300}
 # SLEEP_MODE=1: start with --enable-sleep-mode, POST /sleep?level=1 before the dump (weights -> host RAM,
 # KV cache freed) and POST /wake_up after the restore; both are timed and reported.
 SLEEP_MODE=${SLEEP_MODE:-0}
-# CRIU options the shim uses for vLLM workloads
+# CRIU options for vLLM workloads
 # (+ --tcp-established --link-remap per the vLLM recipe that worked on k8s, see README)
 CRIU_BASE_OPTS=${CRIU_BASE_OPTS:-"--shell-job --skip-in-flight --file-locks --ghost-limit 10485760 --tcp-established --link-remap"}
 DEFAULT_SCENARIOS="upstream-direct|vllm-criu-upstream|--image-io-mode=direct"

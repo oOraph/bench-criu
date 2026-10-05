@@ -124,7 +124,7 @@ Compared with the full (no-sleep) checkpoint on this box:
 - On the restore side with sleep, CRIU core moves the 24 GB of CPU pages at ~4–5 GB/s with `--image-io-mode=direct`
   (buffered: ~3 GB/s); our plugin's share is 0.18 s. The 3.6 s wake_up (vLLM copies 16 GB host→VRAM and
   re-allocates the KV cache) is the floor on the restore side.
-- Net for the shim: sleep 1 + direct restore ≈ 10.6 s vs 16.1 s with our full-checkpoint parallel path, at
+- Net: sleep 1 + direct restore ≈ 10.6 s vs 16.1 s with our full-checkpoint parallel path, at
   the price of app cooperation and ~11 s of sleep latency on the dump side.
 
 ### SDXL upstream run-1 dump failure (for the record)

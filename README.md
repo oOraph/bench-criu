@@ -28,7 +28,7 @@ pages and the process tree. Details, per-run numbers and raw logs:
 |---|---|---|
 | `criu-upstream-head` | `checkpoint-restore/criu` `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads), `--image-io-mode=direct` (PR #3066, off by default), LZ4 |
 | `criu-ref` (`CRIU_REF=…`) | `oOraph/criu` branch of your choice | our fork. `fast_cuda_plugin_on_head` = staging pages via O_DIRECT (serial restore); `fast_cuda_plugin_on_head_parallel` = + parallel `process_vm_writev` restore; `upstream-cuda-custom-storage` = clean series for the upstream PR: custom storage + staging-page offload |
-| `criu-v42-ours` | tag `v4.2-cuda-plugin-optim` (= branch `fast_cuda_plugin_final`) | what production runs (2026-10): CRIU v4.2 + our plugin, serial restore |
+| `criu-v42-ours` | tag `v4.2-cuda-plugin-optim` (= branch `fast_cuda_plugin_final`) | CRIU v4.2 + our plugin, serial restore (the pre-October state of the fork) |
 | `criu-local` | `./criu-src` (git-ignored; rsync your checkout into it) | validate a branch without pushing it |
 | `criu-dev`, `criu-optimized`, `criu-fast-cuda-1` | `criu-dev` @ `4d76d1acd`, branch `optim1`, branch `fast-cuda-1` | June 2026 trio: baseline before PR #3021/#3022, baseline + both PRs, baseline + our plugin; kept for the June results |
 
@@ -111,7 +111,7 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 | 2026-10-02 | p4de.24xlarge, A100-80GB, driver 595 | plugin ceilings with the disk out of the way: serial vs parallel restore, upstream; SDXL, Qwen3-8B (plain and sleep level 1) and gpt-oss-120b through vLLM; the "driver copy" measurements that motivated custom storage | [summary](results/2026-10_p4de.24xlarge_a100/summary.md) |
 | 2026-10-02 | g5.12xlarge, A10G, driver 615 | first custom-storage prototype measurements (standalone tool, single NVMe, tmpfs ceiling) | [summary](results/2026-10_g5_custom_storage_615/summary.md) |
 | 2026-10-02 | g6.48xlarge, 8× L4, 8× NVMe capped at 5 GB/s | is the plugin or the disk the bottleneck (tensor test, mlock control) | [summary](results/2026-10_g6.48xlarge_l4/summary.md) |
-| 2026-10-01 | g5.12xlarge, A10G, single NVMe | production plugin (v4.2) vs upstream head | [summary](results/2026-10_g5.12xlarge_a10g/summary.md) |
+| 2026-10-01 | g5.12xlarge, A10G, single NVMe | our v4.2 plugin vs upstream head | [summary](results/2026-10_g5.12xlarge_a10g/summary.md) |
 | 2026-06 | g6.12xlarge, L4 | synthetic mini benchmark, June builds | [summary](results/mini_benchmark/summary.md) |
 | 2026-06 | g6.12xlarge, L4, Kubernetes | real inference (SDXL, Llama-3.1-8B, Qwen3-8B) via runc checkpoint/restore | [summary](results/real_inference/summary.md) |
 | 2026-06 | g6.12xlarge, L4 | vLLM cooperative sleep/wake-up (Llama-3.1-8B, Qwen3-8B) | [summary](results/vllm_sleep_awake/summary.md) |

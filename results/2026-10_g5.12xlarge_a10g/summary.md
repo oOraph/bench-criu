@@ -1,4 +1,4 @@
-# Benchmark Results — production plugin vs upstream criu-dev head (2026-10-01)
+# Benchmark Results — our v4.2 plugin vs upstream criu-dev head (2026-10-01)
 
 ## Hardware
 
@@ -23,7 +23,7 @@
 
 - `TENSOR_SIZE=60000` (~14 GB of GPU pages), `RUNS=2`, `DROP_CACHE=yes`
 - Dump dir on `/mnt/nvme`
-- Images (see Dockerfile): `criu-v42-ours` (tag `v4.2-cuda-plugin-optim`, production) and
+- Images (see Dockerfile): `criu-v42-ours` (tag `v4.2-cuda-plugin-optim`) and
   `criu-upstream-head` (upstream `criu-dev` @ `4485a86da`, 2026-09-24).
 - Scenario options are passed to both `criu dump` and `criu restore`.
 

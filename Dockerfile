@@ -56,7 +56,7 @@ RUN git clone https://github.com/ooraph/criu.git /criu && \
     mkdir -p /usr/lib/criu && \
     cp plugins/cuda/cuda_plugin.so /usr/lib/criu/
 
-# criu-v42-ours — what production runs (2026-10): CRIU v4.2 + custom CUDA plugin,
+# criu-v42-ours — CRIU v4.2 + custom CUDA plugin (pre-October state of the fork),
 # tag v4.2-cuda-plugin-optim == branch fast_cuda_plugin_final
 FROM bench-base AS criu-v42-ours
 
