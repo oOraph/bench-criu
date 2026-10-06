@@ -1,0 +1,11 @@
+driver: 0 (first launch)
+pull: 0
+weights Qwen/Qwen3-8B: 0
+weights openai/gpt-oss-120b: 0
+criu-upstream-head: 0
+criu-head-cz: 0
+vllm-criu-upstream: 0
+vllm-criu-cz: 0
+vllm-gptoss: 0
+vllm-qwen: 0
+DONE

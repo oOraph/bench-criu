@@ -1,0 +1,49 @@
+NVIDIA A100-SXM4-80GB, 615.71.09
+active
+[10:02:17] === images and weights
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+cuda ok NVIDIA A100-SXM4-80GB
+[10:10:00] === vLLM gpt-oss-120b
+RESULT label=gptoss-up-lz4-256k-par run=1 coldstart_s=136 sleep_ms=n/a dump_ms=101103 restore_ms=70482 wake_ms=n/a inference=OK infer_ms=2937 img_gb=66.9
+RESULT label=gptoss-up-lz4-256k-par run=2 coldstart_s=181 sleep_ms=n/a dump_ms=100102 restore_ms=69808 wake_ms=n/a inference=OK infer_ms=2953 img_gb=66.9
+RESULT label=gptoss-up-lz4-4k-par run=1 coldstart_s=174 sleep_ms=n/a dump_ms=141636 restore_ms=86959 wake_ms=n/a inference=OK infer_ms=2954 img_gb=65.8
+RESULT label=gptoss-up-lz4-4k-par run=2 coldstart_s=175 sleep_ms=n/a dump_ms=140418 restore_ms=88322 wake_ms=n/a inference=OK infer_ms=2912 img_gb=65.8
+RESULT label=gptoss-up-direct run=1 coldstart_s=179 sleep_ms=n/a dump_ms=57124 restore_ms=44211 wake_ms=n/a inference=OK infer_ms=2902 img_gb=80.1
+RESULT label=gptoss-up-direct run=2 coldstart_s=180 sleep_ms=n/a dump_ms=58336 restore_ms=41557 wake_ms=n/a inference=OK infer_ms=2903 img_gb=80.1
+RESULT label=gptoss-up-lz4-256k-serial run=1 coldstart_s=178 sleep_ms=n/a dump_ms=101235 restore_ms=71781 wake_ms=n/a inference=OK infer_ms=2906 img_gb=66.9
+RESULT label=gptoss-up-lz4-256k-serial run=2 coldstart_s=178 sleep_ms=n/a dump_ms=101408 restore_ms=72229 wake_ms=n/a inference=OK infer_ms=2896 img_gb=66.9
+(08.982474) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8514 ms (9.0 GB/s, O_DIRECT), zero chunks 38/1136
+(09.999979) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 6883 ms (11.1 GB/s, O_DIRECT), zero chunks 38/1136
+RESULT label=gptoss-cs-zero run=1 coldstart_s=177 sleep_ms=n/a dump_ms=11456 restore_ms=10363 wake_ms=n/a inference=OK infer_ms=2846 img_gb=77.6
+(08.874204) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8429 ms (9.0 GB/s, O_DIRECT), zero chunks 38/1136
+(10.025902) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 6880 ms (11.1 GB/s, O_DIRECT), zero chunks 38/1136
+RESULT label=gptoss-cs-zero run=2 coldstart_s=175 sleep_ms=n/a dump_ms=11324 restore_ms=10372 wake_ms=n/a inference=OK infer_ms=2835 img_gb=77.6
+(09.071447) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8626 ms (8.8 GB/s, O_DIRECT), zero chunks 0/1136 (skip off)
+(10.240318) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 7095 ms (10.7 GB/s, O_DIRECT), zero chunks 0/1136 (skip off)
+RESULT label=gptoss-cs-nozero run=1 coldstart_s=179 sleep_ms=n/a dump_ms=11487 restore_ms=10595 wake_ms=n/a inference=OK infer_ms=2884 img_gb=80.1
+(09.062593) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8621 ms (8.8 GB/s, O_DIRECT), zero chunks 0/1136 (skip off)
+(10.231480) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 7105 ms (10.7 GB/s, O_DIRECT), zero chunks 0/1136 (skip off)
+RESULT label=gptoss-cs-nozero run=2 coldstart_s=178 sleep_ms=n/a dump_ms=11444 restore_ms=10589 wake_ms=n/a inference=OK infer_ms=2862 img_gb=80.1
+[11:11:30] === vLLM Qwen3-8B
+RESULT label=qwen-up-lz4-256k-par run=1 coldstart_s=145 sleep_ms=n/a dump_ms=66652 restore_ms=30389 wake_ms=n/a inference=OK infer_ms=808 img_gb=17.5
+RESULT label=qwen-up-lz4-256k-par run=2 coldstart_s=145 sleep_ms=n/a dump_ms=67516 restore_ms=31519 wake_ms=n/a inference=OK infer_ms=811 img_gb=17.5
+RESULT label=qwen-up-lz4-4k-par run=1 coldstart_s=146 sleep_ms=n/a dump_ms=85134 restore_ms=38580 wake_ms=n/a inference=OK infer_ms=817 img_gb=17.7
+RESULT label=qwen-up-lz4-4k-par run=2 coldstart_s=148 sleep_ms=n/a dump_ms=85000 restore_ms=37891 wake_ms=n/a inference=OK infer_ms=807 img_gb=17.7
+RESULT label=qwen-up-direct run=1 coldstart_s=145 sleep_ms=n/a dump_ms=58175 restore_ms=45571 wake_ms=n/a inference=OK infer_ms=819 img_gb=79.0
+RESULT label=qwen-up-direct run=2 coldstart_s=145 sleep_ms=n/a dump_ms=57847 restore_ms=42500 wake_ms=n/a inference=OK infer_ms=811 img_gb=79.0
+RESULT label=qwen-up-lz4-256k-serial run=1 coldstart_s=142 sleep_ms=n/a dump_ms=68100 restore_ms=60425 wake_ms=n/a inference=OK infer_ms=812 img_gb=17.5
+RESULT label=qwen-up-lz4-256k-serial run=2 coldstart_s=142 sleep_ms=n/a dump_ms=67726 restore_ms=60455 wake_ms=n/a inference=OK infer_ms=815 img_gb=17.5
+(06.879203) cuda_cs: [timing] custom-storage checkpoint copy: 75.87 GB, 4 threads, 6479 ms (11.7 GB/s, O_DIRECT), zero chunks 828/1131
+(04.782864) cuda_cs: [timing] custom-storage restore copy: 75.87 GB, 4 threads, 2110 ms (36.0 GB/s, O_DIRECT), zero chunks 828/1131
+RESULT label=qwen-cs-zero run=1 coldstart_s=142 sleep_ms=n/a dump_ms=9132 restore_ms=5120 wake_ms=n/a inference=OK infer_ms=798 img_gb=23.5
+(06.856025) cuda_cs: [timing] custom-storage checkpoint copy: 75.87 GB, 4 threads, 6465 ms (11.7 GB/s, O_DIRECT), zero chunks 828/1131
+(04.780036) cuda_cs: [timing] custom-storage restore copy: 75.87 GB, 4 threads, 2113 ms (35.9 GB/s, O_DIRECT), zero chunks 828/1131
+RESULT label=qwen-cs-zero run=2 coldstart_s=145 sleep_ms=n/a dump_ms=8958 restore_ms=5122 wake_ms=n/a inference=OK infer_ms=788 img_gb=23.5
+(08.911800) cuda_cs: [timing] custom-storage checkpoint copy: 75.87 GB, 4 threads, 8519 ms (8.9 GB/s, O_DIRECT), zero chunks 0/1131 (skip off)
+(09.752629) cuda_cs: [timing] custom-storage restore copy: 75.87 GB, 4 threads, 7065 ms (10.7 GB/s, O_DIRECT), zero chunks 0/1131 (skip off)
+RESULT label=qwen-cs-nozero run=1 coldstart_s=143 sleep_ms=n/a dump_ms=11042 restore_ms=10097 wake_ms=n/a inference=OK infer_ms=798 img_gb=79.0
+(08.962862) cuda_cs: [timing] custom-storage checkpoint copy: 75.87 GB, 4 threads, 8567 ms (8.9 GB/s, O_DIRECT), zero chunks 0/1131 (skip off)
+(09.750374) cuda_cs: [timing] custom-storage restore copy: 75.87 GB, 4 threads, 7051 ms (10.8 GB/s, O_DIRECT), zero chunks 0/1131 (skip off)
+RESULT label=qwen-cs-nozero run=2 coldstart_s=142 sleep_ms=n/a dump_ms=10975 restore_ms=10109 wake_ms=n/a inference=OK infer_ms=780 img_gb=79.0
+[11:58:27] === all done
