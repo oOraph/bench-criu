@@ -1,0 +1,64 @@
+make: Entering directory '/home/ubuntu/criu-zdtm'
+Note: Building without amdgpu_plugin.
+      Install libdrm-devel (RPM) or libdrm-dev (DEB) to fix.
+Warn: Externally managed python environment
+Consider using PIP_BREAK_SYSTEM_PACKAGES=1
+make[1]: Nothing to be done for 'all'.
+make[1]: 'images/built-in.o' is up to date.
+make[1]: 'compel/plugins/std.lib.a' is up to date.
+make[1]: 'compel/plugins/fds.lib.a' is up to date.
+make[1]: 'compel/libcompel.a' is up to date.
+make[1]: 'compel/compel-host-bin' is up to date.
+make[1]: Nothing to be done for 'all'.
+make[1]: 'soccr/libsoccr.a' is up to date.
+make[2]: Nothing to be done for 'all'.
+make[2]: Nothing to be done for 'all'.
+make[2]: Nothing to be done for 'all'.
+make[2]: Nothing to be done for 'all'.
+make[1]: Nothing to be done for 'all'.
+make: Leaving directory '/home/ubuntu/criu-zdtm'
+make: Entering directory '/home/ubuntu/criu-zdtm'
+Note: Building without amdgpu_plugin.
+      Install libdrm-devel (RPM) or libdrm-dev (DEB) to fix.
+Warn: Externally managed python environment
+Consider using PIP_BREAK_SYSTEM_PACKAGES=1
+make[1]: Nothing to be done for 'all'.
+make[1]: 'images/built-in.o' is up to date.
+make[1]: 'compel/plugins/std.lib.a' is up to date.
+make[1]: 'compel/plugins/fds.lib.a' is up to date.
+make[1]: 'compel/libcompel.a' is up to date.
+make[1]: 'compel/compel-host-bin' is up to date.
+make[1]: Nothing to be done for 'all'.
+make[1]: 'soccr/libsoccr.a' is up to date.
+make[2]: Nothing to be done for 'all'.
+make[2]: Nothing to be done for 'all'.
+make[2]: Nothing to be done for 'all'.
+make[2]: Nothing to be done for 'all'.
+make[1]: Nothing to be done for 'all'.
+make: Leaving directory '/home/ubuntu/criu-zdtm'
+userns is supported
+========================= Run zdtm/static/cuda00 in h ==========================
+Start test
+Test is SUID
+./cuda00 --pidfile=cuda00.pid --outfile=cuda00.out
+Run criu dump
+=[log]=> dump/zdtm/static/cuda00/68/1/dump.log
+------------------------ grep Error ------------------------
+b'(02.013527)'
+b'(02.013528) Dumping core for thread (pid: 69)'
+b'(02.013529) ----------------------------------------'
+b'(02.013531) Dumping general registers for 69 in native mode'
+b'(02.013532) Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 69 with interrupted system call'
+b'(02.013844)'
+b'(02.013845) Dumping core for thread (pid: 71)'
+b'(02.013846) ----------------------------------------'
+b'(02.013850) Dumping general registers for 71 in native mode'
+b'(02.013851) Warn  (compel/arch/x86/src/lib/infect.c:419): Will restore 71 with interrupted system call'
+------------------------ ERROR OVER ------------------------
+Run criu restore
+Send the 15 signal to  68
+Wait for zdtm/static/cuda00(68) to die for 0.100000
+Wait for zdtm/static/cuda00(68) to die for 0.200000
+Wait for zdtm/static/cuda00(68) to die for 0.400000
+========================= Test zdtm/static/cuda00 PASS =========================
+=== Run 1/1 ================ zdtm/static/cuda00

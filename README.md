@@ -116,7 +116,7 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 
 | Date | Box | What | Link |
 |---|---|---|---|
-| 2026-10-06 | p4de.24xlarge, 8× A100-80GB, driver 615 + FM, CUDA 13.4 | **ZDTM CUDA tests on real GPUs**, custom storage auto/off, 14/14 PASS incl. 8-GPU `cuda_multigpu00` | [summary](results/2026-10_p4de_zdtm_cuda/summary.md) |
+| 2026-10-06 | p4de.24xlarge, 8× A100-80GB, driver 615 + FM, CUDA 13.4 | **ZDTM CUDA tests on real GPUs**, custom storage on/auto/off, 21/21 PASS incl. 8-GPU `cuda_multigpu00` | [summary](results/2026-10_p4de_zdtm_cuda/summary.md) |
 | 2026-10-06 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **parallel staging-page dump** (gpt-oss dump 66 s → 52 s), `cuStreamGetCtx_v2` validation | [summary](results/2026-10_p4de_parallel_dump/summary.md) |
 | 2026-10-06 | same box | **upstream LZ4 compression** (`--compress`, `--compress-block`, `--decompress-threads`) vs custom storage with zero-chunk skipping, gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_compression_zero_skip/summary.md) |
 | 2026-10-05 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **custom storage vs parallel plugin vs upstream**, tensor + gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_custom_storage_615/summary.md) |
