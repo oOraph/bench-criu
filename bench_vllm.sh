@@ -2,7 +2,11 @@
 # Real-inference benchmark: checkpoint/restore a running `vllm serve` with CRIU, Docker-based.
 # Mirrors the June 2026 Kubernetes measurements (results/real_inference) on a bench box.
 #
-# Scenarios: "label|image|extra criu options" (semicolon separated), images from Dockerfile.vllm.
+# Images from Dockerfile.vllm. Scenarios (semicolon separated): "label|image|opts[|dump_opts[|restore_opts[|env]]]"
+#   opts          CRIU options for both dump and restore
+#   dump_opts     dump only (e.g. --compress-block 256K)
+#   restore_opts  restore only (e.g. --decompress-threads 0)
+#   env           space-separated VAR=value set for both criu runs (e.g. CUDA_CS_ZERO_SKIP=0)
 # Restore time = from `criu restore` start until /health answers; then a completion request
 # validates the restored engine.
 set -eu -o pipefail
@@ -55,7 +59,7 @@ wait_gpu_free() {
 curl_health() { docker exec $CONTAINER curl -sf http://localhost:${PORT}/health -o /dev/null 2>/dev/null; }
 
 run_one() {
-    local label=$1 image=$2 run=$3 criu_opts=${4:-}
+    local label=$1 image=$2 run=$3 criu_opts=${4:-} dump_opts=${5:-} restore_opts=${6:-} sc_env=${7:-}
     local dump_dir=$NVME_BASE/dumpvllm_${label}_$run
     cleanup_container
     wait_gpu_free
@@ -108,24 +112,27 @@ run_one() {
 
     log "[$label run=$run] dump start"
     local t0=$(( $(date +%s%N) / 1000000 )) dump_rc=0
-    nsenter -n -m -u -p -i -t "$init_pid" -- \
-        criu dump $CRIU_BASE_OPTS $criu_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log > "$dump_dir/criu-dump.out" 2>&1 || dump_rc=$?
+    env $sc_env nsenter -n -m -u -p -i -t "$init_pid" -- \
+        criu dump $CRIU_BASE_OPTS $criu_opts $dump_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log > "$dump_dir/criu-dump.out" 2>&1 || dump_rc=$?
     local dump_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 ))
     sudo grep -hE 'timing|Error' "$dump_dir/dump.log" | grep -v "tun.c" | head -15 || true
-    local gpu_sz pages_sz
+    local gpu_sz cs_sz pages_sz img_gb
     gpu_sz=$(sudo du -shc "$dump_dir"/gpu-pages-*.img 2>/dev/null | tail -1 | awk '{print $1}' || echo none)
+    cs_sz=$(sudo du -shc "$dump_dir"/gpu-cs-*.img 2>/dev/null | tail -1 | awk '{print $1}' || echo none)
     pages_sz=$(sudo du -shc "$dump_dir"/pages-*.img 2>/dev/null | tail -1 | awk '{print $1}' || echo none)
-    log "[$label run=$run] dump=${dump_ms}ms rc=$dump_rc gpu-pages=${gpu_sz:-none} pages-*.img=${pages_sz:-none}"
+    # allocated size on disk (holes of sparse images not counted)
+    img_gb=$(sudo du -sB1 "$dump_dir" 2>/dev/null | awk '{printf "%.1f", $1/1e9}')
+    log "[$label run=$run] dump=${dump_ms}ms rc=$dump_rc gpu-pages=${gpu_sz:-none} gpu-cs=${cs_sz:-none} pages-*.img=${pages_sz:-none} total=${img_gb}GB"
     if [[ $dump_rc -ne 0 || ! -f "$dump_dir/inventory.img" ]]; then
         sudo cat "$dump_dir/criu-dump.out" 2>/dev/null | head -10; sudo tail -30 "$dump_dir/dump.log" 2>/dev/null || true
-        echo "RESULT label=$label run=$run coldstart_s=$coldstart_s dump_ms=$dump_ms restore_ms=FAILED"; cleanup_container; return 1
+        echo "RESULT label=$label run=$run coldstart_s=$coldstart_s dump_ms=$dump_ms restore_ms=FAILED img_gb=$img_gb"; cleanup_container; return 1
     fi
 
     drop_caches
     log "[$label run=$run] restore start"
     t0=$(( $(date +%s%N) / 1000000 ))
-    nsenter -n -m -u -p -i -t "$init_pid" -- \
-        bash -c "criu restore $CRIU_BASE_OPTS $criu_opts -D $dump_dir --manage-cgroups -v3 -o restore.log" > "$dump_dir/criu-restore.out" 2>&1 &
+    env $sc_env nsenter -n -m -u -p -i -t "$init_pid" -- \
+        bash -c "criu restore $CRIU_BASE_OPTS $criu_opts $restore_opts -D $dump_dir --manage-cgroups -v3 -o restore.log" > "$dump_dir/criu-restore.out" 2>&1 &
     local restore_pid=$! restore_ms=TIMEOUT
     for i in $(seq 1 $((RESTORE_TIMEOUT*10))); do
         if curl_health; then restore_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 )); break; fi
@@ -153,15 +160,15 @@ run_one() {
     else
         sudo cat "$dump_dir/criu-restore.out" 2>/dev/null | head -10; sudo tail -30 "$dump_dir/restore.log" 2>/dev/null || true
     fi
-    echo "RESULT label=$label run=$run coldstart_s=$coldstart_s sleep_ms=$sleep_ms dump_ms=$dump_ms restore_ms=$restore_ms wake_ms=$wake_ms inference=$infer infer_ms=$infer_ms"
+    echo "RESULT label=$label run=$run coldstart_s=$coldstart_s sleep_ms=$sleep_ms dump_ms=$dump_ms restore_ms=$restore_ms wake_ms=$wake_ms inference=$infer infer_ms=$infer_ms img_gb=$img_gb"
     cleanup_container
 }
 
 log "=== vLLM benchmark: MODEL=$MODEL SLEEP_MODE=$SLEEP_MODE RUNS=$RUNS DROP_CACHE=$DROP_CACHE CUDA_RESTORE_THREADS=$CUDA_RESTORE_THREADS CRIU_BASE_OPTS='$CRIU_BASE_OPTS'"
 IFS=';' read -ra SCENARIO_LIST <<< "$SCENARIOS"
 for sc in "${SCENARIO_LIST[@]}"; do
-    IFS='|' read -r label image opts <<< "$sc"
-    echo; echo "=== SCENARIO $label: image=$image opts='$opts' ==="
-    for r in $(seq 1 $RUNS); do run_one "$label" "$image" $r "$opts" || true; echo; done
+    IFS='|' read -r label image opts dopts ropts senv <<< "$sc"
+    echo; echo "=== SCENARIO $label: image=$image opts='$opts' dump='${dopts:-}' restore='${ropts:-}' env='${senv:-}' ==="
+    for r in $(seq 1 $RUNS); do run_one "$label" "$image" $r "$opts" "${dopts:-}" "${ropts:-}" "${senv:-}" || true; echo; done
 done
 log "=== All vLLM benchmarks complete ==="

@@ -29,6 +29,16 @@ RUN git clone ${CRIU_REPO} /criu && cd /criu && git checkout ${CRIU_REF} && \
     mkdir -p /usr/lib/criu && cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && \
     criu --version
 
+# vllm-criu-local: CRIU from a local tree (rsync your checkout to ./criu-src, git-ignored), to bench a
+# branch without pushing it:  docker build -f Dockerfile.vllm --target vllm-criu-local -t vllm-criu-zero .
+FROM vllm-criu-base AS vllm-criu-local
+COPY criu-src /criu
+RUN cd /criu && make clean >/dev/null 2>&1; cd /criu && make -j$(nproc) && make install-criu && \
+    mkdir -p /usr/lib/criu && cp plugins/cuda/cuda_plugin.so /usr/lib/criu/ && criu --version
+ENTRYPOINT ["tini", "--", "sleep", "infinity"]
+
+# default target (last stage): CRIU cloned from CRIU_REPO at CRIU_REF
+FROM vllm-criu AS vllm-criu-ref
 # PID 1 is tini → sleep; the server is launched by the bench via docker exec so that
 # its stdio points at files inside the container's own filesystem (CRIU-friendly).
 ENTRYPOINT ["tini", "--", "sleep", "infinity"]

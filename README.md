@@ -47,12 +47,17 @@ to and from disk itself, and the time is the disk or PCIe time, whichever is slo
 
 | Script | What it measures |
 |---|---|
-| `bench_compare.sh` | synthetic: a torch app holding `TENSOR_SIZE`² floats (60 000 ≈ 14.9 GB), dump and restore with integrity check; scenarios `label\|image\|criu options` |
+| `bench_compare.sh` | synthetic: a torch app holding `TENSOR_SIZE`² random floats (60 000 ≈ 14.9 GB), plus `ZERO_SIZE`² floats that are three-quarters zero (like an untouched KV cache), dump and restore with integrity check |
 | `bench_vllm.sh` | real inference: `vllm serve` checkpointed while serving, restore timed until `/health` answers, then a completion validates the engine; `SLEEP_MODE=1` adds vLLM sleep level 1 before the dump |
 | `bench_sdxl.sh` | huggingface-inference-toolkit + SDXL |
 | `fio.sh` | storage ceiling of the box (sync qd1, libaio qd32, raw single drive) |
 | `run_p4de_cs.sh` | the one-shot session behind the headline result (driver, images, weights, tensor + vLLM matrices) |
+| `run_p4de_compress.sh` | upstream LZ4 memory compression (`--compress`, `--compress-block`, `--decompress-threads`) vs custom storage with zero-chunk skipping |
 | `proto/` | standalone custom-storage prototype (`cuda_cs.c`), driver `.run` installer with Fabric Manager handling, probes |
+
+Scenarios are `label|image|opts[|dump_opts[|restore_opts[|env]]]`, semicolon separated: `opts` go to both
+dump and restore, `dump_opts` / `restore_opts` to one side only, `env` (`VAR=value ...`) is set for both CRIU runs.
+Result lines carry `img_gb`, the allocated size of the image directory.
 
 CRIU runs as root on the host and enters the app container's namespaces with `nsenter`, as runc does.
 Dump directories live on the NVMe array; caches are dropped between dump and restore (`DROP_CACHE=yes`).

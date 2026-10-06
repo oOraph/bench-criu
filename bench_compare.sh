@@ -6,8 +6,11 @@ set -eu -o pipefail
 TENSOR_SIZE=${TENSOR_SIZE:-60000}
 NVME_BASE=${BENCH_DIR:-/mnt/nvme}
 CONTAINER=bench1
-# Scenarios: "label|image|extra criu options (passed to both dump and restore)".
-# Override with SCENARIOS="a|img|opts;b|img2|opts2" (semicolon separated).
+# Scenarios (semicolon separated): "label|image|opts[|dump_opts[|restore_opts[|env]]]"
+#   opts          CRIU options for both dump and restore
+#   dump_opts     dump only (e.g. --compress-block 256K)
+#   restore_opts  restore only (e.g. --decompress-threads 0)
+#   env           space-separated VAR=value set for both criu runs (e.g. CUDA_CS_ZERO_SKIP=0)
 # Note: since upstream PR #3066, O_DIRECT/AIO page reads are OFF unless --image-io-mode=direct.
 DEFAULT_SCENARIOS="v42-ours|criu-v42-ours|"
 DEFAULT_SCENARIOS+=";upstream|criu-upstream-head|"
@@ -38,7 +41,7 @@ run_plugin() {
     local label=$1
     local image=$2
     local run=$3
-    local criu_opts=${4:-}
+    local criu_opts=${4:-} dump_opts=${5:-} restore_opts=${6:-} sc_env=${7:-}
     local dump_dir=$NVME_BASE/dump_${label}_$run
 
     cleanup_container
@@ -55,7 +58,7 @@ run_plugin() {
         -v "$dump_dir:$dump_dir" \
         "$image"
 
-    docker exec -e TENSOR_SIZE=$TENSOR_SIZE $CONTAINER bash -c \
+    docker exec -e TENSOR_SIZE=$TENSOR_SIZE -e ZERO_SIZE=${ZERO_SIZE:-0} $CONTAINER bash -c \
         "touch $outfile && nohup python /test_app.py >> $outfile 2>&1 &"
 
     for i in $(seq 1 60); do grep -q "READY" "$outfile" 2>/dev/null && break; sleep 1; done
@@ -68,8 +71,8 @@ run_plugin() {
     log "[$label run=$run] dump start"
     local t0; t0=$(( $(date +%s%N) / 1000000 ))
     local dump_log dump_rc
-    dump_log=$(nsenter -n -m -u -p -i -t "$container_init_pid" -- \
-        criu dump --shell-job --skip-in-flight $criu_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log 2>&1) && dump_rc=0 || dump_rc=$?
+    dump_log=$(env $sc_env nsenter -n -m -u -p -i -t "$container_init_pid" -- \
+        criu dump --shell-job --skip-in-flight $criu_opts $dump_opts -D "$dump_dir" -t "$app_pid" -v3 -o dump.log 2>&1) && dump_rc=0 || dump_rc=$?
     local dump_ms=$(( $(( $(date +%s%N) / 1000000 )) - t0 ))
     echo "$dump_log" | grep -E 'timing|Error|Warn|Err' || true
     if [ $dump_rc -ne 0 ]; then
@@ -81,7 +84,8 @@ run_plugin() {
     gpu_sz=$(ls -lh "$dump_dir/gpu-pages-${app_pid}.img" 2>/dev/null | awk '{print $5}' || echo none)
     pages_sz=$(ls "$dump_dir"/pages-*.img 2>/dev/null | xargs du -shc 2>/dev/null | tail -1 | awk '{print $1}' || echo none)
     inv_ok=$([ -f "$dump_dir/inventory.img" ] && echo yes || echo NO)
-    log "[$label run=$run] dump=${dump_ms}ms  gpu-pages=$gpu_sz  pages-*.img=$pages_sz  inventory=$inv_ok"
+    local img_gb; img_gb=$(sudo du -sB1 "$dump_dir" 2>/dev/null | awk '{printf "%.1f", $1/1e9}')   # allocated, holes not counted
+    log "[$label run=$run] dump=${dump_ms}ms  gpu-pages=$gpu_sz  pages-*.img=$pages_sz  total=${img_gb}GB  inventory=$inv_ok"
 
     if [ "$inv_ok" != "yes" ]; then
         log "[$label run=$run] SKIP restore — dump incomplete (no inventory.img)"
@@ -98,8 +102,8 @@ run_plugin() {
     log "[$label run=$run] restore start"
     local pre_size; pre_size=$(wc -c < "$outfile" 2>/dev/null || echo 0)
     t0=$(( $(date +%s%N) / 1000000 ))
-    nsenter -n -m -u -p -i -t "$container_init_pid" -- \
-        bash -c "touch /tmp/go && criu restore --shell-job -D $dump_dir --manage-cgroups --skip-in-flight $criu_opts -v3" \
+    env $sc_env nsenter -n -m -u -p -i -t "$container_init_pid" -- \
+        bash -c "touch /tmp/go && criu restore --shell-job -D $dump_dir --manage-cgroups --skip-in-flight $criu_opts $restore_opts -v3" \
         > "$dump_dir/restore.log" 2>&1 &
     local restore_pid=$!
 
@@ -119,7 +123,8 @@ run_plugin() {
     log "[$label run=$run] restore=${restore_ms}ms"
     for i in $(seq 1 15); do grep -q "SUCCESS" "$outfile" 2>/dev/null && break; sleep 1; done
     cat "$outfile"
-    echo "RESULT label=$label run=$run dump_ms=$dump_ms restore_ms=$restore_ms"
+    local ok; ok=$(grep -o "SUCCESS=[A-Za-z]*" "$outfile" | head -1 | cut -d= -f2)
+    echo "RESULT label=$label run=$run dump_ms=$dump_ms restore_ms=$restore_ms img_gb=$img_gb success=${ok:-none}"
 
     cleanup_container
 }
@@ -129,10 +134,10 @@ IFS=';' read -ra SCENARIO_LIST <<< "$SCENARIOS"
 for sc in "${SCENARIO_LIST[@]}"; do log "scenario: $sc"; done
 
 for sc in "${SCENARIO_LIST[@]}"; do
-    IFS='|' read -r label image opts <<< "$sc"
+    IFS='|' read -r label image opts dopts ropts senv <<< "$sc"
     echo ""
-    echo "=== SCENARIO $label: image=$image opts='$opts' ==="
-    for r in $(seq 1 $RUNS); do run_plugin "$label" "$image" $r "$opts" || true; echo; done
+    echo "=== SCENARIO $label: image=$image opts='$opts' dump='${dopts:-}' restore='${ropts:-}' env='${senv:-}' ==="
+    for r in $(seq 1 $RUNS); do run_plugin "$label" "$image" $r "$opts" "${dopts:-}" "${ropts:-}" "${senv:-}" || true; echo; done
 done
 
 log "=== All benchmarks complete ==="
