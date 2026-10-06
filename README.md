@@ -57,6 +57,7 @@ to and from disk itself, and the time is the disk or PCIe time, whichever is slo
 | `run_p4de_cs.sh` | the one-shot session behind the headline result (driver, images, weights, tensor + vLLM matrices) |
 | `run_p4de_compress.sh` | upstream LZ4 memory compression (`--compress`, `--compress-block`, `--decompress-threads`) vs custom storage with zero-chunk skipping |
 | `run_p4de_dumppar.sh` | parallel staging-page dump (`CUDA_DUMP_THREADS`) and custom storage, on a box already set up by `run_p4de_compress.sh` |
+| `zdtm_cuda_matrix.sh` | CRIU's ZDTM CUDA tests with custom storage `auto` and `off`, on a box with the CRIU tree built (setup in its header) |
 | `proto/` | standalone custom-storage prototype (`cuda_cs.c`), driver `.run` installer with Fabric Manager handling, probes |
 
 Scenarios are `label|image|opts[|dump_opts[|restore_opts[|env]]]`, semicolon separated: `opts` go to both
@@ -115,6 +116,7 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 
 | Date | Box | What | Link |
 |---|---|---|---|
+| 2026-10-06 | p4de.24xlarge, 8× A100-80GB, driver 615 + FM, CUDA 13.4 | **ZDTM CUDA tests on real GPUs**, custom storage auto/off, 14/14 PASS incl. 8-GPU `cuda_multigpu00` | [summary](results/2026-10_p4de_zdtm_cuda/summary.md) |
 | 2026-10-06 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **parallel staging-page dump** (gpt-oss dump 66 s → 52 s), `cuStreamGetCtx_v2` validation | [summary](results/2026-10_p4de_parallel_dump/summary.md) |
 | 2026-10-06 | same box | **upstream LZ4 compression** (`--compress`, `--compress-block`, `--decompress-threads`) vs custom storage with zero-chunk skipping, gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_compression_zero_skip/summary.md) |
 | 2026-10-05 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **custom storage vs parallel plugin vs upstream**, tensor + gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_custom_storage_615/summary.md) |
