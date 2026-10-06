@@ -30,7 +30,7 @@ With custom storage, restore is 7 s of VRAM copy (11 GB/s into the mapping) plus
 | Image target | Source | Description |
 |---|---|---|
 | `criu-upstream-head` | [checkpoint-restore/criu](https://github.com/checkpoint-restore/criu) `criu-dev` @ `4485a86da` (2026-09-24) | upstream: libcuda Driver API backend, PR #3021/#3022 (parallel memfd restore, AIO/O_DIRECT image reads), `--image-io-mode=direct` (PR #3066, off by default), LZ4 |
-| `criu-ref` with `CRIU_REF=upstream-cuda-custom-storage` | [oOraph/criu](https://github.com/oOraph/criu/tree/upstream-cuda-custom-storage) | upstream head + the series proposed upstream: staging-page offload (O_DIRECT, parallel `process_vm_writev` restore) and CUDA custom storage (`--plugin-option=cuda_plugin.custom-storage=auto\|on\|off`, `auto` enables it on driver ≥ 615) |
+| `criu-ref` with `CRIU_REF=upstream-cuda-custom-storage` | [oOraph/criu](https://github.com/oOraph/criu/tree/upstream-cuda-custom-storage) | upstream head + the series proposed upstream: staging-page offload (O_DIRECT, parallel `process_vm_readv` dump and `process_vm_writev` restore) and CUDA custom storage (`--plugin-option=cuda_plugin.custom-storage=auto\|on\|off`, `auto` enables it on driver ≥ 615) |
 
 `Dockerfile.vllm` builds either CRIU into a vLLM image (`APP_IMAGE`, `CRIU_REPO`, `CRIU_REF`). Older
 targets in the `Dockerfile` (`criu-dev`, `criu-optimized`, `criu-fast-cuda-1`, `criu-v42-ours`) are the
