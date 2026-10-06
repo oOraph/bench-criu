@@ -10,6 +10,8 @@ cd "$(dirname "$(readlink -f "$0")")"
 S=~/p4de-cz-status.txt
 UPSTREAM_REF=${UPSTREAM_REF:-4485a86da237}
 DRIVER=${DRIVER:-615.71.09}
+PHASES=${PHASES:-"fio synth gptoss qwen"}   # e.g. PHASES="gptoss" to go straight to vLLM + gpt-oss-120b
+has() { [[ " $PHASES " == *" $1 "* ]]; }
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 step() { echo "$1: $2" >> $S; }
 [ -f criu-src/Makefile ] || { echo "criu-src/ missing: rsync the CRIU tree first"; exit 1; }
@@ -21,9 +23,11 @@ fi
 nvidia-smi --query-gpu=name,driver_version --format=csv,noheader | head -1
 systemctl is-active nvidia-fabricmanager
 
+if has fio; then
 log "=== fio"
 sudo mkdir -p /mnt/nvme/fio && sudo chown -R ubuntu /mnt/nvme; RAW_DEV=/dev/$(ls /sys/block/md0/slaves 2>/dev/null | head -1) ./fio.sh > ~/fio.log 2>&1; step fio $?
 grep -E "^===|READ: bw" ~/fio.log
+fi
 
 log "=== images and weights"
 ( docker pull -q vllm/vllm-openai:latest > ~/pull.log 2>&1 || docker pull -q vllm/vllm-openai:latest >> ~/pull.log 2>&1; step pull $?
@@ -40,9 +44,10 @@ docker run --rm --gpus '"device=0"' --entrypoint python criu-head-cz -c 'import 
 D="--image-io-mode=direct"
 mk() {  # mk <prefix> <upstream image> <ours image>
     local p=$1 up=$2 cz=$3
-    echo "$p-up-direct|$up|$D||;$p-up-lz4-256k-par|$up|$D|--compress-block 256K|--decompress-threads 0;$p-up-lz4-4k-par|$up|$D|--compress|--decompress-threads 0;$p-up-lz4-256k-serial|$up|$D|--compress-block 256K|;$p-cs-zero|$cz|--plugin-option=cuda_plugin.custom-storage=on||;$p-cs-nozero|$cz|--plugin-option=cuda_plugin.custom-storage=on|||CUDA_CS_ZERO_SKIP=0"
+    echo "$p-up-lz4-256k-par|$up|$D|--compress-block 256K|--decompress-threads 0;$p-up-lz4-4k-par|$up|$D|--compress|--decompress-threads 0;$p-up-direct|$up|$D||;$p-up-lz4-256k-serial|$up|$D|--compress-block 256K|;$p-cs-zero|$cz|--plugin-option=cuda_plugin.custom-storage=on||;$p-cs-nozero|$cz|--plugin-option=cuda_plugin.custom-storage=on|||CUDA_CS_ZERO_SKIP=0"
 }
 
+if has synth; then
 log "=== smoke (small tensor + zero tensor)"
 sudo rm -rf /mnt/nvme/dump_*
 sudo env TENSOR_SIZE=5000 ZERO_SIZE=16000 RUNS=1 DROP_CACHE=no SCENARIOS="$(mk smoke criu-upstream-head criu-head-cz)" ./bench_compare.sh > ~/cz_smoke.log 2>&1
@@ -52,15 +57,20 @@ log "=== tensor 14.4 GB random + 14.4 GB three-quarters zero"
 sudo rm -rf /mnt/nvme/dump_*
 sudo env TENSOR_SIZE=60000 ZERO_SIZE=60000 RUNS=2 DROP_CACHE=yes SCENARIOS="$(mk tensor criu-upstream-head criu-head-cz)" ./bench_compare.sh > ~/cz_tensor.log 2>&1; step tensor $?
 grep -hE "^RESULT|custom-storage .* copy" ~/cz_tensor.log | cut -c1-200
+fi
 
+if has gptoss; then
 log "=== vLLM gpt-oss-120b"
 sudo rm -rf /mnt/nvme/dumpvllm_*
 sudo env RUNS=2 MODEL=openai/gpt-oss-120b MAX_MODEL_LEN=4096 READY_TIMEOUT=1500 RESTORE_TIMEOUT=900 SCENARIOS="$(mk gptoss vllm-criu-upstream vllm-criu-cz)" ./bench_vllm.sh > ~/cz_vllm_gptoss.log 2>&1; step vllm-gptoss $?
 grep -E "^RESULT|custom-storage .* copy" ~/cz_vllm_gptoss.log | cut -c1-200
+fi
 
+if has qwen; then
 log "=== vLLM Qwen3-8B"
 sudo rm -rf /mnt/nvme/dumpvllm_*
 sudo env RUNS=2 RESTORE_TIMEOUT=900 SCENARIOS="$(mk qwen vllm-criu-upstream vllm-criu-cz)" ./bench_vllm.sh > ~/cz_vllm_qwen.log 2>&1; step vllm-qwen $?
 grep -E "^RESULT|custom-storage .* copy" ~/cz_vllm_qwen.log | cut -c1-200
+fi
 echo DONE >> $S
 log "=== all done"
