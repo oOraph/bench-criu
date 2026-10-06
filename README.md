@@ -4,23 +4,26 @@ Checkpoint/restore benchmarks for GPU (CUDA / PyTorch / vLLM) workloads with CRI
 `cuda-checkpoint` driver API, comparing upstream CRIU with the changes we intend to propose upstream
 ([oOraph/criu `upstream-cuda-custom-storage`](https://github.com/oOraph/criu/tree/upstream-cuda-custom-storage)).
 
-## Headline result (2026-10-05)
+## Headline result (2026-10-06)
 
 vLLM serving **gpt-oss-120b** on an **A100-80GB** (AWS `p4de.24xlarge`, 8× NVMe RAID-0 at 16 GB/s,
-driver 615.71.09). vLLM fills the card with KV cache, so the checkpoint is **76 GB of GPU memory**
-regardless of the model (Qwen3-8B gives the same numbers). Cold start of the server is 3 minutes.
+driver 615.71.09), all variants on the same box. vLLM fills the card with KV cache, so the checkpoint is
+**76 GB of GPU memory** whatever the model. Cold start of the server is 3 minutes.
 
-![gpt-oss-120b on A100: dump/restore seconds per CRIU variant](results/2026-10_p4de_custom_storage_615/gptoss-120b-a100.png)
+![gpt-oss-120b on A100: dump/restore seconds per CRIU variant](results/2026-10_p4de_parallel_dump/gptoss-120b-a100.png)
 
 | variant | dump | restore | what it does |
 |---|---|---|---|
-| upstream `criu-dev` `4485a86da`, `--image-io-mode=direct` | 59 s | 42 s | driver copies VRAM to host RAM, CRIU writes those pages like any other memory |
-| our branch, custom storage off | 66 s | 17 s | driver still copies VRAM↔host RAM; the plugin moves the staging pages itself with O_DIRECT and 16 `process_vm_writev` threads (21 GB/s on restore), bypassing the page cache |
-| our branch, **custom storage on** (driver ≥ 615) | **11.5 s** | **10.6 s** | the plugin reads/writes VRAM directly through driver-exposed device mappings, pinned buffers and CUDA streams; no host staging copy at all |
+| upstream `criu-dev` `4485a86da`, `--image-io-mode=direct` | 58 s | 43 s | driver copies VRAM to host RAM, CRIU dumps those pages like any other memory |
+| upstream + `--compress-block 256K`, `--decompress-threads 0` | 101 s | 70 s | same, LZ4-compressed; the weights barely compress (image −16%) and restore stays bound by page faults |
+| our branch, custom storage off | **52 s** | **17 s** | driver still copies VRAM↔host RAM; the plugin moves the staging pages itself, 8 threads on dump (9 GB/s) and 16 on restore (21 GB/s), with O_DIRECT and 2 MB pages |
+| our branch, **custom storage on** (driver ≥ 615) | **11.4 s** | **10.4 s** | the plugin reads/writes VRAM directly through driver-exposed device mappings; no host staging copy at all |
 
-Restore is now 7 s of VRAM copy (10.8 GB/s into the mapping) plus 3 s of CRIU work on the 3.7 GB of CPU
-pages and the process tree. Details, per-run numbers and raw logs:
-[results/2026-10_p4de_custom_storage_615/](results/2026-10_p4de_custom_storage_615/summary.md).
+With custom storage, restore is 7 s of VRAM copy (11 GB/s into the mapping) plus 3 s of CRIU work on the
+3.7 GB of CPU pages and the process tree. On a model whose KV cache is mostly untouched (Qwen3-8B, same
+76 GB), skipping all-zero chunks brings it to **9.0 s dump / 5.1 s restore**. Details and raw logs:
+[parallel dump](results/2026-10_p4de_parallel_dump/summary.md),
+[compression and zero skip](results/2026-10_p4de_compression_zero_skip/summary.md).
 
 ## What is compared
 
@@ -38,8 +41,10 @@ builds behind the earlier result sets and are described in those summaries.
 With `cuda-checkpoint` the driver copies all of VRAM into the target process's host memory, and CRIU
 then dumps that memory as ordinary pages. Upstream pays the driver copy (A100: ~38 s for 76 GB at
 ~2 GB/s on dump, ~10 s on restore) plus a page-cache-bound write/read of the same volume. Our plugin
-detects the staging VMAs, writes them with O_DIRECT and drops them from the target (dump), and on
-restore fills them in parallel straight from disk before the driver copies them back. With the
+detects the staging VMAs, writes them with parallel workers and O_DIRECT and drops them from the target
+(dump), and on restore fills them in parallel straight from disk before the driver copies them back.
+Upstream's restore is bound by one thread faulting in 4 KB pages, which is why LZ4 compression with
+parallel decompression does not help on dense data. With the
 CUDA 13.4 custom-storage API (driver ≥ 615) the driver copy disappears entirely: the plugin streams VRAM
 to and from disk itself, and the time is the disk or PCIe time, whichever is slower.
 
@@ -53,6 +58,7 @@ to and from disk itself, and the time is the disk or PCIe time, whichever is slo
 | `fio.sh` | storage ceiling of the box (sync qd1, libaio qd32, raw single drive) |
 | `run_p4de_cs.sh` | the one-shot session behind the headline result (driver, images, weights, tensor + vLLM matrices) |
 | `run_p4de_compress.sh` | upstream LZ4 memory compression (`--compress`, `--compress-block`, `--decompress-threads`) vs custom storage with zero-chunk skipping |
+| `run_p4de_dumppar.sh` | parallel staging-page dump (`CUDA_DUMP_THREADS`) and custom storage, on a box already set up by `run_p4de_compress.sh` |
 | `proto/` | standalone custom-storage prototype (`cuda_cs.c`), driver `.run` installer with Fabric Manager handling, probes |
 
 Scenarios are `label|image|opts[|dump_opts[|restore_opts[|env]]]`, semicolon separated: `opts` go to both
@@ -111,6 +117,8 @@ Results are printed as `RESULT label=... run=... dump_ms=... restore_ms=...` lin
 
 | Date | Box | What | Link |
 |---|---|---|---|
+| 2026-10-06 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **parallel staging-page dump** (gpt-oss dump 66 s → 52 s), `cuStreamGetCtx_v2` validation | [summary](results/2026-10_p4de_parallel_dump/summary.md) |
+| 2026-10-06 | same box | **upstream LZ4 compression** (`--compress`, `--compress-block`, `--decompress-threads`) vs custom storage with zero-chunk skipping, gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_compression_zero_skip/summary.md) |
 | 2026-10-05 | p4de.24xlarge, A100-80GB, 8× NVMe 16 GB/s, driver 615 + FM | **custom storage vs parallel plugin vs upstream**, tensor + gpt-oss-120b + Qwen3-8B | [summary](results/2026-10_p4de_custom_storage_615/summary.md) |
 | 2026-10-02 | p4de.24xlarge, A100-80GB, driver 595 | plugin ceilings with the disk out of the way: serial vs parallel restore, upstream; SDXL, Qwen3-8B (plain and sleep level 1) and gpt-oss-120b through vLLM; the "driver copy" measurements that motivated custom storage | [summary](results/2026-10_p4de.24xlarge_a100/summary.md) |
 | 2026-10-02 | g5.12xlarge, A10G, driver 615 | first custom-storage prototype measurements (standalone tool, single NVMe, tmpfs ceiling) | [summary](results/2026-10_g5_custom_storage_615/summary.md) |
