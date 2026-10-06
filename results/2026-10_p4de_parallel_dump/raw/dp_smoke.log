@@ -1,0 +1,71 @@
+[13:28:02] === Benchmark start: TENSOR_SIZE=5000 RUNS=1 DROP_CACHE=no MEMLOCK_UNLIMITED=no ===
+[13:28:02] scenario: smoke-cs-on|criu-head-cz|--plugin-option=cuda_plugin.custom-storage=on
+[13:28:02] scenario: smoke-off-t8|criu-head-cz|--plugin-option=cuda_plugin.custom-storage=off|||CUDA_DUMP_THREADS=8
+
+=== SCENARIO smoke-cs-on: image=criu-head-cz opts='--plugin-option=cuda_plugin.custom-storage=on' dump='' restore='' env='' ===
+[13:28:02] [smoke-cs-on run=1] starting container image=criu-head-cz (TENSOR_SIZE=5000)
+1374ca61825641eab6c6be21b59e8cab8882533fadcba17aac717ee22cfcca43
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:28:12] [smoke-cs-on run=1] dump start
+[13:28:13] [smoke-cs-on run=1] dump=1075ms  gpu-pages=none  pages-*.img=388M  total=1.0GB  inventory=yes
+[13:28:13] skip drop caches (deactivated)
+[13:28:13] [smoke-cs-on run=1] restore start
+(00.003031) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(00.888983) cuda_cs: [timing] custom-storage restore copy: 1.45 GB, 4 threads, 329 ms (4.4 GB/s, O_DIRECT), zero chunks 13/22
+(00.898999) cuda_plugin: [timing] Driver API restore+unlock: 627 ms
+[13:28:17] [smoke-cs-on run=1] restore=971ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=66
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=66
+[POST] device: NVIDIA A100-SXM4-80GB (+0.000s)
+[POST] first sum: +0.001s from wake
+[POST] x=-3377.735840 y=-35.730186
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] z=(16000000.0, 16000000) expected=(16000000.0, 16000000) z_match=True
+[POST] SUCCESS=True
+RESULT label=smoke-cs-on run=1 dump_ms=1075 restore_ms=971 img_gb=1.0 success=True
+bench1
+
+
+=== SCENARIO smoke-off-t8: image=criu-head-cz opts='--plugin-option=cuda_plugin.custom-storage=off' dump='' restore='' env='CUDA_DUMP_THREADS=8' ===
+[13:28:17] [smoke-off-t8 run=1] starting container image=criu-head-cz (TENSOR_SIZE=5000)
+32cad17ad587d1b05ca02634dee2bad1845d60273a0b1a27420ae1eebef718cd
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[13:28:20] [smoke-off-t8 run=1] dump start
+[13:28:21] [smoke-off-t8 run=1] dump=1442ms  gpu-pages=1.4G  pages-*.img=373M  total=1.9GB  inventory=yes
+[13:28:21] skip drop caches (deactivated)
+[13:28:21] [smoke-off-t8 run=1] restore start
+(00.003746) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+(00.400047) [timing] parallel restore: 136 ms (10.8 GB/s) [8 threads, 22 chunks, O_DIRECT]
+(00.400096) cuda_plugin: [timing] GPU page restore: 136 ms
+(00.774123) cuda_plugin: [timing] Driver API restore+unlock: 374 ms
+[13:28:23] [smoke-off-t8 run=1] restore=863ms
+/venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[PRE]  device: NVIDIA A100-SXM4-80GB (CUDA_VISIBLE_DEVICES=?)
+[PRE]  x=-3377.735840 y=-35.730186 pid=65
+[PRE]  READY — waiting for /tmp/go to proceed
+[POST] RESTORED pid=65
+[POST] device: NVIDIA A100-SXM4-80GB (+0.000s)
+[POST] first sum: +0.001s from wake
+[POST] x=-3377.735840 y=-35.730186
+[POST] x_match=True y_match=True
+[POST] same_gpu_model=True
+[POST] z=(16000000.0, 16000000) expected=(16000000.0, 16000000) z_match=True
+[POST] SUCCESS=True
+RESULT label=smoke-off-t8 run=1 dump_ms=1442 restore_ms=863 img_gb=1.9 success=True
+bench1
+
+[13:28:23] === All benchmarks complete ===

@@ -1,0 +1,39 @@
+[13:28:02] === smoke
+(00.003031) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+RESULT label=smoke-cs-on run=1 dump_ms=1075 restore_ms=971 img_gb=1.0 success=True
+(00.003746) Error (criu/tun.c:85): tun: Unable to create tun: No such file or directory
+RESULT label=smoke-off-t8 run=1 dump_ms=1442 restore_ms=863 img_gb=1.9 success=True
+[13:28:23] === vLLM gpt-oss-120b
+(38.010813) cuda_plugin: [timing] Driver API checkpoint: 37863 ms
+(46.500205) [timing] parallel dump: 8478 ms (9.0 GB/s) [8 threads, 1136 chunks, O_DIRECT]
+(49.547426) cuda_plugin: [timing] injected madvise(DONTNEED): 3047 ms
+RESULT label=gptoss-off-t8 run=1 coldstart_s=181 sleep_ms=n/a dump_ms=51796 restore_ms=17372 wake_ms=n/a inference=OK infer_ms=2880 img_gb=80.1
+(37.793025) cuda_plugin: [timing] Driver API checkpoint: 37652 ms
+(46.210391) [timing] parallel dump: 8405 ms (9.1 GB/s) [8 threads, 1136 chunks, O_DIRECT]
+(49.261654) cuda_plugin: [timing] injected madvise(DONTNEED): 3051 ms
+RESULT label=gptoss-off-t8 run=2 coldstart_s=179 sleep_ms=n/a dump_ms=51480 restore_ms=16533 wake_ms=n/a inference=OK infer_ms=2897 img_gb=80.1
+(37.528753) cuda_plugin: [timing] Driver API checkpoint: 37379 ms
+(45.987922) [timing] parallel dump: 8448 ms (9.0 GB/s) [16 threads, 1136 chunks, O_DIRECT]
+(49.020774) cuda_plugin: [timing] injected madvise(DONTNEED): 3033 ms
+RESULT label=gptoss-off-t16 run=1 coldstart_s=178 sleep_ms=n/a dump_ms=51171 restore_ms=17059 wake_ms=n/a inference=OK infer_ms=2932 img_gb=80.1
+(38.006499) cuda_plugin: [timing] Driver API checkpoint: 37865 ms
+(46.458249) [timing] parallel dump: 8440 ms (9.0 GB/s) [16 threads, 1136 chunks, O_DIRECT]
+(49.467610) cuda_plugin: [timing] injected madvise(DONTNEED): 3009 ms
+RESULT label=gptoss-off-t16 run=2 coldstart_s=175 sleep_ms=n/a dump_ms=51649 restore_ms=16840 wake_ms=n/a inference=OK infer_ms=2882 img_gb=80.1
+(39.413002) cuda_plugin: [timing] Driver API checkpoint: 39266 ms
+(62.687294) [timing] parallel dump: 23263 ms (3.3 GB/s) [1 threads, 1136 chunks, O_DIRECT]
+(65.712932) cuda_plugin: [timing] injected madvise(DONTNEED): 3026 ms
+RESULT label=gptoss-off-t1 run=1 coldstart_s=175 sleep_ms=n/a dump_ms=67793 restore_ms=17125 wake_ms=n/a inference=OK infer_ms=2849 img_gb=80.1
+(36.774227) cuda_plugin: [timing] Driver API checkpoint: 36631 ms
+(60.034485) [timing] parallel dump: 23249 ms (3.3 GB/s) [1 threads, 1136 chunks, O_DIRECT]
+(63.058255) cuda_plugin: [timing] injected madvise(DONTNEED): 3024 ms
+RESULT label=gptoss-off-t1 run=2 coldstart_s=182 sleep_ms=n/a dump_ms=65065 restore_ms=16465 wake_ms=n/a inference=OK infer_ms=2864 img_gb=80.1
+(08.926646) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8479 ms (9.0 GB/s, O_DIRECT), zero chunks 38/1136
+(09.075898) cuda_plugin: [timing] Driver API checkpoint: 8806 ms
+(10.009456) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 6878 ms (11.1 GB/s, O_DIRECT), zero chunks 38/1136
+RESULT label=gptoss-cs-on run=1 coldstart_s=174 sleep_ms=n/a dump_ms=11395 restore_ms=10366 wake_ms=n/a inference=OK infer_ms=2842 img_gb=77.6
+(08.894830) cuda_cs: [timing] custom-storage checkpoint copy: 76.20 GB, 4 threads, 8439 ms (9.0 GB/s, O_DIRECT), zero chunks 38/1136
+(09.036069) cuda_plugin: [timing] Driver API checkpoint: 8759 ms
+(09.993438) cuda_cs: [timing] custom-storage restore copy: 76.20 GB, 4 threads, 6876 ms (11.1 GB/s, O_DIRECT), zero chunks 38/1136
+RESULT label=gptoss-cs-on run=2 coldstart_s=176 sleep_ms=n/a dump_ms=11316 restore_ms=10346 wake_ms=n/a inference=OK infer_ms=2855 img_gb=77.6
+[14:01:35] === all done
