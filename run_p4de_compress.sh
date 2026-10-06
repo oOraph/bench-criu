@@ -22,7 +22,7 @@ nvidia-smi --query-gpu=name,driver_version --format=csv,noheader | head -1
 systemctl is-active nvidia-fabricmanager
 
 log "=== fio"
-sudo mkdir -p /mnt/nvme/fio && sudo chown -R ubuntu /mnt/nvme; RAW_DEV=/dev/nvme1n1 ./fio.sh > ~/fio.log 2>&1; step fio $?
+sudo mkdir -p /mnt/nvme/fio && sudo chown -R ubuntu /mnt/nvme; RAW_DEV=/dev/$(ls /sys/block/md0/slaves 2>/dev/null | head -1) ./fio.sh > ~/fio.log 2>&1; step fio $?
 grep -E "^===|READ: bw" ~/fio.log
 
 log "=== images and weights"
