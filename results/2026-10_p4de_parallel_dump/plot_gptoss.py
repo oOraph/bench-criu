@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Bar chart of gpt-oss-120b checkpoint/restore on one p4de (A100-80GB, driver 615), 2026-10-06.
-Means of the two runs in this directory's summary.md and ../2026-10_p4de_compression_zero_skip/summary.md.
+Means of the two runs in this directory's summary.md (upstream: ../2026-10_p4de_compression_zero_skip/summary.md).
 Run: python3 plot_gptoss.py"""
 import matplotlib
 matplotlib.use("Agg")
@@ -9,15 +9,14 @@ import numpy as np
 
 variants = [
     "upstream criu-dev\n(--image-io-mode=direct)",
-    "upstream criu-dev\n+ LZ4 256K, parallel decode",
     "our branch, custom storage off\n(parallel staging-page offload)",
     "our branch, custom storage on\n(driver >= 615)",
 ]
-dump = [(57.124 + 58.336) / 2, (101.103 + 100.102) / 2, (51.796 + 51.480) / 2, (11.395 + 11.316) / 2]
-restore = [(44.211 + 41.557) / 2, (70.482 + 69.808) / 2, (17.372 + 16.533) / 2, (10.366 + 10.346) / 2]
+dump = [(57.124 + 58.336) / 2, (51.796 + 51.480) / 2, (11.395 + 11.316) / 2]
+restore = [(44.211 + 41.557) / 2, (17.372 + 16.533) / 2, (10.366 + 10.346) / 2]
 
 x = np.arange(len(variants)); w = 0.36
-fig, ax = plt.subplots(figsize=(10.5, 5.2))
+fig, ax = plt.subplots(figsize=(9.5, 5.2))
 b1 = ax.bar(x - w / 2, dump, w, label="dump (checkpoint)", color="#4C72B0")
 b2 = ax.bar(x + w / 2, restore, w, label="restore (until /health answers)", color="#DD8452")
 for bars in (b1, b2):

@@ -15,7 +15,6 @@ driver 615.71.09), all variants on the same box. vLLM fills the card with KV cac
 | variant | dump | restore | what it does |
 |---|---|---|---|
 | upstream `criu-dev` `4485a86da`, `--image-io-mode=direct` | 58 s | 43 s | driver copies VRAM to host RAM, CRIU dumps those pages like any other memory |
-| upstream + `--compress-block 256K`, `--decompress-threads 0` | 101 s | 70 s | same, LZ4-compressed; the weights barely compress (image −16%) and restore stays bound by page faults |
 | our branch, custom storage off | **52 s** | **17 s** | driver still copies VRAM↔host RAM; the plugin moves the staging pages itself, 8 threads on dump (9 GB/s) and 16 on restore (21 GB/s), with O_DIRECT and 2 MB pages |
 | our branch, **custom storage on** (driver ≥ 615) | **11.4 s** | **10.4 s** | the plugin reads/writes VRAM directly through driver-exposed device mappings; no host staging copy at all |
 
@@ -43,8 +42,7 @@ then dumps that memory as ordinary pages. Upstream pays the driver copy (A100: ~
 ~2 GB/s on dump, ~10 s on restore) plus a page-cache-bound write/read of the same volume. Our plugin
 detects the staging VMAs, writes them with parallel workers and O_DIRECT and drops them from the target
 (dump), and on restore fills them in parallel straight from disk before the driver copies them back.
-Upstream's restore is bound by one thread faulting in 4 KB pages, which is why LZ4 compression with
-parallel decompression does not help on dense data. With the
+Upstream's restore is bound by one thread faulting in 4 KB pages. With the
 CUDA 13.4 custom-storage API (driver ≥ 615) the driver copy disappears entirely: the plugin streams VRAM
 to and from disk itself, and the time is the disk or PCIe time, whichever is slower.
 
